@@ -1,0 +1,32 @@
+Using version ^2.7 for friendsofsymfony/jsrouting-bundle
+./composer.json has been updated
+Running composer update friendsofsymfony/jsrouting-bundle
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 2 installs, 0 updates, 0 removals
+  - Locking friendsofsymfony/jsrouting-bundle (2.7.0)
+  - Locking willdurand/jsonp-callback-validator (v1.1.0)
+Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 2 installs, 0 updates, 0 removals
+    0 [>---------------------------]    0 [>---------------------------]    0 [>---------------------------]  - Installing willdurand/jsonp-callback-validator (v1.1.0): Extracting archive
+  - Installing friendsofsymfony/jsrouting-bundle (2.7.0): Extracting archive
+    0 [>---------------------------]    0 [>---------------------------]    0 [>---------------------------]Generating optimized autoload files
+86 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+
+Symfony operations: 1 recipe (53e6906a0086b240f26a4990d62a58a8)
+  -  WARNING  friendsofsymfony/jsrouting-bundle (>=2.3): From github.com/symfony/recipes-contrib:master
+    The recipe for this package comes from the "contrib" repository, which is open to community contributions.
+    Review the recipe at https://github.com/symfony/recipes-contrib/tree/master/friendsofsymfony/jsrouting-bundle/2.3
+
+    Do you want to execute this recipe?
+    [y] Yes
+    [n] No
+    [a] Yes for all packages, only for the current installation session
+    [p] Yes permanently, never ask again for this project
+    (defaults to n): Synchronizing package.json with PHP packages
+Don't forget to run npm install --force or yarn install --force to refresh your JavaScript dependencies!
+Executing script cache:clear [OK]
+Executing script assets:install public [OK]
+Nothing to unpack

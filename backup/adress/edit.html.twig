@@ -1,0 +1,41 @@
+{% extends 'edit.html.twig' %}
+
+{# EDIT : ADRESS #}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+	{# Load for specific CSS with this TWIG call : {{ encore_entry_link_tags("adress-form") }} 
+         (i) copy the CSS file adress-form.css in  /asset/Core/forms/css/ directory
+         (ii)add the Style entry in  the configuration file webpack.config.js :
+         .addStyleEntry('contact-form', './assets/forms/Core/css/adress-form.css') 
+        #}
+{% endblock %}
+
+
+{% block action %}
+	{{parent()}}
+        {# Add a button Back to linked entity : name_of_linked_entity
+            {% if edit_form.vars.data.name_of_linked_entityFk is not null %}
+                    <a href="{{path('name_of_linked_entity_show', {id: edit_form.vars.data.name_of_linked_entityFk.id})}}" class="btn btn-sm btn-info">
+                            <i class="fas fa-link"></i>
+                            {{'button.Back to name_of_linked_entity'|trans}}
+                    </a>
+            {% endif %}
+        #}
+{% endblock %}
+
+{% block body %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block scripts %}
+	{{ parent() }}
+        {# Load for specific js script with the TWIG call : {{ encore_entry_script_tags("adress-form") }} 
+         (i) copy the file adress-form.js in /asset/Core/forms/js/ directory
+         (ii)add the js entry in the configuration file webpack.config.js  : 
+         .addEntry('adress-form', './assets/forms/Core/js/adress-form.js') 
+        #}
+{% endblock %}
+

@@ -1,0 +1,184 @@
+{% extends 'base.html.twig' %}
+
+{# initialize the nameOfEntity variable from the gloable variable _controller: '~ / Controller / NameOfEntityController :: indexAction' #}
+{% set Urlcontroller = app.request.attributes.get('_controller') %}
+{% set controllerInArray = Urlcontroller|split('Controller') %}
+{% set controllerName = controllerInArray[1][1:] %}
+{% set nameOfEntity = (controllerName[:1]|lower) ~ controllerName[1:] %}
+{# initialise la variable entityname à partir de la variable globale _route : 'entityname_index' #}
+{% set route = app.request.attributes.get('_route') %}
+{% set entityname = route|split('_')[0] %}
+{# initialise les routes : 'importfilesentityname_index' et entityname_new #}
+{% set route_index = entityname ~ '_index' %}
+{% set route_importfiles = 'importfiles' ~ entityname ~ '_index' %}
+{% set route_new = entityname ~ '_new' %}
+{% set route_indexjson = entityname ~ '_indexjson' %}
+
+{% set varUrl_idFk = app.request.query.get('idFk') %}
+{% set varUrl_nameFk = app.request.query.get('nameFk') | default('') %}
+
+{% block page_title %}
+  <h1>
+    {{ ('core.' ~ entityname)|trans({}, 'sections') }}
+  </h1>
+{% endblock %}
+
+{% block action %}
+  {{ parent() }}
+  <a href="{{ path(route_index) }}"
+    class="btn btn-primary btn-sm"
+    role="button">
+    <i class="fas fa-list"></i>
+    {{ 'button.showAllRecord'|trans }}
+  </a>
+
+  {% if is_granted('ROLE_COLLABORATION') %}
+    {% set path_action_new = path(route_new) ~ "?nameFk=" ~ varUrl_nameFk ~ "&idFk=" ~ varUrl_idFk %}
+        <a href="{{ path_action_new }}"
+          class="btn btn-success btn-sm"
+          role="button">
+          <i class="fas fa-plus"></i>
+          {{ ['button.New', entityname|capitalize]|join|trans }}
+        </a>
+    <button class="btn btn-light border btn-sm"
+      id="export"
+      data-export="export"
+      data-toggle="tooltip"
+      data-align="right"
+      title="{{ 'button.exportToCSV-title'|trans }}">
+      <i class="fas fa-file-export"></i>
+      {{ 'button.exportToCSV'|trans }}
+    </button>
+  {% else %}
+    <a href="#"
+      class="btn btn-secondary btn-sm disabled"
+      role="button">
+      {{ ['button.New', entityname|capitalize]|join|trans }}
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block templatescripts %}  
+    
+    
+{{ encore_entry_script_tags("index") }}
+  
+{# display of the error message on Delete if there are related records #}
+{% if ( exception_message is defined ) %} 
+<script type="text/javascript"> 
+    alert("{{exception_message|raw}}"); 
+</script>    
+{% endif %}
+
+{#  bootgrid list management #} 
+
+
+<script type="text/javascript">     
+
+const urlParams = new URLSearchParams(window.location.search);
+{% if app.user.id is defined %}
+    const current_user_id = {{app.user.id}}
+{% else %}
+    const current_user_id = 0
+{% endif %}
+
+const is_granted = {
+    ROLE_COLLABORATION : {{is_granted("ROLE_COLLABORATION")|json_encode()}},
+    ROLE_PROJECT: {{is_granted("ROLE_PROJECT")|json_encode()}}
+}
+
+function is_owner(row){
+    return current_user_id == row.userCreId
+}
+
+$(document).ready(function(){
+    $("#grid-basic").bootgrid({
+        ajax: true,
+        url: "{{ path( route_indexjson ) }}",
+        post: function ()
+        {        
+            return {
+                searchPattern: urlParams.get("searchPattern"),
+                idFk: urlParams.get("idFk"),
+                nameFk: urlParams.get("nameFk"),
+                typeBoite: urlParams.get("typeBoite")
+            };
+        },
+        rowCount: [10, 25, 50, -1],
+        labels: {
+            noResults: "There are no results for the selection",
+            search: urlParams.get("searchPattern") || ""
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
+        complete: function() {
+        },
+        formatters: {
+            {% for link in links %}
+                {#INBORE1.0  {% set linkname =  'link' ~ (link|capitalize) %} #}
+                {% set linkname =  'link_' ~ link %}
+                {% set link_tabname =  link|split('_')[0]  %}
+                {% set link_index =  link_tabname  ~ '_index' %}
+                {% set link_new=  link_tabname ~ '_new' %}                   
+            "{{linkname}}" : function(column, row, value)
+            {   
+                if (row.{{linkname}} !== undefined && row.{{linkname}} != '' && row.{{linkname}} !== null) {
+                    var is_num = row.{{linkname}};
+                    is_num = is_num.match(/^\d+$/);
+                    if( is_num > 0) {
+                        return "<a href=\"{{ path(link_index)}}?nameFk={{nameOfEntity}}Fk&idFk=" + row.{{linkname}} + "\" class=\"btn btn-sm\" ><span class=\"fas fa-list\"></span></a>";
+                    } else {
+                        return "<a href=\"{{ path(link_index)}}?searchPattern="  + row.{{linkname}} + "\" class=\"btn btn-sm\" ><span class=\"fas fa-list\"></span></a>";
+                    }
+                 } else if (is_granted.ROLE_COLLABORATION) {  
+                      return "<a href=\"{{ path(link_new)}}?nameFk={{nameOfEntity}}Fk&idFk="  + row.id + "\" class=\"btn btn-sm\" ><span class=\"fas fa-plus-circle\"></span></a>";
+                 }  else {
+                      return `<a href="#" class="btn btn-sm disabled"><i class="fas fa-plus-circle"></i></a>`;
+                 }
+            },
+            {% endfor %}
+
+            "show": function(column, row, value)
+            { 
+                return `<a href="${row.id}?${urlParams.toString()}" class="btn btn-sm" >
+                        <i class="fas fa-eye"></i></a>`;
+            },
+            "edit": function(column, row, value)
+            {
+                if( is_granted.ROLE_PROJECT || (is_granted.ROLE_COLLABORATION && is_owner(row))) {
+                    return `<a href="${row.id}/edit?${urlParams.toString()}" class="btn btn-sm">
+                            <i class="fas fa-edit"></i></a>`;  
+                } else {
+                      return `<a href="#" class="btn btn-sm  disabled" ><i class="fas fa-edit" ></i></a>`;          
+                }
+            },
+            "delete": function(column, row, value)
+            {
+                let form_action = `${row.id}?${urlParams.toString()}`
+                if( is_granted.ROLE_PROJECT || (is_granted.ROLE_COLLABORATION && is_owner(row))) {
+                    return `<form  method="post" action="${form_action}"
+                                onsubmit="return confirm('Do you really want to delete this record?');" >
+                            <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}" />
+                            <input name="_method" value="DELETE" type="hidden" /> 
+                            <button class='btn btn-sm' type='submit'>
+                            <i class="fas fa-trash"></i></button></form>`; 
+                } else {
+                    return `<button class="btn btn-sm" disabled><i class="fas fa-trash"></i></button>`
+                }
+            }
+        }
+    }); 
+ }); 
+ </script>
+
+<script type="text/javascript">
+    // enable the table to CSV tool
+   $("#export").click(function(){
+        $("#grid-basic").tableToCSV();
+   });
+</script>
+
+{% endblock %}

@@ -1,19 +1,111 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
-        {% endblock %}
+{# configuration parameter for second language. put the 'code-ISO-second-language' or '' if there is not #}
+{% set second_language = 'en' %}
 
-        {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+{# setup TWIG variables ; base_route_index, base_route_url, help_message #}
+{% set base_route_index = app.request.attributes.get('_route') %}
+{% set help_message = base_route_index|trans({},'help')|nl2br %}
+
+{# Main TWIG template of GOTIT application : BASE.HTML.TWIG #}
+
+<!DOCTYPE html>
+
+<html lang="{{ app.request.getLocale() }}">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="{{ asset('build/images/favicon.ico') }}" type="image/ico"/>
+
+		<title>
+                            {% block title %}
+                                InBORe
+                            {% endblock %}
+		</title>
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('core') }}
+		{% endblock %}
+
+		{% block headincl %}{% endblock %}
+
+	</head>
+	<body>
+		<div class="main-container">
+
+			{% block leftnav %}
+				{% include "nav.html.twig" %}
+			{% endblock %}
+			{% block topnav %}
+				{% include "nav-top.html.twig" %}
+			{% endblock %}
+
+			<header class="main-header">
+				{% block help_panel %}
+					<button
+						class="help-btn btn btn-light border-primary text-secondary"
+						type="button"
+						data-toggle="collapse"
+						data-target="#page-help"
+						aria-expanded="false"
+						aria-controls="page-help">
+						<i class="fas fa-question"></i>
+					</button>
+
+					<div class="collapse" id="page-help">
+						<div class="card card-body">
+							{% block pagehelp %}
+								{% if help_message is defined and help_message is not empty %}
+									{{help_message|raw}}
+								{% else %}
+									Undefined
+								{% endif %}
+							{% endblock %}
+						</div>
+					</div>
+				{% endblock %}
+
+				{% block page_title %}{% endblock %}
+
+				<div class="page-actions {% block action_bar_class %}{% endblock %}">
+					{% block action %}
+						{# Page action buttons #}
+					{% endblock %}
+				</div>
+
+
+			</header>
+
+			<div class="main-content container" role="main">
+				{% block body %}
+					{# Main content body #}
+				{% endblock %}
+				{% block link %}{% endblock %}
+			</div>
+
+			{# footer content #}
+			{% block footer %}
+				{% include "footer.html.twig" %}
+			{% endblock %}
+
+			{# General Scripts #}
+			{% block scripts %}
+				{# Main JS #}
+				{{ encore_entry_script_tags('core') }}
+				<!-- Symfony javascript routing bundle -->
+				<script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+				<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+				{# Symfony translation in JS #}
+				{# <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+				<script src="{{ url('bazinga_jstranslation_js', { 'domain': 'queries', 'locales': 'fr,en' }) }}"></script>
+				<script src="{{ url('bazinga_jstranslation_js', { 'domain': 'messages', 'locales': 'fr,en' }) }}"></script>  #}
+
+			{% endblock %}
+
+			{#  Templates Scripts #}
+			{% block templatescripts %}
+				{#  Templates Scripts : index.html.twig / edit.html.twig ... #}
+			{% endblock %}
+		</div>
+	</body>
 </html>
