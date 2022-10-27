@@ -1,0 +1,40 @@
+ashboard: |
+    INFO : Cette page présente quelques informations concernant les données présentes dans la base de données du projet.
+
+vocabulary_index: |
+    INFO : Liste des termes de vocabulaire existants. La recherche s'effectue sur le champ marqué d'une *. 
+vocabulary_edit: |
+    INFO : Saisir les informations concernant le terme de vocabulaire. Les champs en rouge sont obligatoires pour valider la saisie.
+vocabulary_new: |
+    INFO : Saisir les informations concernant le terme de vocabulaire. Les champs en rouge sont obligatoires pour valider la saisie.
+    
+user_index: |
+    INFO : Use this page to browse, create, export, show, edit and delete user accounts. WARNING: Deleting a user account would erase contents of technical fields (e.g. user creation). Rather, lock a user account using the option “LOCKED” in the edit session. Additional fields can be listed using the top right button. The search button applies to the field "Username"
+user_new: |
+    INFO : Use this form to fill in data of a new user. 
+user_show: |
+    INFO : Use this form to consult data of a user. 
+user_edit: |
+    INFO : Use this form to edit data of a user. 
+
+login: Use this page to login and access to Greatape web user interface
+# info generale aux import de fichiers csv
+importfiles.form: |
+    (1) Select the file to be imported using the scroll bar
+
+    (2) Upload the csv file to be imported
+
+    the csv file has to be recorded with the options :
+         - character encoding in UTF-8
+         - the "semicolon" as record delimiter
+         - quotation marks as text field delimiter 
+
+# procédure d'import csv      
+importfilestable_index: | 
+    INFO : Use this form to upload data from multiple internal sequences and related data sets. Proceed by step: 
+    - (if necessary) upload the referential files (templates: source, vocabulary, person, taxon);
+    - Use and upload the template “internal_sequence” to follow appropriate data format.
+    Also, refer to the section “uploading tools” in GOTIT HELP for further details on the uploading procedure.
+
+  
+   

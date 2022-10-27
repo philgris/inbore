@@ -1,0 +1,128 @@
+{% extends '/base.html.twig' %}
+{% form_theme edit_form 'Form/form-theme.html.twig' %}
+
+{% set entity = app.request.attributes.get('entity') %}
+
+{# initialization of TWIG general variables #}
+{% set route = app.request.attributes.get('_route') %}
+{#INBORE1.0  {% set entityname = route|split('_')[0] %} #} 
+{% set entityname = route|split('_')|slice(0,-1)|join('_') %}
+{% set action = route|split('_')[1] %}
+{% set route_new = entityname ~ '_new' %}
+{% set route_index = entityname ~ '_index' %}
+{# initialize the url attached to the BackToTheList button #}
+{% set idFk = app.request.query.get('idFk')|default(null) %}
+{% set nameFk = app.request.query.get('nameFk')|default(null) %}
+
+{# initializes and manages the variables that are valid for validation and the BackToTheList button #}
+{% set flagvalid = 0 %}
+
+{# case of the UPDATE / edit mode: valid is passed in form_edit form parameter after validation #}
+{% if valid is defined and valid == 1 %}
+    {% set flagvalid = 1 %}
+{% endif %}
+{# case of CREATE / new: valid mode passed in url parameter? valid = 1 #}
+{% if app.request.query.get('valid')|default(null) == '1' %}
+    {% set flagvalid = 1 %}
+{% endif %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags("forms") }}
+{% endblock %}
+
+
+{% block page_title %}
+    <h1>
+        {{ ("core." ~ entity)|trans({}, 'sections') }}
+        <sup><i class="fa fa-user-ninja text-warning small"></i></sup>
+        {#{% if flagvalid != 0 %}#}
+        {#<i class="fas fa-check-circle"></i>#}
+        {#{% endif %}#}
+    </h1>
+{% endblock %}
+
+{% block action_bar_class %}offset-xl-2 offset-lg-3 col-xl-10 col-lg-9{% endblock %}
+{% block action %}
+    {#{% set path_route_index = path_route_index|default(path( route_index, { nameFk: nameFk, idFk: idFk } )) %}#}
+    <a href="{{ path('admin_index', {'entity':entity}) }}" class="btn btn-sm btn-light border">
+        <i class="fas fa-list"></i>
+        {{ "button.BackToTheList"|trans }}
+    </a>
+    {% if
+        edit_form.vars.action_type == "show" and
+        (    is_granted('ROLE_PROJECT') or
+        (    is_granted('ROLE_COLLABORATION') and
+        edit_form.vars.data.userCre == app.user.id)) %}
+        <a href="{{ path('admin_edit', {'entity':entity, 'id':edit_form.vars.data.id}) }}" class="btn btn-sm btn-success">
+            <i class="fas fa-edit"></i>
+            {{ 'Edit'|trans }}
+        </a>
+    {% endif %}
+{% endblock %}
+
+
+{% block body %}
+    {{ form_start(edit_form, {'disabled': false}) }}
+    {{ form_errors(edit_form) }}
+
+    {% if nameFk is defined and action == 'new' and edit_form[nameFk] is defined %}
+        {{ form_row(attribute(edit_form, nameFk), {value: idFk}) }}
+    {% endif %}
+    {{ form_rest(edit_form) }}
+    <div class="row">
+        <div class="form-group offset-lg-3 col-lg-9 offset-xl-2 col-xl-10">
+            {% if edit_form.vars.action_type != 'show' %}
+                <button type="submit" class="btn btn-round btn-success" value="Create">
+                    {{ "button.Valid"|trans }}
+                </button>
+            {% endif %}
+        </div>
+    </div>
+    {{ form_end(edit_form) }}
+
+
+    {# Create form modals #}
+    {% for field in edit_form %}
+        {% if field.vars.attr['data-modal-controller'] is defined %}
+            {% set args = {} %}
+            {% if field.vars.attr['data-modal-entity'] is defined %}
+                {% set args = args|merge({'entity':field.vars.attr['data-modal-entity']}) %}
+            {% endif %}
+            {% if field.vars.attr['entity'] is defined %}
+                {% set args = args|merge({'entity': field.vars.attr["entity"]}) %}
+            {% endif %}
+            {% if field.vars.attr['choice_label'] is defined %}
+                {% set args = args|merge({'choice_label': field.vars.attr["choice_label"]}) %}
+            {% endif %}
+            <div id="{{ 'modal-' ~ field.vars.id }}" class="modal-container"
+                 data-target="{{ '#wrapper_' ~ field.vars.id }}">
+                {{ render(controller(field.vars.attr["data-modal-controller"], args )) }}
+            </div>
+            {#{% if  field.vars.attr['choice_label'] is defined %}#}
+                {#<div id="{{ 'modal-' ~ field.vars.id }}" class="modal-container"#}
+                     {#data-target="{{ '#wrapper_' ~ field.vars.id }}">#}
+                    {#{{ render(controller(field.vars.attr["data-modal-controller"], {'entity':field.vars.attr['data-modal-entity'], 'choice_label': field.vars.attr["choice_label"] } )) }}#}
+                {#</div>#}
+            {#{% else %}#}
+                {#<div id="{{ 'modal-' ~ field.vars.id }}" class="modal-container"#}
+                     {#data-target="{{ '#wrapper_' ~ field.vars.id }}">#}
+                    {#{{ render(controller(field.vars.attr["data-modal-controller"], {'entity':field.vars.attr['data-modal-entity']})) }}#}
+                {#</div>#}
+            {#{% endif %}#}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block scripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags("forms") }}
+    {% if exception_message is defined %}
+        <script type="text/javascript">
+            alert("{{ exception_message|raw }}");
+        </script>
+    {% endif %}
+{% endblock %}

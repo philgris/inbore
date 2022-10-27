@@ -1,0 +1,15 @@
+search: Search
+
+add: add
+create: create
+
+login:
+  sign in: sign in
+  username: username
+  password: password
+  remember me: remember me
+
+footer:
+  github_prompt: "help us improve"
+  bug_report: "report a bug"
+  feature_request: "request a feature"

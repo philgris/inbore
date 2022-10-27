@@ -1,0 +1,920 @@
+# VOCABULARY ###################################################################
+# Vocabulary (table Voc) : Examples of vocabulary labels (translations fr/en)
+# NOTE : Only add vocabulary terms for which translation is needed. 
+# By default,the primary langage vocabulary label will be used
+# 1 - DELETE THE FIRST PART OF THAT FILE IF ENGLISH IS USED AS A PRIMARY LANGAGE
+
+# 1 - END OF DELETE THE FIRST PART OF THAT FILE IF ENGLISH IS USED AS A PRIMARY LANGAGE
+
+# 
+    
+# autocomplete field form
+
+# Class of vocabulary (table = Voc , field = parent)
+
+
+# SHORT TITLE OF COLUMNS IN CONTENT PAGES ######################################
+# Links
+list.show: Show
+list.edit: Edit
+list.delete: Del
+list.link_working_day: WDay
+list.link_working_day.title: Working Day
+list.link_team_day: TDay
+list.link_behavior_study: BStudy
+list.link_behavior_context: BContext
+list.link_transect: Trans.
+list.link_transect.title: Transect
+list.link_pheno_tree: PTree
+list.link_pheno_tree.title: Pheno Tree
+list.link_individual: Ind.
+list.link_individual_description: Desc.
+list.link_gps: gps
+list.link_evidence: Evid.
+list.link_evidence_study: EStudy
+list.link_macro_observation: MObs
+list.link_transect_section: Tr.Sec
+
+# Column titles 
+list.id__search_column: id *
+list.date_maj: Date Up
+list.date_cre: Date Cre
+list.user_maj: User Up
+list.user_cre: User Cre
+list.date: Date
+list.site_name: Site
+list.workingday_date_sitename: Working day / Site
+list.time_start: Time (start)
+list.time_end: Time (end)
+list.list_person: Persons 
+list.protocol_code: Code protocol
+list.individual_name: name
+list.behavior_type: behavior type
+list.time_behavior_start: time behavior start
+list.time_behavior_end: time behavior end
+list.workingday_date_sitename_typestudy: Working day / Site / Study type
+list.workingday_date_sitename_typestudy_id: Working day / Site / Study type / Id-BS
+list.list_behavior_type: Behavior(s)
+list.focalscan_type: Focalscan type
+list.time_scan: Time scan
+list.id_scan: Scan Id
+list.individual_code:  Code
+list.group_name: Group name
+list.taxon_genus_specie_subspecies : Genus / specie / subspecies
+list.person_name: Person name
+list.person_code: Person code
+list.person_status: Person status
+list.list_sites: Sites 
+list.taxon_code: Species code
+list.taxon_kindom: Taxon kindom
+list.taxon_family: Taxon family
+list.taxon_genus: Taxon genus
+list.taxon_specie: Taxon species
+list.taxon_subspecies: Taxon subspecies
+list.vernacular_name: Vernacular name
+list.vocabulary_language: Language
+list.vocabulary_validation_status: Validation status
+list.filename: Filename
+list.name: Name
+list.idgps_duplicate: Idgps duplicate
+list.track_number: Track code
+list.latitude: Latitude
+list.longitude: Longitude
+list.altitude: Altitude
+list.date_year: Year
+list.vocabulary_type_study: Protocol type
+list.country: Country
+list.region: Region
+list.num_group_site: Group code
+list.parent: parent
+list.list_tables: table(s)
+list.batch: Batch
+list.code: Code
+list.valid: valid
+# working day
+list.list_protocol: protocol(s)
+list.count_macro_observation: nb obs.
+# scan on focal
+list.individual_name_focal: Individual name
+list.voc_habitat_1_code: Habitat 1
+list.voc_habitat_code: Habitat(s)
+list.height: Height
+#evidence study & evidence
+list.evidenceStudy_bootgrid_search_column: Working day / Site
+list.evidenceStudy_numTransectRun: Num transect run
+list.evidenceStudy_time_start_in: Time start
+list.evidenceStudy_time_end_out: Time end
+list.evidence_bootgrid_search_column: Working day / Site / Evidence type / Id-ES
+list.evidence_type: Evidence type
+list.evidence_specie: Evidence specie
+list.gps_point: GPS
+list.evidenceStudy_gpsTrack: Track
+# macro-observation
+list.macroObservation_bootgrid_search_column: Working day / Site / code Macro
+list.vocabularyMacroObservationType_name: Macro type
+# transect & transect section 
+list.transect_bootgrid_search_column: Num transect
+list.transect_gpsStart: GPS start
+list.transect_gpsEnd: GPS end
+list.transect_gpsTrack: Track
+list.transectSection_bootgrid_search_column: Num transect section
+list.transectSection_gpsStart: GPS start
+list.transectSection_gpsEnd: GPS end
+list.transectSection_gpsTrack: Track
+list.transect_numTransect: Num transect
+
+# Dashboard
+list.dashboard.siteName: Site
+list.dashboard.country: Country
+list.dashboard.region: Region
+list.dashboard.codeProtocol: Code protocol
+list.dashboard.numberBehaviorStudy: Number
+list.dashboard.type_study: Type study
+
+# Ambiguous name
+vernacular_name.name: Vernacular name
+
+# Name of collection*
+Specievernaculars: Species
+
+
+# BUTTONS ######################################################################
+#
+button.Back: Back
+button.exportToCSV: Export to CSV file
+button.exportToCSV-title: UTF-8 encoding and comma point separator
+button.Close: Close 
+# Button titles in csv file uploading tools
+button.ImportVocabulary: Import new set of Vocabulary
+button.ImportPerson: Import new set of Person
+#  Button titles "Back to Entity"
+button.Back to site: Back to site
+button.Back to working_day: Back to working day
+button.Back to team_day: Back to team day
+button.Back to Behavior Study: Back to behavior study
+button.Back to individual: Back to individual
+button.Back to Evidence Study: Back to Evidence Study
+button.Back to transect: Back to transect
+#  Button titles "Back to Entity" in csv file uploading tools
+button.Back to the list of site: Back to the list of Sites
+# Button titles in web interface
+button.Add a working day: Add working day
+button.NewSite: Add new site
+button.NewVoc: Add new vocabulary
+button.NewWorking_day: Add new working day
+button.NewTeam_day: Add new team day
+button.NewPerson: Add new person
+button.NewBehavior_study: Add new behavior study
+button.NewBehavior_context: Add new behavior context
+button.NewScan_non_focal: Add new scan on focal
+button.NewIndividual: Add new individual
+button.NewSpecie:  Add new taxon
+button.NewVernacular_name: Add new vernacular name
+button.NewMedia: Add new Media
+button.NewGps:  Add new Gps point
+button.ImportGps:  Import Gps points
+button.BatchGps:  Batch Gps points
+button.NewTrack:   Add  new track
+button.NewProtocol: Add new protocol
+button.NewGroup_site_sp: Add new group
+button.NewVocabulary: Add new vocabulary
+button.NewIndividual_description:  Add new description
+button.NewMacro_observation: Add new Macro observation
+button.NewEvidence:  Add a new Evidence
+button.NewEvidence_study: Add a new Evidence study
+button.NewTransect: Add a new Transect
+button.NewTransect_section: Add a new Transect section
+#  Button titles "Show Relative Entity list"
+button.Show behavior context list: Show behavior context list
+button.Show evidence list: Show evidence list
+button.Show transect section list: Show transect section list
+# Button in Behavior context and scan on focal list of records
+button.back_to_behavior_context: Back to behavior context
+button.hide_scan_on_focal: Hide scan
+button.show_scan_on_focal: Show scan
+button.switch_to_scan_on_focal: List of scan
+
+#
+button.Valid: Validate
+button.BackToTheSelection: Back to selection
+button.BackToTheList: Show list
+button.showAllRecord: Show all records
+Envoyer: Import CSV file
+# Button titles in Edit form
+button.Switch_to_add_focalscan: Switch to new focalscan
+button.Switch_to_add_macro_observation: Switch to new macro obs.
+button.Add_focal_obs: Add a new behavior
+button.Add new macro observation: Add new macro observation
+button.Return to evidence_edit: Back to evidence
+button.Delete macro observation: Delete macro observation
+
+# UPLODAING FILE SERVICE ERROR MESSAGES ########################################
+# Error messages from the data uploading procedures (ImportFileE3s)
+importfileService.ERROR Unknown file imported: ERROR -  UNKNOWN CSV file imported
+importfileService.ERROR Unknown template file: ERROR - UNKNOWN template file
+importfileService.ERROR bad number of columns in CSV file: ERROR - Wrong number of columns in CSV file - cf. GOTIT Help 
+importfileService.ERROR bad column in CSV file: ERROR - the CSV file does not contain correct column names - cf. GOTIT Help 
+importfileService.ERROR bad data OUI-NON: ERROR - INVALID record { OUI / NON , YES / NO, 1 / 0}
+importfileService.ERROR bad data YES-NO: ERROR - INVALID record ( YES / NO )
+importfileService.ERROR bad float format: ERROR - Wrong FLOAT format
+importfileService.ERROR bad date format: ERROR - Wrong date format ( dd / mm / yyyy )
+importfileService.ERROR unknown record: ERROR - UNKNOWN record 
+importfileService.ERROR bad character: ERROR - Special characters are to be deleted in
+importfileService.ERROR duplicate record: ERROR - DUPLICATE record, record already in database
+importfileService.ERROR duplicate code: ERROR - DUPLICATE code, code already in database
+importfileService.ERROR bad code: ERROR - UNKNOWN code
+importfileService.Date of data set import: Date of data set import
+importfileService.Problem of FLUSH: PROBLEM of FLUSH ! the import process is stopped, please modify your CSV file. Error message is
+importfileService.Import OK: Data import is successful. Number of records Imported
+
+#  BUTTON TITLES IN PAGES FOR UPLOADING DATA IN BATCHES ########################
+import.liste: Upload other set of files 
+import.gps: Upload GPS points
+import.gps.check_for_duplications: Check for duplications
+import.gps.without_duplications: Import without duplications
+import.gps.with_duplications: Import with duplications
+import.gps.has_duplications: Import includes duplications
+import.gps.imported: Import done
+
+batch.gps: Batch GPS points
+batch.gps.set_track: Link track
+batch.gps.unset_track: Unlink track
+batch.gps.delete: Delete
+batch.gps.done: Batch done
+
+# TITLES OF CONTENT PAGES  #####################################################
+title.Dashboard: Dashboard
+title.core.working_day: Working Day
+
+
+# HEADINGS OF SCROLLING LISTS ##################################################
+Choose a behavior: Choose a behavior
+Choose a behavior context: Choose a behavior context
+Choose a behavior study: Choose a behavior study
+Choose a filename: Choose a filename
+Choose a gps point: Choose a gps point
+Choose a gps track: Choose a gps track
+Choose a group site: Choose a group site
+Choose a parent: Choose a parent
+Choose a person: Choose a person
+Choose a protocol: Choose a protocol
+Choose a site name: Choose a site name
+Choose a species: Choose a species
+Choose a statut: Choose a status
+Choose a team day: Choose a team day
+Choose a type study: Choose a type study
+Choose a vernacular name: Choose a vernacular name
+Choose a working day: Choose a working day
+Choose an individual: Choose an individual
+Choose a idVocabularyEvidenceType: Choose an evidence type
+Choose a idVocabularyEvidenceSpecie: Choose an evidence specie
+Choose a idEvidenceStudy: Choose an evidence study
+Choose a idVocabularyMacroObservationType: Choose a MacroObservation type
+Choose a idVocabularyTransectType: Choose a Transect Type
+Choose a idVocabularyHabitat: Choose an habitat
+Choose a idVocabularyTrapType: Choose a trap type
+
+# DASHBOARD ####################################################################
+Dashboard.lastUpdate: Last updates (Studies on protocol)
+Dashboard.tools: Management tools
+Dashboard.siteName: List of sites
+Dashboard.behaviorStudy: Studies on protocol (stat)
+Dashboard.queryTools: Query and visualization tools
+
+# OTHER ########################################################################
+NO: NO
+YES: YES
+legales_mentions: Legal notices
+Switch version: Switch version
+# PopUp alert messages related to date management
+alert.datePrecisionINCONNU:  date fields must be left blank 
+alert.datePrecisionANNEE:  All date fields have to be filled with the format 01-01-YYYY
+alert.datePrecisionMOIS:  All date fields have to be filled with the format 01-MM-YYYY
+alert.datePrecisionJOUR:  All date fields have to be filled with the format DD-MM-YYYY
+alert.BadFormatDate: Bad date format (DD-MM-YYYY) or bad value (DD=[1,31] MM=[1,12] YYYY=[1000,2999]
+
+# FORM EMBEDED LABEL
+Illegalactivitys: Trap(s) description
+
+# USER BUNDLE  #################################################################
+# table User_db
+Username: Username
+User Password: Password (8 char min)
+Repeat Password: Repeat Password
+User Email: Email address
+User Role: Role
+User Full Name: User full name
+Institution: Institution
+Commentaire user: User comments
+Locale: Version
+buton.NewUser: Create a new User
+title.user: User
+title.users: Users
+list.User cre: User Create
+list.User maj: User Update
+title.Personne: Person
+Personne: Person
+ROLE_ADMIN: ADMIN
+ROLE_PROJECT: PROJECT MEMBER
+ROLE_COLLABORATION: COLLABORATION MEMBER
+ROLE_INVITED: INVITED MEMBER
+Profile: User profile
+
+# DATABASE  ##############################################################
+# Fields label
+
+Acid detergent fibre percent: Acid detergent fibre percent
+Acid detergent lignin percent: Acid detergent lignin percent
+Altitude: Altitude
+Analysis date: Analysis date
+Analysis place: Analysis place
+Anemia: Anemia
+Appetite index: Appetite index
+Appetite: Appetite
+Authors: Authors
+Avg dm g part eaten: Avg dm g part eaten
+Avg om g part eaten: Avg om g part eaten
+Bil: Bil
+Biological type: Biological type
+Biomol confirmation: Biomol confirmation
+Biomol pcr results: Biomol pcr results
+Birth date confirmation: Birth date confirmation
+Birth date day: Birth date day
+Birth date month: Birth date month
+Birth date year: Birth date year
+Birth date: Birth date
+Bld ery: Bld ery
+Bleeding index: Bleeding index
+Blood hemolized presence: Blood hemolized presence
+Blood hemolized value: Blood hemolized value
+Blood index: Blood index
+Bnb: Bonobo
+Bones index: Bones index
+Building date: Building date
+Ca mg per kgts: Ca mg per kgts
+Canopy diameter m: Canopy diameter m
+Canopy height m: Canopy height m
+Carpo nb : Carpo nb 
+Cd nom: Cd nom
+Cd ref: Cd ref
+Cd valid: Cd valid
+Cellulose percent: Cellulose percent
+Chp: Chimpanzee
+Code bar: Code bar
+Code lot: Code lot
+Code sample: Code sample
+Code subsample: Code subsample
+Code: Code
+Comb index: Comb index
+Comment: Comment
+Condensed tannin percent: Condensed tannin percent
+Corresp bnb: Corresp bnb
+Corresp chp: Corresp chp
+Corresp gor: Corresp gor
+Corresp our: Corresp our
+Cough date start: Cough date start
+Cough nb: Cough nb
+Cough obs duration mn: Cough obs duration mn
+Country: Country
+Cpl: Cpl
+Credit: Credit
+Cristal index: Cristal index
+Crop name: Crop name
+Crude ash percent: Crude ash percent
+Crude fat percent: Crude fat percent
+Crude fiber percent: Crude fiber percent
+Crude protein percent: Crude protein percent
+Cu mg per kgts: Cu mg per kgts
+Date start: Date start
+Date year: Date year
+Date: Date
+Dbh cm: Dbh cm
+Defecate nb: Defecate nb
+Delay since death day: Delay since death day
+Delivery date: Delivery date
+Delivery: Delivery
+Depth cm: Depth cm
+Depth mm: Depth mm
+Description: Description
+Diameter cm: Diameter cm
+Diameter mm: Diameter mm
+Diameter width cm: Diameter width cm
+Digestive problem date start: Digestive problem date start
+Dirt fragments index: Dirt fragments index
+Disappearance cause details: Disappearance cause details
+Disappearance date confirmation: Disappearance date confirmation
+Disappearance date day: Disappearance date day
+Disappearance date month: Disappearance date month
+Disappearance date year: Disappearance date year
+Disappearance: Disappearance
+Discriminant: Discriminant
+Distance m: Distance m
+Distance perp m: Distance perp m
+Dry matter percent: Dry matter percent
+Dry weight g: Dry weight g
+Dung: Dung
+# Email: Email
+Energy kj per g: Energy kj per g
+Entire skeleton: Entire skeleton
+Estimated age day: Estimated age day
+Estimated number: Estimated number
+Examined organ: Examined organ
+Eye: Eye
+Fe mg per kgts: Fe mg per kgts
+Feeding: Feeding
+Fever suspicion: Fever suspicion
+Fibrosity index: Fibrosity index
+Filename: Filename
+Fl index: Flower index
+Fl nb estimation index: Flower nb estimation index
+Fructose percent: Fructose percent
+Fruit ground quantity index: Fruit ground quantity index
+Function end date: Function end date
+Function start date: Function start date
+Fur aspect index: Fur aspect index
+General condition index: General condition index
+Geodesic system: Geodesic system
+Glu: Glu
+Glucose percent: Glucose percent
+Gor: Gorilla
+Gps behavior: Gps behavior
+Gps center: Gps center
+Gps end: Gps end
+Gps info geo: Gps info geo
+Gps ne: Gps NE
+Gps no: Gps NW
+Gps point: Gps point
+Gps se: Gps SE
+Gps so: Gps SW
+Gps start: Gps start
+Gps track: Gps track
+Group name: Group name
+Group nest nb: Group nest nb
+Group nest: Group nest
+Habituation level index: Habituation level index
+Hair legs density index: Hair legs density index
+Hair lower back density index: Hair lower back density index
+Hair shoulders density index: Hair shoulders density index
+Hairs index: Hairs index
+Health condition index: Health condition index
+Height m: Height m
+Height: Height
+Hemi cellulose percent: Hemi cellulose percent
+Herba carpo: Herba carpo
+Hygro evening time: Hygro evening time
+Hygro evening: Hygro evening
+Hygro midday time: Hygro midday time
+Hygro midday: Hygro midday
+Hygro morning time: Hygro morning time
+Hygro morning: Hygro morning
+Id admin user: Admin user
+Id behavior context focal: Behavior context focal
+Id behavior context: Behavior context
+Id behavior plant: Behavior plant
+Id behavior study: Behavior study
+Id behavior: Behavior
+Id evidence study: Evidence study
+Id evidence: Evidence
+Id faeces macro: Faeces macro
+Id field sampling: Field sampling
+Id group site sp: Group site sp
+Id health monitoring: Health monitoring
+Id herba carpo bdd: Herba carpo bdd
+Id herba carpo: Herba carpo
+Id individual description: Individual description
+Id individual: Individual
+Id kinship: Kinship
+Id macro observation nest: Macro observation nest
+Id macro observation: Macro observation
+Id material specie: Material specie
+Id material vernacular name: Material vernacular name
+Id media: Media
+Id metadata: Metadata
+Id mutilation: Mutilation
+Id person: Person
+Id pheno score: Pheno score
+Id pheno study: Pheno study
+Id pheno tree: Pheno tree
+Id plot study: Plot study
+Id plot thv: Plot thv
+Id plot tree: Plot tree
+Id plot: Plot
+Id protocol: Protocol
+Id sample parent: Sample parent
+Id sample: Sample
+Id scan non focal: Scan non focal
+Id shipment: Shipment
+Id site: Site
+Id skin lesion: Skin lesion
+Id specie tree1: Specie tree1
+Id specie tree2: Specie tree2
+Id specie: Specie
+Id species: Species
+Id storage container: Storage container
+Id storage place: Storage place
+Id subsample: Subsample
+Id target specie: Target specie
+Id target vernacular name: Target vernacular name
+Id team day: Team day
+Id track: Track
+Id transect section: Transect section
+Id transect: Transect
+Id urine macro: Urine macro
+Id use: Use
+Id vernacular name: Vernacular name
+Id vocabulary action goal: Action goal
+Id vocabulary address: Address
+Id vocabulary age: Age
+Id vocabulary analysis method type: Analysis method type
+Id vocabulary behavior type individual: Behavior type individual
+Id vocabulary behavior type: Behavior type
+Id vocabulary biomol confidence: Biomol confidence
+Id vocabulary biomol inhibition result: Biomol inhibition result
+Id vocabulary biomol pcr quality: Biomol pcr quality
+Id vocabulary body condition: Body condition
+Id vocabulary body part: Body part
+Id vocabulary body shape: Body shape
+Id vocabulary cause loco problem: Cause loco problem
+Id vocabulary cause precision: Cause precision
+Id vocabulary cause: Cause
+Id vocabulary check : Check 
+Id vocabulary class age sex: Class age sex
+Id vocabulary code container: Code container
+Id vocabulary code place: Code place
+Id vocabulary color macro: Color macro
+Id vocabulary color: Color
+Id vocabulary consistency: Consistency
+Id vocabulary copro type: Copro type
+Id vocabulary cough start precision: Cough start precision
+Id vocabulary cough type: Cough type
+Id vocabulary country: Country
+Id vocabulary date start precision: Date start precision
+Id vocabulary dcc: Dcc
+Id vocabulary delivery date precision: Delivery date precision
+Id vocabulary delivery: Delivery
+Id vocabulary den: Den
+Id vocabulary digestive problem start precision: Digestive problem start precision
+Id vocabulary digestive problem: Digestive problem
+Id vocabulary disappearance cause: Disappearance cause
+Id vocabulary disease type: Disease type
+Id vocabulary distance precision: Distance precision
+Id vocabulary ear left bend: Ear left bend
+Id vocabulary ear left shape: Ear left shape
+Id vocabulary ear left size: Ear left size
+Id vocabulary ear right bend: Ear right bend
+Id vocabulary ear right shape: Ear right shape
+Id vocabulary ear right size: Ear right size
+Id vocabulary evidence specie: Evidence specie
+Id vocabulary evidence type: Evidence type
+Id vocabulary eye behavior: Eye behavior
+Id vocabulary eye problem type: Eye problem type
+Id vocabulary face color: Face color
+Id vocabulary face lips color: Face lips color
+Id vocabulary faeces content: Faeces content
+Id vocabulary female status repro: Female status repro
+Id vocabulary focalscan type: Focalscan type
+Id vocabulary food type: Food type
+Id vocabulary foreign body: Foreign body
+Id vocabulary fruit ground maturity: Fruit ground maturity
+Id vocabulary genital problem: Genital problem
+Id vocabulary group position: Group position
+Id vocabulary habitat1: Habitat 1
+Id vocabulary habitat2: Habitat 2
+Id vocabulary hair legs color: Hair legs color
+Id vocabulary hair lower back color: Hair lower back color
+Id vocabulary hair shoulders color: Hair shoulders color
+Id vocabulary head hair color: Head hair color
+Id vocabulary head hair density: Head hair density
+Id vocabulary healing stage: Healing stage
+Id vocabulary height class: Height class
+Id vocabulary height: Height
+Id vocabulary hierarchical rank: Hierarchical rank
+Id vocabulary home range: Home range
+Id vocabulary individual ni: Individual ni
+Id vocabulary infection: Infection
+Id vocabulary info type : Info type 
+Id vocabulary institution: Institution
+Id vocabulary kinship type: Kinship type
+Id vocabulary language: Language
+Id vocabulary lesion type: Lesion type
+Id vocabulary lips color: Lips color
+Id vocabulary location: Location
+Id vocabulary loco problem start precision: Loco problem start precision
+Id vocabulary macro observation type: Macro observation type
+Id vocabulary mammal left problem: Mammal left problem
+Id vocabulary mammal right problem: Mammal right problem
+Id vocabulary mass cause precision: Mass cause precision
+Id vocabulary mass cause: Mass cause
+Id vocabulary mass location: Mass location
+Id vocabulary mass type: Mass type
+Id vocabulary mutilation type: Mutilation type
+Id vocabulary nature loco problem: Nature loco problem
+Id vocabulary necropsy results: Necropsy results
+Id vocabulary neuro problem cause precision: Neuro problem cause precision
+Id vocabulary neuro problem cause: Neuro problem cause
+Id vocabulary neuro problem type: Neuro problem type
+Id vocabulary nose: Nose
+Id vocabulary number unit: Number unit
+Id vocabulary obs distance min: Obs distance min
+Id vocabulary oestrus: Oestrus
+Id vocabulary orientation: Orientation
+Id vocabulary origin loco problem: Origin loco problem
+Id vocabulary origin: Origin
+Id vocabulary other analysis: Other analysis
+Id vocabulary other macro type: Other macro type
+Id vocabulary part use: Part use
+Id vocabulary part: Part
+Id vocabulary ph: Ph
+Id vocabulary plant part: Plant part
+Id vocabulary position locomotor problem: Position locomotor problem
+Id vocabulary proximity: Proximity
+Id vocabulary quantity other unit: Quantity other unit
+Id vocabulary quantity unit: Quantity unit
+Id vocabulary respiratory problem type: Respiratory problem type
+Id vocabulary sample type: Sample type
+Id vocabulary sampling type: Sampling type
+Id vocabulary sex: Sex
+Id vocabulary shrub leave score: Shrub leave score
+Id vocabulary side: Side
+Id vocabulary snare loco type: Snare loco type
+Id vocabulary sneeze start precision: Sneeze start precision
+Id vocabulary sneeze type: Sneeze type
+Id vocabulary storage type: Storage type
+Id vocabulary storage: Storage
+Id vocabulary substrat type: Substrat type
+Id vocabulary target object: Target object
+Id vocabulary thv life form: Thv life form
+Id vocabulary tick location: Tick location
+Id vocabulary tool material: Tool material
+Id vocabulary transect type: Transect type
+Id vocabulary trap material: Trap material
+Id vocabulary trap status: Trap status
+Id vocabulary trap target: Trap target
+Id vocabulary trap type: Trap type
+id vocabulary tree life form: Tree life form
+Id vocabulary tree status: Tree status
+Id vocabulary type container: Type container
+Id vocabulary type dna: Type dna
+Id vocabulary type study: Type study
+Id vocabulary type use: Type use
+Id vocabulary type: Type
+Id vocabulary unit: Unit
+Id vocabulary unsual behavior: Unsual behavior
+Id vocabulary urinary problem macro: Urinary problem macro
+Id vocabulary urinary problem start precision: Urinary problem start precision
+Id vocabulary urine collect method: Urine collect method
+Id vocabulary validation status: Validation status
+Id vocabulary vulva discharge: Vulva discharge
+Id vocabulary vulva shape  oestrus1: Vulva shape  oestrus1
+Id vocabulary vulva shape swelling: Vulva shape swelling
+Id vocabulary vulva size oestrus1: Vulva size oestrus1
+Id vocabulary vulva size swelling: Vulva size swelling
+Id working day: Working day
+Idadmin user: Idadmin user
+Idanimal neighbour: Idanimal neighbour
+Idbehavior context: Idbehavior context
+Idbehavior plant: Idbehavior plant
+Idbehavior study: Idbehavior study
+Idbehavior: Idbehavior
+Idbiomol genet results: Idbiomol genet results
+Idbiomol parasito results: Idbiomol parasito results
+Idbiomol pcr results: Idbiomol pcr results
+Idcopro results: Idcopro results
+Idevidence study: Idevidence study
+Idevidence: Idevidence
+Ideye problem: Ideye problem
+Idfaeces macro: Idfaeces macro
+Idfaeces species: Idfaeces species
+Idfield sampling: Idfield sampling
+Idgps duplicate: Idgps duplicate
+Idgps: Idgps
+Idgroup site sp: Idgroup site sp
+Idhealth monitoring: Idhealth monitoring
+Idherba carpo: Idherba carpo
+Idillegal activity: Idillegal activity
+Idindividual description: Idindividual description
+Idindividual: Idindividual
+Idkinship: Idkinship
+Idmacro observation: Idmacro observation
+Idmedia link: Idmedia link
+Idmedia: Idmedia
+Idmetadata: Idmetadata
+Idmutilation: Idmutilation
+Idnecropsy: Idnecropsy
+Idnest: Idnest
+Idnutritional results: Idnutritional results
+Idother analysis results: Idother analysis results
+Idother macro: Idother macro
+Idperson: Idperson
+Idpheno score: Idpheno score
+Idpheno study: Idpheno study
+Idpheno tree: Idpheno tree
+Idplot study: Idplot study
+Idplot thv: Idplot thv
+Idplot tree: Idplot tree
+Idplot: Idplot
+Idprotocol: Idprotocol
+Idsample: Idsample
+Idscan non focal: Idscan non focal
+Idshipment metadata: Idshipment metadata
+Idshipment: Idshipment
+Idsite: Idsite
+Idskin lesion: Idskin lesion
+Idspecie: Idspecie
+Idstorage container: Idstorage container
+Idstorage place: Idstorage place
+Idsubsample: Idsubsample
+Idteam day: Idteam day
+Idtool: Idtool
+Idtrack: Idtrack
+Idtransect section: Idtransect section
+Idtransect: Idtransect
+Idurine macro: Idurine macro
+Iduse: Iduse
+Idvernacular name: Idvernacular name
+Idvocabulary: Idvocabulary
+Idworking day: Idworking day
+Index: Index
+Individual code: Individual code
+Individual nb: Individual nb
+Indo details: Indo details
+Info geo: Info geo
+Inhibition test: Inhibition test
+Intensity index: Intensity index
+Ket: Ket
+Large mm: Large mm
+Latitude: Latitude
+Leave nb: Leave nb
+Lenght cm: Lenght cm
+Length m: Length m
+Length mm: Length mm
+Lethargy index: Lethargy index
+Leu: Leu
+License: License
+Loco problem date start: Loco problem date start
+Locomotion index: Locomotion index
+Locomotion: Locomotion
+Login: Login
+Long mm: Long mm
+Longitude: Longitude
+Macro type: Macro type
+Main address affiliation: Main address affiliation
+Main affiliation: Main affiliation
+Mark in date: Mark in date
+Mark out date: Mark out date
+Mass diameter cm: Mass diameter cm
+Meat index: Meat index
+Mg mg per kgts: Mg mg per kgts
+Mime type: Mime type
+Ml index: Ml index
+Ml nb estimation index: Ml nb estimation index
+Mn mg per kgts: Mn mg per kgts
+Mucus index: Mucus index
+Muscles index: Muscles index
+Mutilation date confirmation: Mutilation date confirmation
+Mutilation date: Mutilation date
+Na mg per kgts: Na mg per kgts
+Name: Name
+Nearest: Nearest
+Neutral detergent fibre percent: Neutral detergent fibre percent
+Nickname: Nickname
+Nit: Nit
+Nitrogen percent: Nitrogen percent
+Nom champ Interface: Libelle Interface en
+Nose mucus index: Nose mucus index
+Num group site: Num group site
+Num herba carpo: Num herba carpo
+Num pheno tree: Num pheno tree
+Num plot: Num plot
+Num transect run: Num transect run
+Num transect section: Num transect section
+Num transect: Num transect
+Number: Number
+Open lesion: Open lesion
+Other affiliations: Other affiliations
+Our: Orang-outan
+Parent: Parent
+Password: Password
+Path: Path
+Person contact: Person contact
+Personal phone: Personal phone
+Phone: Phone
+Pl: Pl
+Precision: Precision
+Presence: Presence
+Pro: Pro
+Process: Process
+Protected area: Protected area
+Quantity other: Quantity other
+Quantity shipment: Quantity shipment
+Quantity: Quantity
+Rainfall mm: Rainfall mm
+Rank confirmation: Rank confirmation
+Ref plot quadra: Ref plot quadra
+Region: Region
+Relascope: Relascope
+Repetition: Repetition
+Respiratory rythm nb mn: Respiratory rythm nb mn
+Result: Result
+Result1: Result1
+Result2: Result2
+Rf index: Ripe fruit index (RF)
+Rf nb estimation index: Ripe fruit nb estimation index (RF)
+Role: Role
+Sending date: Sending date
+Sequence double: Sequence double
+Sequencing: Sequencing
+Severity degree index: Severity degree index
+Shape: Shape
+Site name: Site name
+Size cm: Size cm
+Size: Size
+Skeleton location: Skeleton location
+Snare loco presence: Snare loco presence
+Sneeze date start: Sneeze date start
+Sneeze nb: Sneeze nb
+Sneeze obs duration mn: Sneeze obs duration mn
+Sort: Sort
+Starch percent: Starch percent
+Status: Status
+Stem nb: Stem nb
+Storage datetime: Storage datetime
+Storage detail: Storage detail
+Strip band: Strip band
+Substrat firmness index: Substrat firmness index
+Sucrose percent: Sucrose percent
+Taxon class: Taxon class
+Taxon family: Taxon family
+Taxon genus: Taxon genus
+Taxon infraorder: Taxon infraorder
+Taxon kingdom: Taxon kingdom
+Taxon order: Taxon order
+Taxon phylum: Taxon phylum
+Taxon specie: Taxon specie
+Taxon subclass: Taxon subclass
+Taxon suborder: Taxon suborder
+Taxon subspecies: Taxon subspecies
+Taxon superfamily: Taxon superfamily
+Taxon superorder: Taxon superorder
+Technician: Technician
+Temp evening time: Temp evening time
+Temp evening: Temp evening
+Temp midday time: Temp midday time
+Temp midday: Temp midday
+Temp morning time: Temp morning time
+Temp morning: Temp morning
+Tick index: Tick index
+Tickness height mm: Tickness height mm
+Time analysis: Time analysis
+Time behavior end: Time behavior end
+Time behavior start: Time behavior start
+Time contact mn: Time contact mn
+Time end: Time end
+Time scan: Time scan
+Time start in: Time start in
+Time start out: Time start out
+Time start: Time start
+Time: Time
+Timestamp: Timestamp
+Tool efficiency: Tool efficiency
+Total phenol percent: Total phenol percent
+Total seed index: Total seed index
+Total tannin percent: Total tannin percent
+total time contact mn: Total time contact mn
+Total time forest mn: Total time forest mn
+Trap nb: Trap nb
+Trap: Trap
+Tree dbh: Tree dbh
+Tree distance m: Tree distance m
+Tree fl index: Tree flower index (FL)
+Tree ml index: Tree mature leave  index (ML)
+Tree nb: Tree nb
+Tree rf index: Tree ripe fruit index (RF)
+Tree urf index: Tree unrirpe fruit index (URF)
+Tree yl index: Tree young leave index (YL)
+Turbidity macro index: Turbidity macro index
+Type record: Type record
+Ubg mgdl: Ubg mgdl
+Undercover description: Undercover description
+Urf index: Unripe fruit index (URF)
+Urf nb estimation index: Unripe fruit nb estimation index (URF)
+Uri old file: Uri old file
+Urinary problem date start: Urinary problem date start
+Urine nb: Urine nb
+Urine: Urine
+Used name: Used name
+Valid: Valid
+Value: Value
+Visibility: Visibility
+Visible blood index: Visible blood index
+Visual confirmation: Visual confirmation
+Weight g: Weight g
+Wet weight g: Wet weight g
+Width cm: Width cm
+Width m: Width m
+Width mm: Width mm
+Width: Width
+Work phone: Work phone
+Yl index: Yl index
+Yl nb estimation index: Yl nb estimation index
+Zn mg per kgts: Zn mg per kgts

@@ -1,0 +1,15 @@
+search: Rechercher
+
+add: ajouter
+create: créer
+
+login:
+  sign in: Connexion
+  username: Utilisateur
+  password: Mot de passe
+  remember me: Rester connecté·e
+
+footer:
+  github_prompt: "Aidez-nous à améliorer ce projet"
+  bug_report: "rapport de bug"
+  feature_request: "demande de développement"

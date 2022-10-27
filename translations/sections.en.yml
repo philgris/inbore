@@ -1,0 +1,15 @@
+core:
+  Dashboard: Dashboard
+  ref-collaboration: Repository (collaboration)
+  ref-project: Repository (project)
+  ref-admin: Repository (admin)
+  users: User
+
+  # sub-menus 
+
+  # sub-menus ref-collaboration
+
+  # sub-menus ref-project
+
+  # sub-menus ref-admin
+  vocabulary: Vocabulary
