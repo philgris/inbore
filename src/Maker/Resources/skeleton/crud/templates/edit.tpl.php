@@ -15,12 +15,20 @@
 
 {% block action %}
 	{{parent()}}
-        {# Add a button Back to linked entity : name_of_linked_entity
+        {# Add a button Back to N-1 linked entity : name_of_linked_entity
             {% if edit_form.vars.data.nameOfLinkedEntityFk is not null %}
                     <a href="{{path('name_of_linked_entity_show', {id: edit_form.vars.data.nameOfLinkedEntityFk.id})}}" class="btn btn-sm btn-info">
                             <i class="fas fa-link"></i>
                             {{'button.Back to name_of_linked_entity'|trans}}
                     </a>
+            {% endif %}
+        #}
+        {# Add a button Show List of 1-N linked entity : name_of_linked_entity
+            {% if edit_form.vars.value.id is not null %}
+                        <a href="{{path('name_of_linked_entity_index', {'nameFk':'coreEntityFk', 'idFk':edit_form.vars.value.id})}}" class="btn btn-sm btn-info">
+                                <i class="fas fa-list"></i>
+                    {{'button.Show name_of_linked_entity list'|trans}}
+                        </a>
             {% endif %}
         #}
 {% endblock %}

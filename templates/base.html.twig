@@ -1,5 +1,5 @@
-{# configuration parameter for second language. put the 'code-ISO-second-language' or '' if there is not #}
-{% set second_language = 'en' %}
+{# configuration parameter for second language. put the 'code-ISO-second-language' or let '' if there is not #}
+{% set second_language = '' %}
 
 {# setup TWIG variables ; base_route_index, base_route_url, help_message #}
 {% set base_route_index = app.request.attributes.get('_route') %}
@@ -19,7 +19,7 @@
 
 		<title>
                             {% block title %}
-                                Greatapes
+                                InBORe 1.0
                             {% endblock %}
 		</title>
 
