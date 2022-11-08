@@ -28,7 +28,7 @@ list.user_maj: U Maj
 list.user_cre: U Cre
 # Dashboard
 # Entity1
-list.entity1_fieldname1: ex. libellé du champ fieldname1 de l'entity1 de la liste
+list.entity1_fieldname1: ex. libellé du champ fieldname1 de l'entity1
 
 
 # BUTTONS ######################################################################
@@ -51,16 +51,16 @@ button.Back to the list of entity: ex. Retour à la liste des Entity
 # Button titles in web interface
 button.NewEntity: ex. Créer une Entity
 
-# Button in Media
+# Button in Media ##############################################################
 button.NewMedia: Ajouter un Media
 
-# Button in Gps Form and list of record
+# Button in Gps Form and list of record ########################################
+list.link_gps: gps
+list.gps_point: GPS
 button.NewGps:  Créer un point Gps
 button.ImportGps:  Importer des points Gps 
 button.BatchGps:  Ajuster les points Gps
 button.NewTrack:   Ajouter un track
-
-
 #  BUTTON TITLES IN PAGES FOR UPLOADING DATA IN BATCHES ########################
 import.liste: Importer des fichiers
 import.gps: Importer des point GPS par lot
@@ -69,7 +69,6 @@ import.gps.without_duplications: Importer sans duplications
 import.gps.with_duplications: Importer avec duplications
 import.gps.has_duplications: L'import comprend des duplications
 import.gps.imported: Import effectué
-
 # BATCH GPS ACTIONS ############################################################
 batch.gps: Gestion par lot des points GPS
 batch.gps.set_track: Associer le tracé
@@ -79,7 +78,7 @@ batch.gps.done: Action effectuée
 
 # TITLES OF CONTENT PAGES  #####################################################
 title.Dashboard: Dashboard
-title.core.working_day: Working Day
+title.core.entity: ex. Entity title 
 
 
 # HEADINGS OF SCROLLING LISTS ##################################################
