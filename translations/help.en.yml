@@ -17,7 +17,7 @@ user_show: |
 user_edit: |
     INFO : Use this form to edit data of a user. 
 
-login: Use this page to login and access to Greatapes  web user interface
+login: Use this page to login and access to web user interface
 # info generale aux import de fichiers csv
 importfiles.form: |
     (1) Select the file to be imported using the scroll bar
@@ -30,7 +30,4 @@ importfiles.form: |
          - quotation marks as text field delimiter 
 # procédure d'import csv      
 importfilestable_index: | 
-    INFO : Use this form to upload data from multiple internal sequences and related data sets. Proceed by step: 
-    - (if necessary) upload the referential files (templates: source, vocabulary, person, taxon);
-    - Use and upload the template “internal_sequence” to follow appropriate data format.
-    Also, refer to the section “uploading tools” in GOTIT HELP for further details on the uploading procedure.
+    INFO : 

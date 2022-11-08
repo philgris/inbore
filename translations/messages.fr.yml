@@ -14,128 +14,21 @@
 
 
 # SHORT TITLE OF COLUMNS IN CONTENT PAGES ######################################
-# Links
+# Column titles
 list.show: Lire
 list.edit: Edit
 list.delete: Supp
-list.link_working_day: J.Et
-list.link_working_day.title: Journée d'Etude
-list.link_team_day: Equ
-list.link_behavior_study: E.Comp
-list.link_behavior_context: Context
-list.link_transect: Trans.
-list.link_transect.title: Transect
-list.link_pheno_tree: Arbre
-list.link_pheno_tree.title: Arbre (Pheno)
-list.link_individual: Ind.
-list.link_individual_description: Desc.
-list.link_gps: gps
-list.link_evidence: Evid.
-list.link_evidence_study: EStudy
-list.link_macro_observation: MObs
-list.link_transect_section: Tr.Sec
-
-# Column titles
+# Links
+list.link_entity: ex. libellé du lien vers l'Entity
+# General  
 list.id__search_column: id *
 list.date_maj: Date Maj
 list.date_cre: Date Cre
 list.user_maj: U Maj
 list.user_cre: U Cre
-list.date: Date
-list.site_name: Site
-list.workingday_date_sitename: Journée d'étude / Site
-list.time_start: Heure (début)
-list.time_end: Heure (fin)
-list.list_person: Personnes  
-list.protocol_code: Code protocole
-list.individual_name: Nom
-list.behavior_type: Type de comportement
-list.time_behavior_start: Heure (début)
-list.time_behavior_end: Heure (fin)
-list.workingday_date_sitename_typestudy: Journée / Site / Type d'étude
-list.workingday_date_sitename_typestudy_id: Journée / Site / Type Etude / Id-EC
-list.list_behavior_type: Comportement(s)
-list.focalscan_type: Type de scan
-list.time_scan: Heure du scan
-list.id_scan: Id du scan
-list.individual_code:  Code
-list.group_name: Nom du groupe
-list.taxon_genus_specie_subspecies : Genus / specie / subspecies
-list.person_name: Nom
-list.person_code: Code
-list.person_status: Statut
-list.list_sites: Sites d'études
-list.taxon_code: Code espèce
-list.taxon_kindom: Taxon kindom
-list.taxon_family: Taxon family
-list.taxon_genus: Taxon genus*
-list.taxon_specie: Taxon specie
-list.taxon_subspecies: Taxon subspecies
-list.vernacular_name: Nom vernaculaire
-list.vocabulary_language: Langue
-list.vocabulary_validation_status: Statut
-list.filename: Filename
-list.name: Name
-list.idgps_duplicate: Idgps duplicate
-list.track_number: Track code
-list.latitude: Latitude
-list.longitude: Longitude
-list.altitude: Altitude
-list.date_year: Année
-list.vocabulary_type_study: Type de protocol
-list.country: Pays
-list.region: Région
-list.num_group_site: Code du groupe
-list.parent: parent
-list.list_tables: table(s)
-list.batch: Batch
-list.code: Code
-list.valid: valid
-# working day
-list.list_protocol: protocole(s)
-list.count_macro_observation: nb obs.
-# scan on focal
-list.individual_name_focal: Nom individu
-list.voc_habitat_code: Habitat(s)
-list.voc_habitat_1_code: Habitat 1
-list.height: Hauteur
-#evidence study & evidence
-list.evidenceStudy_bootgrid_search_column:  Journée / Site
-list.evidenceStudy_numTransectRun: Num transect run
-list.evidenceStudy_time_start_in: Time start
-list.evidenceStudy_time_end_out: Time end
-list.evidence_bootgrid_search_column: Journée / Site / Type / Id-ES
-list.evidence_type: Evidence type
-list.evidence_specie: Evidence espèce
-list.gps_point: GPS
-list.evidenceStudy_gpsTrack: Track
-# macro-observation
-list.macroObservation_bootgrid_search_column: Journée / Site / Type
-list.vocabularyMacroObservationType_name: Macro type
-# transect & transect section 
-list.transect_bootgrid_search_column: Num transect
-list.transect_gpsStart: GPS start
-list.transect_gpsEnd: GPS end
-list.transect_gpsTrack: Track
-list.transectSection_bootgrid_search_column: Num transect section
-list.transectSection_gpsStart: GPS start
-list.transectSection_gpsEnd: GPS end
-list.transectSection_gpsTrack: Track
-list.transect_numTransect: Num transect
-
 # Dashboard
-list.dashboard.siteName: Site
-list.dashboard.country: Pays
-list.dashboard.region: Region
-list.dashboard.codeProtocol: Code protocole
-list.dashboard.numberBehaviorStudy: Nombre
-list.dashboard.type_study: Type d'étude
-
-# Ambiguous name
-vernacular_name.name: Nom vernaculaire
-
-# Name of collection*
-Specievernaculars: Espèces
+# Entity1
+list.entity1_fieldname1: ex. libellé du champ fieldname1 de l'entity1 de la liste
 
 
 # BUTTONS ######################################################################
@@ -144,89 +37,29 @@ button.Back: Retour
 button.exportToCSV: Exporter au format CSV
 button.exportToCSV-title: Encodage UTF-8 et Séparateur point virgule
 button.Close: Fermer 
-# Button titles in csv file uploading tools
-button.ImportVocabulary: Importer fichier Vocabulaire
-button.ImportPerson: Importer fichier Personne
-#  Button titles "Back to Entity"
-button.Back to site: Retour à la Station
-button.Back to working_day: Retour à la Journée d'étude
-button.Back to team_day: Retour à l'Equipe
-button.Back to Behavior Study: Retour à l'Etude comportementale
-button.Back to individual: Retour à l'Individu
-button.Back to Evidence Study: Retour à l'Etude des évidences
-button.Back to transect: Retour au Transect
-#  Button titles "Back to Entity" in csv file uploading tools
-button.Back to the list of site: Retour à la liste des Stations
-# Button titles in web interface
-button.Add a working day: Ajouter un working day
-button.NewSite: Créer un site
-button.NewVoc: Créer un vocabulaire
-button.NewWorking_day: Créer une journée d'étude
-button.NewTeam_day: Créer une équipe
-button.NewPerson: Créer une personne
-button.NewBehavior_study: Créer une étude comportementale
-button.NewBehavior_context: Créer un contexte
-button.NewScan_non_focal: Créer un scan / focale
-button.NewIndividual: Créer un individu
-button.NewSpecie: Créer un  taxon
-button.NewVernacular_name: Créer un nom vernaculaire
-button.NewMedia: Ajouter un Media
-button.NewGps:  Créer un point Gps
-button.ImportGps:  Importer des points Gps 
-button.BatchGps:  Ajuster les points Gps
-button.NewTrack:   Ajouter un track
-button.NewProtocol: Créer un protocole
-button.NewGroup_site_sp: Créer un groupe
-button.NewIndividual_description:  Créer une description
-button.NewMacro_observation: Créer une Macro observation
-button.NewEvidence:  Créer une Evidence
-button.NewEvidence_study: Créer une Etude d'évidence
-button.NewTransect: Créer un nouveau Transect
-button.NewTransect_section: Créer un nouveau Transect section
-#  Button titles "Show Relative Entity list"
-button.Show behavior context list: Afficher la liste des contextes
-button.Show evidence list: Afficher la liste des evidences
-button.Show transect section list: Afficher la liste des transects section
-# Button in Behavior context and scan on focal list of records
-button.back_to_behavior_context: Retour aux contextes
-button.hide_scan_on_focal: Cacher les contextes des scans
-button.show_scan_on_focal: Afficher les contextes des scans
-button.switch_to_scan_on_focal: Lister les scans
-
-# 
 button.Valid: Valider
 button.BackToTheSelection: Retour à la selection
 button.BackToTheList: Afficher la Liste
 button.showAllRecord: Liste de tous les enregistrements
 Envoyer: Importer le fichier CSV
-# Button titles in Edit form
-button.Switch_to_add_focalscan: Ajouter un scan/focale
-button.Switch_to_add_macro_observation: Ajouter une macro obs.
-button.Add_focal_obs: Ajouter un nouveau comportement
-button.Add new macro observation: Ajouter une macro obs.
-button.Return to evidence_edit: Retour à l'Evidence
-button.Delete macro observation: Supprimer la Macro obs.
+# Button titles in csv file uploading tools
+button.ImportEntity: ex. Importer fichier 
+#  Button titles "Back to Entity"
+button.Back to entity: ex. Retour à l'entity
+#  Button titles "Back to Entity" in csv file uploading tools
+button.Back to the list of entity: ex. Retour à la liste des Entity
+# Button titles in web interface
+button.NewEntity: ex. Créer une Entity
 
+# Button in Media
+button.NewMedia: Ajouter un Media
 
-# UPLODAING FILE SERVICE ERROR MESSAGES ########################################
-# Error messages from the data uploading procedures (ImportFileE3s)
-importfileService.ERROR Unknown file imported: ERREUR - fichier CSV INCONNU
-importfileService.ERROR Unknown template file: ERREUR - template INCONNU
-importfileService.ERROR bad number of columns in CSV file: ERREUR - Le fichier CSV ne contient pas le bon nombre de collonnes - cf. Aide GOTIT
-importfileService.ERROR bad column in CSV file: ERREUR - le fichier CSV ne contient pas les bonnes colonnes du modèle de migration - cf. Aide GOTIT
-importfileService.ERROR NULL value: ERREUR - Contenu INVALIDE (valeur NULL)
-importfileService.ERROR bad data OUI-NON: ERREUR - Contenu INVALIDE { OUI / NON , YES / NO, 1 / 0}
-importfileService.ERROR bad data YES-NO: ERREUR - Contenu INVALIDE ( YES / NO )
-importfileService.ERROR bad float format: ERREUR - Format de type FLOAT INVALIDE
-importfileService.ERROR bad date format: ERREUR - Format de date INVALIDE ( d / m / Y )
-importfileService.ERROR unknown record: ERREUR - Enregistrement INCONNU
-importfileService.ERROR bad character: ERREUR - Des caractères spéciaux sont à supprimer dans
-importfileService.ERROR duplicate record: ERREUR - Enregistrement déja présent dans la BDD
-importfileService.ERROR duplicate code: ERREUR - Code déja présent dans la BDD
-importfileService.ERROR bad code: ERREUR - Code INCONNU
-importfileService.Date of data set import: Date import
-importfileService.Problem of FLUSH: Problème de FLUSH ! La procédure d'import est stoppée, vous devez corriger le fichier CSV. Le message d'erreur est
-importfileService.Import OK: Procédure d'importation terminée. Nombre d'enregistrements insérés
+# Button in Gps Form and list of record
+button.NewGps:  Créer un point Gps
+button.ImportGps:  Importer des points Gps 
+button.BatchGps:  Ajuster les points Gps
+button.NewTrack:   Ajouter un track
+
 
 #  BUTTON TITLES IN PAGES FOR UPLOADING DATA IN BATCHES ########################
 import.liste: Importer des fichiers
@@ -250,36 +83,13 @@ title.core.working_day: Working Day
 
 
 # HEADINGS OF SCROLLING LISTS ##################################################
-Choose a behavior: Sélectionner un comportement
-Choose a behavior context: Sélectionner un contexte
-Choose a behavior study: Sélectionner une étude comportementale
-Choose a filename: Sélectionner un ficher
-Choose a gps point: Sélectionner un point gps
-Choose a gps track: Sélectionner un track
-Choose a group site: Sélectionner un groupe
-Choose a parent: Sélectionner un parent
-Choose a person: Sélectionner une personne
-Choose a protocol: Sélectionner un protocole
-Choose a site name: Sélectionner un site
-Choose a species: Sélectionner une espèce
-Choose a statut: Sélectionner un statut
-Choose a team day: Sélectionner une équipe
-Choose a type study: Sélectionner un type d'étude
-Choose a vernacular name: Sélectionner un nom vernaculaire
-Choose a working day: Sélectionner une journée d'étude
-Choose an individual: Sélectionner un individu
-Choose a idVocabularyEvidenceType: Sélectionner un type  d'evidence
-Choose a idVocabularyEvidenceSpecie: Sélectionner une espèce
-Choose a idEvidenceStudy: Sélectionner une étude sur protocole 
-Choose a idVocabularyMacroObservationType: Sélectionner un type de Macro-Observation
-Choose a idVocabularyHabitat: Sélectionner un habitat
-Choose a idVocabularyTrapType: Choose a trap type
+Choose a entity: ex. Sélectionner une Entity-label
+
 
 # DASHBOARD ####################################################################
-Dashboard.lastUpdate: Dernières mises à jour (étude sur protocole)
+Dashboard.lastUpdate: Dernières mises à jour 
 Dashboard.tools: Outils de gestion
 Dashboard.siteName: Liste des sites d'étude
-Dashboard.behaviorStudy: Etudes sur protocole (stat)
 Dashboard.queryTools: Outils de visualisation
 
 # OTHER ########################################################################
@@ -298,8 +108,27 @@ alert.datePrecisionMOIS: les champs date doivent avoir le format 01-MM-AAAA
 alert.datePrecisionJOUR: les champs date doivent avoir le format JJ-MM-AAAA
 alert.BadFormatDate: mauvais format de date (JJ-MM-AAAA) ou mauvaise valeur (JJ=[1,31] MM=[1,12] AAAA=[1000,2999]
 
+# UPLODAING FILE SERVICE ERROR MESSAGES ########################################
+# Error messages from the data uploading procedures (ImportFileE3s)
+importfileService.ERROR Unknown file imported: ERREUR - fichier CSV INCONNU
+importfileService.ERROR Unknown template file: ERREUR - template INCONNU
+importfileService.ERROR bad number of columns in CSV file: ERREUR - Le fichier CSV ne contient pas le bon nombre de collonnes - cf. Aide GOTIT
+importfileService.ERROR bad column in CSV file: ERREUR - le fichier CSV ne contient pas les bonnes colonnes du modèle de migration - cf. Aide GOTIT
+importfileService.ERROR NULL value: ERREUR - Contenu INVALIDE (valeur NULL)
+importfileService.ERROR bad data OUI-NON: ERREUR - Contenu INVALIDE { OUI / NON , YES / NO, 1 / 0}
+importfileService.ERROR bad data YES-NO: ERREUR - Contenu INVALIDE ( YES / NO )
+importfileService.ERROR bad float format: ERREUR - Format de type FLOAT INVALIDE
+importfileService.ERROR bad date format: ERREUR - Format de date INVALIDE ( d / m / Y )
+importfileService.ERROR unknown record: ERREUR - Enregistrement INCONNU
+importfileService.ERROR bad character: ERREUR - Des caractères spéciaux sont à supprimer dans
+importfileService.ERROR duplicate record: ERREUR - Enregistrement déja présent dans la BDD
+importfileService.ERROR duplicate code: ERREUR - Code déja présent dans la BDD
+importfileService.ERROR bad code: ERREUR - Code INCONNU
+importfileService.Date of data set import: Date import
+importfileService.Problem of FLUSH: Problème de FLUSH ! La procédure d'import est stoppée, vous devez corriger le fichier CSV. Le message d'erreur est
+importfileService.Import OK: Procédure d'importation terminée. Nombre d'enregistrements insérés
 
-# USER BUNDLE  #################################################################
+# USER #################################################################
 # table User_db
 Username: Nom d'utilisateur
 User Password: Mot de passe (8 char min)
@@ -322,605 +151,10 @@ ROLE_COLLABORATION: MEMBRE COLLABORATION
 ROLE_INVITED: INVITÉ
 Profile: Profil utilisateur
 
-# FORM EMBEDED LABEL
-Illegalactivitys: Piège(s)
 
 
 # DATABASE  ##############################################################
-#  Database Field Titles
+#  Database Field Titles : Liste de tous les champs des tables de la bdd
 
-Acid detergent fibre percent: Pourcentage détergent acide fibre
-Acid detergent lignin percent: Pourcentage détergent acide lignine
-Altitude: Altitude
-Analysis date: Analyse date
-Analysis place: Analyse lieu
-Anemia: Anémie
-Appetite index: Appétit index
-Appetite: Appétit vérifié
-Authors: Auteur
-Avg dm g part eaten: Avg dm g partie mangée
-Avg om g part eaten: Avg om g partie mangée
-Bil: Bil
-Biological type: Type biologique
-Biomol confirmation: Biomol confirmation
-Biomol pcr results: Biomol résultats pcr
-Birth date confirmation: Date naissance confirmation
-Birth date day: Date naissance jour
-Birth date month: Date naissance mois
-Birth date year: Date naissance année
-Birth date: Date de naissance
-Bld ery: Bld ery
-Bleeding index: Saignement index
-Blood hemolized presence: Sang hémolysé présence
-Blood hemolized value: Sang hémolysé valeur
-Blood index: Sang index
-Bnb: Bnb
-Bones index: Os index
-Building date: Construction date
-Ca mg per kgts: Ca mg par kgts
-Canopy diameter m: Diamètre canopé m
-Canopy height m: Hauteur canopé m
-Carpo nb: Carpo nb
-Cd nom: Cd nom
-Cd ref: Cd ref
-Cd valid: Cd validé
-Cellulose percent: Pourcentage cellulose
-Chp: Chimpanzé
-Code bar: Codebarre
-Code lot: Code lot
-Code sample: Code échantillon
-Code subsample: Code sous-échantillon
-Code: Code
-Comb index: Comb index
-Comment: Commentaire
-Condensed tannin percent: Pourcentage tannin condensé
-Corresp bnb: Correspondance bonobo
-Corresp chp: Correspondance chimpanzé
-Corresp gor: Correspondance gorille
-Corresp our: Correspondance orang-outan
-Cough date start: Toux date début
-Cough nb: Toux nb
-Cough obs duration mn: Toux obs durée mn
-Country: Pays
-Cpl: Cpl
-Credit: Crédit
-Cristal index: Cristal index
-Crop name: Culture nom
-Crude ash percent: Pourcentage cendre brut
-Crude fat percent: Pourcentage gras brut
-Crude fiber percent: Pourcentage fibre brut
-Crude protein percent: Pourcentage protéine brut
-Cu mg per kgts: Cu mg par kgts
-Date start: Date début
-Date year: Date année
-Date: Date
-Dbh cm: Dbh cm
-Defecate nb: Déféquer nb
-Delay since death day: Intervalle depuis jour décès
-Delivery date: Date misebas
-Delivery: Accouchement vérifié
-Depth cm: Profondeur cm
-Depth mm: Profondeur mm
-Description: Description
-Diameter cm: Diamètre cm
-Diameter mm: Diamètre mm
-Diameter width cm: Diamètre largeur cm
-Digestive problem date start: Problème digestif date début
-Dirt fragments index: Fragments saleté index
-Disappearance cause details: Disparition cause détails
-Disappearance date confirmation: Disparition date confirmation
-Disappearance date day: Disparition date jour
-Disappearance date month: Disparition date mois
-Disappearance date year: Disparition date année
-Disappearance: Disparition
-Discriminant: Discriminant
-Distance m: Distance m
-Distance perp m: Distance perpendiculaire m
-Dry matter percent: Pourcentage matière sèche
-Dry weight g: Poids sec g
-Dung: Fèces vérifiée
-Email: Courriel
-Energy kj per g: Energie kj per g
-Entire skeleton: Squelette entier
-Estimated age day: Âge estimé jour
-Estimated number: Nombre estimé
-Examined organ: Organe examiné
-Eye: Œil vérifié
-Fe mg per kgts: Fe mg par kgts
-Feeding: Alimentation
-Fever suspicion: Suspicion fièvre
-Fibrosity index: Fibrosité index
-Filename: Nomfichier
-Fl index: Fleur index
-Fl nb estimation index: Fleur nb estimation index
-Fructose percent: Pourcentage fructose
-Fruit ground quantity index: Quantité fruits sol index
-Function end date: Fonction fin date
-Function start date: Fonction début date
-Fur aspect index: Fourrure aspect index
-General condition index: État général index
-Geodesic system: Système géodesic
-Glu: Glu
-Glucose percent: Pourcentage glucose
-Gor: Gorille
-Gps behavior: Point GPS du comportement
-Gps center: Point GPS du Centre
-Gps end: Fin gps
-Gps info geo: Gps info geo
-Gps ne: Gps NE
-Gps no: Gps NO
-Gps point: Point gps
-Gps se: Gps SE
-Gps so: Gps SO
-Gps start: Début gps
-Gps track: Tracé gps
-Group name: Nom groupe
-Group nest nb: Groupe nids nb
-Group nest: Groupe nids
-Habituation level index: Niveau habituation index
-Hair legs density index: Poils jambes densité index
-Hair lower back density index: Poils bas dos densité index
-Hair shoulders density index: Poils épaules densité index
-Hairs index: Cheveux index
-Health condition index: État santé index
-Height m: Hauteur m
-Height: Hauteur
-Hemi cellulose percent: Pourcentage hemi cellulose
-Herba carpo: Herba carpo
-Hygro evening time: Hygro soir heure
-Hygro evening: Hygro soir
-Hygro midday time: Hygro après-midi heure
-Hygro midday: Hygro après-midi
-Hygro morning time: Hygro matin heure
-Hygro morning: Hygro matin
-Id admin user: Administrateur utilisateur
-Id behavior context focal: Comportement contexte focal
-Id behavior context: Contexte comportement
-Id behavior plant: Comportement plante
-Id behavior study: Étude comportementale
-Id behavior: Comportement
-Id evidence study: Étude indice
-Id evidence: Indice
-Id faeces macro: Faeces macro
-Id field sampling: Échantillonnage
-Id group site sp: Groupe site espèce
-Id health monitoring: Suivi sanitaire
-Id herba carpo bdd: Herba carpo bdd
-Id herba carpo: Herba carpo
-Id individual description: Description individu
-Id individual: Individu
-Id kinship: Id Parenté
-Id macro observation nest: Macro observation nid
-Id macro observation: Observation macro
-Id material specie: Matériel espèce
-Id material vernacular name: Nom vernaculaire
-Id media: Media
-Id metadata: Metadonnées
-Id mutilation: Mutilation
-Id person: Personne
-Id pheno score: Pheno score
-Id pheno study: Phéno étude
-Id pheno tree: Arbre phenologie
-Id plot study: Etude Plot
-Id plot thv: Plot thv
-Id plot tree: arbre Plot
-Id plot: Parcelle
-Id protocol: Protocole
-Id sample parent: Échantillon initial
-Id sample: Échantillon
-Id scan non focal: Scan on focal
-Id shipment: Expédition
-Id site: Site
-Id skin lesion: Lésion cutanée
-Id specie tree1: Espèce arbre1
-Id specie tree2: Espèce arbre2
-Id specie: Espèce
-Id species: Espèce
-Id storage container: Stockage conteneur
-Id storage place: Stockage lieu
-Id subsample: Sous-échantillon
-Id target specie: Espèce cible
-Id target vernacular name: nom vernaculaire cible
-Id team day: Équipe jour
-Id track: Tracé
-Id transect section: Transect section
-Id transect: Transect
-Id urine macro: Macro urine
-Id use: Utilisation
-Id vernacular name: Nom vernaculaire
-Id vocabulary action goal: Action but
-Id vocabulary address: Adresse
-Id vocabulary age: Âge
-Id vocabulary analysis method type: Méthode analyse type
-Id vocabulary behavior type individual: Individu en interaction lors du comportement
-Id vocabulary behavior type: Type de comportement
-Id vocabulary biomol confidence: Biomol confiance
-Id vocabulary biomol inhibition result: Biomol résultats inhibition
-Id vocabulary biomol pcr quality: Biomol qualité pcr
-Id vocabulary body condition: État corps
-Id vocabulary body part: Corps partie vérifiée
-Id vocabulary body shape: Corps état
-Id vocabulary cause loco problem: Cause problème loco
-Id vocabulary cause precision: Cause précision
-Id vocabulary cause: Cause
-Id vocabulary check: Vérifié
-Id vocabulary class age sex: Classe âge sexe
-Id vocabulary code container: Code conteneur
-Id vocabulary code place: Code lieu
-Id vocabulary color macro: Macro couleur
-Id vocabulary color: Couleur
-Id vocabulary consistency: Consistence
-Id vocabulary copro type: Coprologie type
-Id vocabulary cough start precision: Toux début précision
-Id vocabulary cough type: Toux type
-Id vocabulary country: Pays
-Id vocabulary date start precision: Date début précision
-Id vocabulary dcc: Dcc
-Id vocabulary delivery date precision: Misebas date précision
-Id vocabulary delivery: Misebas
-Id vocabulary den: Den
-Id vocabulary digestive problem start precision: Problème digestif début précision
-Id vocabulary digestive problem: Problème digestif
-Id vocabulary disappearance cause: Disparition cause
-Id vocabulary disease type: Maladie type
-Id vocabulary distance precision: Distance précision
-Id vocabulary ear left bend: Oreille gauche courbure
-Id vocabulary ear left shape: Oreille gauche forme
-Id vocabulary ear left size: Oreille gauche taille
-Id vocabulary ear right bend: Oreille droite courbure
-Id vocabulary ear right shape: Oreille droite forme
-Id vocabulary ear right size: Oreille droite taille
-Id vocabulary evidence specie: Indice espèce
-Id vocabulary evidence type: Indice type
-Id vocabulary eye behavior: Oeil comportement
-Id vocabulary eye problem type: Oeil problème type
-Id vocabulary face color: Couleur tête
-Id vocabulary face lips color: Couleur lèvres face
-Id vocabulary faeces content: Faeces contenu
-Id vocabulary female status repro: Femelle statut repro
-Id vocabulary focalscan type: Focalscan type
-Id vocabulary food type: Nourriture type
-Id vocabulary foreign body: Corps étranger
-Id vocabulary fruit ground maturity: Fruit sol maturité
-Id vocabulary genital problem: Problème génital
-Id vocabulary group position: Vocabulary groupe position
-Id vocabulary habitat1: Habitat 1
-Id vocabulary habitat2: Habitat 2
-Id vocabulary hair legs color: Poils jambes couleur
-Id vocabulary hair lower back color: Poils bas dos couleur
-Id vocabulary hair shoulders color: Poils épaules couleur
-Id vocabulary head hair color: Poils tête couleur
-Id vocabulary head hair density: Poils tête densité
-Id vocabulary healing stage: Guérison état
-Id vocabulary height class: Classe hauteur
-Id vocabulary height: Hauteur
-Id vocabulary hierarchical rank: Hiérarchie rang
-Id vocabulary home range: Domaine vital
-Id vocabulary individual ni: Individu non identifié
-Id vocabulary infection: Infection
-Id vocabulary info type: Info type
-Id vocabulary institution: Institution
-Id vocabulary kinship type: Type lien parenté
-Id vocabulary language: Langue
-Id vocabulary lesion type: Lésion type
-Id vocabulary lips color: Couleur lèvre
-Id vocabulary location: Localisation
-Id vocabulary loco problem start precision: Problème loco début précision
-Id vocabulary macro observation type: Observation macro type
-Id vocabulary mammal left problem: Problème mamelle gauche
-Id vocabulary mammal right problem: Problème mamelle droite
-Id vocabulary mass cause precision: Vocabulary masse cause précision
-Id vocabulary mass cause: Vocabulary masse cause
-Id vocabulary mass location: Masse localisation
-Id vocabulary mass type: Masse type
-Id vocabulary mutilation type: Vocabulary mutilation type
-Id vocabulary nature loco problem: Nature problème loco
-Id vocabulary necropsy results: Vocabulary necropsie resultats
-Id vocabulary neuro problem cause precision: Problème neuro précision
-Id vocabulary neuro problem cause: Problème neuro cause
-Id vocabulary neuro problem type: Problème neuro type
-Id vocabulary nose: Nez
-Id vocabulary number unit: Nombre unité
-Id vocabulary obs distance min: Obs distance min
-Id vocabulary oestrus: Oestrus
-Id vocabulary orientation: Orientation
-Id vocabulary origin loco problem: Origine problème loco
-Id vocabulary origin: Vocabulary origine
-Id vocabulary other analysis: Autres analyses
-Id vocabulary other macro type:  type autre macro
-Id vocabulary part use: partie utilisée
-Id vocabulary part: Partie
-Id vocabulary ph: Ph
-Id vocabulary plant part: Partie plante
-Id vocabulary position locomotor problem: Position problème locomoteur
-Id vocabulary proximity: Proximité
-Id vocabulary quantity other unit: Quantité autres unités
-Id vocabulary quantity unit: Quantité unité
-Id vocabulary respiratory problem type: Problème respiratoire type
-Id vocabulary sample type: Type échantillon 
-Id vocabulary sampling type: Type échantillonnage 
-Id vocabulary sex: Sexe
-Id vocabulary shrub leave score: Feuille arbuste score
-Id vocabulary side: Coté
-Id vocabulary snare loco type: Piège loco type
-Id vocabulary sneeze start precision: Précision début éternuement 
-Id vocabulary sneeze type: Type éternuement
-Id vocabulary storage type: Type Stockage 
-Id vocabulary storage: Stockage
-Id vocabulary substrat type: Type de substrat
-Id vocabulary target object: Objet cible
-Id vocabulary thv life form: Thv forme de vie
-Id vocabulary tick location: Tique localisation
-Id vocabulary tool material: Matière de l'outil
-Id vocabulary transect type: Type de transect
-Id vocabulary trap material: Matière du piège
-Id vocabulary trap status: Statut du piège 
-Id vocabulary trap target: Cible du piège
-Id vocabulary trap type: Type de piège
-id vocabulary tree life form: Arbre forme vie
-Id vocabulary tree status: Arbre status
-Id vocabulary type container: Type conteneur
-Id vocabulary type dna: Type adn
-Id vocabulary type study: Type d'étude
-Id vocabulary type use: Type d'utilisation
-Id vocabulary type: Type
-Id vocabulary unit: Unité
-Id vocabulary unsual behavior: Comportement inhabituel
-Id vocabulary urinary problem macro: Problème urinaire macro
-Id vocabulary urinary problem start precision: Problème urinaire début précision
-Id vocabulary urine collect method: Méthode collecte urine 
-Id vocabulary validation status: Validation statut
-Id vocabulary vulva discharge: Vulve décharge
-Id vocabulary vulva shape  oestrus1: Vulve forme oestrus1
-Id vocabulary vulva shape swelling: Vulve forme gonflement
-Id vocabulary vulva size oestrus1: Vulve taille oestrus1
-Id vocabulary vulva size swelling: Vulve taille gonflement
-Id working day: Jour de travail
-Idadmin user: Id administrateur utilisateur
-Idanimal neighbour: Id animale voisinage
-Idbehavior context: Idcomportement contexte
-Idbehavior plant: Idcomportement plante
-Idbehavior study: Idcomportement étude
-Idbehavior: Idcomportement
-Idbiomol genet results: Idbiomol résultats génétique
-Idbiomol parasito results: Idbiomol parasitologie résultats
-Idbiomol pcr results: Idbiomol résultats pcr
-Idcopro results: Idcoprologie résultats
-Idevidence study: Id indice étude
-Idevidence: Idindice
-Ideye problem: Idoeil problème
-Idfaeces macro: Idfaeces macro
-Idfaeces species: Idfaeces espèce
-Idfield sampling: Idchamps échantillion
-Idgps duplicate: Idgps duplica
-Idgps: Idgps
-Idgroup site sp: Idgroupe site espèce
-Idhealth monitoring: Idsuivi sanitaire
-Idherba carpo: Idherbe carpo
-Idillegal activity: Idactivité illégale
-Idindividual description: Idindividu descritpion
-Idindividual: Idindividu
-Idkinship: Idparenté
-Idmacro observation: Observation macro
-Idmedia link: Idmedia lien
-Idmedia: Idmedia
-Idmetadata: Idmétadonnées
-Idmutilation: Idmutilation
-Idnecropsy: Idnecropsie
-Idnest: Idnids
-Idnutritional results: Idnutrition résultats
-Idother analysis results: Idautres analyses résultats
-Idother macro: Idautres macro
-Idperson: Idpersonne
-Idpheno score: Idphéno score
-Idpheno study: Idphéno étude
-Idpheno tree: Idphéno arbre
-Idplot study: Idparcelle étude
-Idplot thv: Idparcelle thv
-Idplot tree: Idparcelle arbre
-Idplot: Idparcelle
-Idprotocol: Idprotocole
-Idsample: Idéchantillon
-Idscan non focal: Idscan non focal
-Idshipment metadata: Idexpédition métadonnées
-Idshipment: Idexpédition
-Idsite: Idsite
-Idskin lesion: Idlésion cutanée
-Idspecie: Idespèce
-Idstorage container: Idstockage conteneur
-Idstorage place: Idstockage lieu
-Idsubsample: Idsouséchantillon
-Idteam day: Idéquipe jour
-Idtool: Idoutils
-Idtrack: Idchemin
-Idtransect section: Idtransect section
-Idtransect: Idtransect
-Idurine macro: Idurine macro
-Iduse: Idutilisation
-Idvernacular name: Idnom vernaculaire
-Idvocabulary: Idvocabulaire
-Idworking day: Idtravail jour
-Index: Index
-Individual code: Individu code
-Individual nb: Nb individus
-Indo details: Indo details
-Info geo: Info geo
-Inhibition test: Test inhibition
-Intensity index: Index intensité
-Ket: Ket
-Large mm: Largeur mm
-Latitude: Latitude
-Leave nb: Racine nb
-Lenght cm: Longueur cm
-Length m: Longueur m
-Length mm: Longueur mm
-Lethargy index: Lethargie vérifiée
-Leu: Leu
-License: Licence
-Loco problem date start: Problème loco date début
-Locomotion index: Locomotion index
-Locomotion: Locomotion vérifiée
-Login: Identifiant
-Long mm: Longueur mm
-Longitude: Longitude
-Macro type: Type macro
-Main address affiliation: Adresse principale affiliation
-Main affiliation: Affiliation principale
-Mark in date: Marquage date
-Mark out date: Retrait marquage date
-Mass diameter cm: Diamètre masse cm
-Meat index: Viande index
-Mg mg per kgts: Mg mg par kgts
-Mime type: Type mime
-Ml index: Ml index
-Ml nb estimation index: Ml nb estimation index
-Mn mg per kgts: Mn mg par kgts
-Mucus index: Mucus index
-Muscles index: Muscles index
-Mutilation date confirmation: Date mutilation confirmation
-Mutilation date: Date mutilation
-Na mg per kgts: Na mg par kgts
-Name: Nom
-Nearest: Plus proche
-Neutral detergent fibre percent: Pourcentage détergent neutre fibre
-Nickname: Surnom
-Nit: Nit
-Nitrogen percent: Pourcentage nitrogène
-Nom champ Interface: Libelle Interface fr
-Nose mucus index: Nez mucus index
-Num group site: Num groupe site
-Num herba carpo: Num herbe carpo
-Num pheno tree: Num phéno arbre
-Num plot: Num parcelle
-Num transect run: Numéro passage transect 
-Num transect section: Num transect section
-Num transect: Num transect
-Number: Nombre
-Open lesion: Lésion ouverte
-Other affiliations: Autres affiliations
-Our: Orang-outan
-Parent: Initial
-Password: Mot de passe
-Path: Chemin
-Person contact: Personne à contacter
-Personal phone: Téléphone personnel
-Phone: Téléphone
-Pl: Pl
-Precision: Précision
-Presence: Présence
-Pro: Pro
-Process: Procédé
-Protected area: Aire protégée
-Quantity other: Quantité autres
-Quantity shipment: Quantité expédition
-Quantity: Quantité
-Rainfall mm: Pluie mm
-Rank confirmation: Rang confirmation
-Ref plot quadra: Ref parcelle quadra
-Region: Région
-Relascope: Relascope
-Repetition: Répétition
-Respiratory rythm nb mn: Rythm respiratoire nb mn
-Result: Résultat
-Result1: Résultat1
-Result2: Résultat2
-Rf index: Rf index
-Rf nb estimation index: Rf nb estimation index
-Role: Fonction
-Sending date: Date envoi
-Sequence double: Séquence double
-Sequencing: Séquençage
-Severity degree index: Degré sévérité index
-Shape: Forme
-Site name: Nom site
-Size cm: Taille cm
-Size: Taille
-Skeleton location: Squelette localisation
-Snare loco presence: Présence piège loco
-Sneeze date start: Éternuement date début
-Sneeze nb: Éternuement nombre
-Sneeze obs duration mn: Éternuement obs durée mn
-Sort: Sort
-Starch percent: Pourcentage amidon
-Status: Statut
-Stem nb: Tige nb
-Storage datetime: Dateheure stockage
-Storage detail: Stockage détails
-Strip band: bandelette
-Substrat firmness index: Index fermeté du substrat 
-Sucrose percent: Pourcentage sucrose
-Taxon class: Taxon classe
-Taxon family: Taxon famille
-Taxon genus: Taxon gene
-Taxon infraorder: Taxon infraordre
-Taxon kingdom: Taxon règne
-Taxon order: Taxon ordre
-Taxon phylum: Taxon phylum
-Taxon specie: Taxon espèce
-Taxon subclass: Taxon sousclasse
-Taxon suborder: Taxon sousordre
-Taxon subspecies: Taxon sousespèce
-Taxon superfamily: Taxon superfamille
-Taxon superorder: Taxon superordre
-Technician: Technicien
-Temp evening time: Heure du relevé température soir 
-Temp evening: Température soir
-Temp midday time: Heure du relevé température après-midi
-Temp midday: Température après-midi
-Temp morning time: Heure du relevé température matin
-Temp morning: Température matin
-Tick index: Tique index
-Tickness height mm: Épaisseur (mm)
-Time analysis: Heure analyse
-Time behavior end: Heure de fin du comportement 
-Time behavior start: Heure de début du comportement
-Time contact mn: Durée du contact (mn)
-Time end: Heure fin
-Time scan: Heure scan
-Time start in: Heure début dedans
-Time start out: Heure début dehors
-Time start: Heure début
-Time: Heure
-Timestamp: Timestamp
-Tool efficiency: Efficacité de l'outil
-Total phenol percent: Pourcentage phénol total
-Total seed index: Graine total index
-Total tannin percent: Pourcentage tannin total
-total time contact mn: Durée totale de contact (mn)
-Total time forest mn: Durée totale en forêt (mn)
-Trap nb: Nombre de piège
-Trap: Piège
-Tree dbh: DBH Arbre 
-Tree distance m: Distance arbre m
-Tree fl index: Index arbre fleur (FL)
-Tree ml index: Index arbre feuille mature (ML)
-Tree nb: Nombre d'arbre
-Tree rf index: Index Arbre fruit mûr (RF)
-Tree urf index: Index Arbre fruit non mûr (URF)
-Tree yl index: Index Arbre jeune feuille (YL)
-Turbidity macro index: Turbidité macro index
-Type record: Type enregistrement
-Ubg mgdl: Ubg mgdl
-Undercover description: Description du sous-bois
-Urf index: index fruit non mûr (URF)
-Urf nb estimation index:  index estimation nombre fruit non mûr (URF)
-Uri old file: Uri ancien fichier
-Urinary problem date start: Problème urinaire date début
-Urine nb: Urine nb
-Urine: Vérification urine
-Used name: Nom utilisé
-Valid: Validé
-Value: Valeur
-Visibility: Visibilité
-Visible blood index: Sang visible index
-Visual confirmation: Confirmation visuelle
-Weight g: Poids g
-Wet weight g: Poids humide g
-Width cm: Largeur cm
-Width m: Largeur m
-Width mm: Largeur mm
-Width: Largeur
-Work phone: Téléphone travail
-Yl index: Yl index
-Yl nb estimation index: Yl nb estimation index
-Zn mg per kgts: Zn mg par kgts
+Field1 table1 : libellé du Champ1 de la table1 
+Fk1 table1 : libellé de la clès étrangère 1 de la table1 
