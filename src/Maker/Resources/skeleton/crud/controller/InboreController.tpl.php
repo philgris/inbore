@@ -1,4 +1,5 @@
 <?= "<?php\n" ?>
+<?php $route_name = (substr($route_name, 0, 4)== 'app_')? substr($route_name, 4) : $route_name ; ?>
 
 namespace <?= $namespace ?>;
 
