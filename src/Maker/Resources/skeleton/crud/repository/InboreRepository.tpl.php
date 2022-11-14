@@ -39,6 +39,8 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
     const BOOTGRID_SEARCH_COLUMN = 'name_or_expression_of_the_bootgrid_search_column'; 
     // Name (Database) of the  Autocomplete Field for Select2 
     const DBNAME_FIELD_TO_AUTOCOMPLETE = 'name_of_select2_autocomplete_field';
+    // Max number of result to show in the auto-complete list (default = 20)
+    const MAX_RESULTS_TO_AUTOCOMPLETE = 20;
 	
     private $service;
     private $fileUploader;
@@ -73,7 +75,7 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
             '<?= lcfirst($entity_class_name) ?>.userCre'                               => 'user_cre_id',
             
                         
-            // links
+            // links declarations (1)
             
         ];
 		
@@ -87,13 +89,15 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
 
         // join entities
         /** 
-	$qb
+        $qb
             ->leftJoin('<?= lcfirst($entity_class_name) ?>.idEntityRel', 'entityrel')
         ;
-	*/
-		
-	// reduction
-	$qb
+        */
+	
+        // join aggregation : links (2)
+        
+        // reduction
+        $qb
             ->addGroupBy('<?= lcfirst($entity_class_name) ?>.id')
             ->addGroupBy('userMaj.id')
             ->addGroupBy('userCre.id')
