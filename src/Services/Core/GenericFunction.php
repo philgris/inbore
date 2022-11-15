@@ -97,7 +97,7 @@ class GenericFunction
     public function GetUserCreUsername($entity){
         $em = $this->entityManager;
         $userCreId = ($entity->getUserCre() !== null) ? $entity->getUserCre() : 0;
-        $query = $em->createQuery('SELECT user.username FROM App:User user WHERE user.id = '.$userCreId.'')->getResult();
+        $query = $em->createQuery('SELECT user.username FROM App:Core\\User user WHERE user.id = '.$userCreId.'')->getResult();
         $userCre = (count($query) > 0) ? $query[0]['username'] : 'NA';
         return $userCre;
     }
@@ -105,7 +105,7 @@ class GenericFunction
     public function GetUserMajUsername($entity){
         $em = $this->entityManager;
         $userMajId = ($entity->getUserMaj() !== null) ? $entity->getUserMaj() : 0;
-        $query = $em->createQuery('SELECT user.username FROM App:User user WHERE user.id = '.$userMajId.'')->getResult();
+        $query = $em->createQuery('SELECT user.username FROM App:Core\\User user WHERE user.id = '.$userMajId.'')->getResult();
         $userMaj = (count($query) > 0) ? $query[0]['username'] : 'NA';
         return $userMaj;
     }
@@ -113,7 +113,7 @@ class GenericFunction
         public function GetUserCreUserfullname($entity){
         $em = $this->entityManager;
         $userCreId = ($entity->getUserCre() !== null) ? $entity->getUserCre() : 0;
-        $query = $em->createQuery('SELECT user.name FROM App:User user WHERE user.id = '.$userCreId.'')->getResult();
+        $query = $em->createQuery('SELECT user.name FROM App:Core\\User user WHERE user.id = '.$userCreId.'')->getResult();
         $userCre = (count($query) > 0) ? $query[0]['name'] : 'NA';
         return $userCre;
     }
@@ -121,7 +121,7 @@ class GenericFunction
     public function GetUserMajUserfullname($entity){
         $em = $this->entityManager;
         $userMajId = ($entity->getUserMaj() !== null) ? $entity->getUserMaj() : 0;
-        $query = $em->createQuery('SELECT user.name FROM App:User user WHERE user.id = '.$userMajId.'')->getResult();
+        $query = $em->createQuery('SELECT user.name FROM App:Core\\User user WHERE user.id = '.$userMajId.'')->getResult();
         $userMaj = (count($query) > 0) ? $query[0]['name'] : 'NA';
         return $userMaj;
     }

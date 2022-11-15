@@ -30,19 +30,7 @@ class GpsImportType extends ActionFormType {
         $relativeRecord = $builder->getData();
         $builder    
                 
-        // idSite : typeOptions['type'] =  , typeOptions['options_code'] =     
-          ->add('idSite', EntityType::class, array(
-          'class' => 'App:Site',
-          'query_builder' => function (EntityRepository $er) {
-            return $er->createQueryBuilder('site')
-              ->orderBy('site.siteName', 'ASC');
-          },
-          'placeholder' => 'Choose a site name',
-          'choice_label' => 'site_name', // nom_field_to_order : name of field in the database
-          'multiple' => false,
-          'expanded' => false,
-        )) 
-                  
+        // Ex. idSite : Add Fk to Site Entity if Gps is linked to a Site ...   
 
         // file gpx
         ->add('file', FileType::class, [

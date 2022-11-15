@@ -33,7 +33,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author Philippe Grison  <philippe.grison@mnhn.fr>, Louis Duchemin <ls.duchemin@gmail.com>
  */
 class UserController extends AbstractController {
-  const ENTITY_PATH   = 'App\\Entity\\';
+  const ENTITY_PATH   = 'App\\Entity\\Core\\';
   private $doctrine;
   public function __construct(ManagerRegistry $doctrine) { 
       $this->doctrine = $doctrine;

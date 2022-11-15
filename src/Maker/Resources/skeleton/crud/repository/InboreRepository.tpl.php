@@ -115,8 +115,8 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
         }
 
         // join technical fields
-        $qb->leftJoin('App:User', 'userCre', 'WITH', '<?= lcfirst($entity_class_name) ?>.userCre = userCre.id')
-            ->leftJoin('App:User', 'userMaj', 'WITH', '<?= lcfirst($entity_class_name) ?>.userMaj = userMaj.id')
+        $qb->leftJoin('App:Core\\User', 'userCre', 'WITH', '<?= lcfirst($entity_class_name) ?>.userCre = userCre.id')
+            ->leftJoin('App:Core\\User', 'userMaj', 'WITH', '<?= lcfirst($entity_class_name) ?>.userMaj = userMaj.id')
         ;
 
         // query
