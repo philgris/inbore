@@ -1,0 +1,36 @@
+twig:
+  default_path: "%kernel.project_dir%/templates"
+  debug: "%kernel.debug%"
+  strict_variables: "%kernel.debug%"
+  exception_controller: null
+  globals:
+    app_name: InBORe1.0
+    navbar_menu_entries:
+      # USAGE :
+      # - route: nav link route name (~ for non-link menu wrappers)
+      #   icon: link icon (font awesome class)
+      #   text : link text
+      #   auth_required: (optional) user privilege/role required
+      #   children : [] -> no sub-navs
+      #     - route: sub-nav link route name
+      #       text: sub-nav link text
+      #       auth_required: (optional)
+      #       route_args: (optional)
+      #         key : value
+      #         ...
+      #     - route: dashboard
+      #      icon: fas fa-home
+      #      text: core.Dashboard
+      #      children: []
+
+      - route: dashboard
+        icon: fas fa-home
+        text: core.Dashboard
+        children: []
+      - route: user_index
+        text: core.users
+        icon: fas fa-users
+        auth_required: ROLE_ADMIN
+        children: []
+
+

@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{# DASHBOARD #}
+
+{% block headincl %}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }} 
+	{{ encore_entry_link_tags('dashboard') }} 
+{% endblock %}
+
+{% block page_title %}
+	<h1>{{app_name}} </h1>
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="row">
+
+        <div class="col-md-4 col-sm-4 col-xs-12">
+
+            <div class="x_panel">
+                        <div class="x_title">
+                                <h2>{{'Dashboard.tools'|trans}}</h2>
+                                <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                                <div class="dashboard-widget-content">
+
+
+                                </div>
+                        </div>
+                </div>
+                                        
+            <div class="x_panel tile fixed_height_200">
+                <div class="x_title">
+                        <h2>{{'Dashboard.queryTools'|trans}} </h2>
+
+                        <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                        <div class="widget_summary">
+                                <div class="w_left w_55">
+                                        <span>{# {{'Dashboard.nbStation'|trans}} #}</span>
+                                </div>
+                                <div class="w_center w_25"></div>
+                                <div class="w_right w_20">
+                                        <span>{# {{ nbStation }} #}</span>
+                                </div>
+                                <div class="clearfix"></div>
+                        </div>
+                        <div class="widget_summary">
+                                <div class="w_left w_55">
+                                        <span>{# {{'Dashboard.nbCollecte'|trans}} #}</span>
+                                </div>
+                                <div class="w_center w_25"></div>
+                                <div class="w_right w_20">
+                                        <span>{# {{ nbCollecte }} #}</span>
+                                </div>
+                                <div class="clearfix"></div>
+                        </div>
+
+                </div>
+            </div>
+                                
+        </div>
+
+        <div class="col-md-8 col-sm-8 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{'Dashboard.info'|trans}}</h2>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            {# {{dump(infos)}} #}
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{'Dashboard.info2'|trans}}</h2>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+                            
+
+
+        </div>
+
+        <div class="col-md-8 col-sm-8 col-xs-12">
+                <div class="x_panel">
+                        <div class="x_title">
+                                <h2>{{'Dashboard.lastUpdate'|trans}}</h2>
+                                <div class="clearfix"></div>
+                        </div>
+                        <div id="stations" class="x_content">
+                                <div class="table-responsive">
+                                        <table id="last-updates-table" class="table table-condensed table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                            <th data-column-id="id" data-type="numeric" data-visible="false">Id</th>
+                                                            <th data-column-id="dbName" data-visible="false">DB Table</th>
+                                                            <th data-column-id="name">Table</th>
+                                                            <th data-column-id="info">{{'list.dashboard.info'|trans}} </th>
+                                                            <th data-column-id="dateMaj" data-type="date" data-sortable="true">{{'list.date_maj'|trans}} </th>
+                                                            <th data-column-id="userMaj">{{'list.user_maj'|trans}} </th>
+                                                            <th data-column-id="showEntity" data-formatter="showEntity" data-sortable="false" data-visible="true">Show</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for entity in entities %}
+                                                            <tr>
+                                                                    <td>{{entity.id}}</td>
+                                                                    <td>{{entity.name}}</td>
+                                                                    <td>{{('core.' ~ entity.name)|trans(domain="sections")|capitalize}}</td>
+                                                                    <td>{{entity.info }}</td>
+                                                                    <td>{{entity.dateMaj}}</td>
+                                                                    <td>{{entity.userMaj}}</td>
+                                                                    <td></td>
+                                                            </tr>
+
+                                                    {% endfor %}
+                                                </tbody>
+                                        </table>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+    </div>
+                                                        
+{% endblock %}
+{% block scripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('dashboard') }}
+{% endblock %}

@@ -1,0 +1,242 @@
+{% extends '/base.html.twig' %}
+
+
+{# initialize the maximum number of fields list to show #}
+{% set max_fields_visible = 5 %}
+
+{% set links =  [] %}
+{% for row in list_SQL_fetchedVariables %}
+    {% if row[:5] == "link_" %}
+        {%  set links =  [row[5:]]%}
+    {% endif %}
+{% endfor %}
+
+
+{# initialize the nameOfEntity variable from the gloable variable _controller: '~ / Controller / NameOfEntityController :: indexAction' #}
+{% set Urlcontroller = app.request.attributes.get('_controller') %}
+{% set controllerInArray = Urlcontroller|split('Controller') %}
+{% set controllerName = controllerInArray[1][1:] %}
+{% set nameOfEntity = (controllerName[:1]|lower) ~ controllerName[1:] %}
+{# initialise la variable entityname à partir de la variable globale _route : 'entityname_index' #}
+{% set route = app.request.attributes.get('_route') %}
+{#INBORE1.0  {% set entityname = route|split('_')[0] %} #} 
+{% set entityname = route|split('_')|slice(0,-1)|join('_') %}
+{# initialise les routes : 'importfilesentityname_index' et entityname_new #}
+{% set route_index = entityname ~ '_index' %}
+{% set route_importfiles = 'importfiles' ~ entityname ~ '_index' %}
+{% set route_new = entityname ~ '_new' %}
+{% set route_indexjson = entityname ~ '_indexjson' %}
+
+
+{% set entity = app.request.attributes.get('entity') %}
+
+{% block page_title %}
+  <h1>
+    {#{{ ('core.' ~ entityname)|trans({}, 'sections') }}#}
+    {{ ('core.' ~ entity)|trans({}, 'sections') }}
+    <sup><i class="fa fa-user-ninja text-warning small"></i></sup>
+  </h1>
+{% endblock %}
+
+{% block action %}
+    {{ parent() }}
+    <a href="{{ path('admin_index', {'entity':entity}) }}"
+       class="btn btn-primary btn-sm"
+       role="button">
+        <i class="fas fa-list"></i>
+        {{ 'button.showAllRecord'|trans }}
+    </a>
+
+    {% if is_granted('ROLE_COLLABORATION') %}
+        <a href="{{ path('admin_new', {'entity':entity, 'nameFk':app.request.query.get('nameFk'), 'idFk':app.request.query.get('idFk') }) }}"
+           class="btn btn-success btn-sm"
+           role="button">
+            <i class="fas fa-plus"></i>
+            {#{{ ['button.New', entityname|capitalize]|join|trans }}#}
+            {{ ['button.New', entity|capitalize]|join|trans }}
+        </a>
+        <button class="btn btn-light border btn-sm"
+                id="export"
+                data-export="export"
+                data-toggle="tooltip"
+                data-align="right"
+                title="{{ 'button.exportToCSV-title'|trans }}">
+            <i class="fas fa-file-export"></i>
+            {{ 'button.exportToCSV'|trans }}
+        </button>
+    {% else %}
+        <a href="#"
+           class="btn btn-secondary btn-sm disabled"
+           role="button">
+            {#{{ ['button.New', entityname|capitalize]|join|trans }}#}
+            {{ ['button.New', entity|capitalize]|join|trans }}
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    {#  {{dump(list_SQL_fetchedVariables)}} #}
+    {# definition of columns to display
+                    RQ! for sortable columns, suffix the field names with the names of tables tableName.fieldName #}
+
+    <div class="table-responsive">
+        <div class="table-responsive">
+            <div class="table-responsive">
+                <table id="grid-basic" class="table table-condensed table-hover table-striped">
+                    <thead>
+                    <tr>
+                        {% set compt = 0 %}
+                        {% for row in list_SQL_fetchedVariables %}
+                            {% if row == 'id' %}
+                                <th data-column-id="id" data-width="10" data-type="numeric" data-visible="false">Id</th>
+                            {% elseif row == 'date_maj' %}
+                                <th data-column-id="date_maj" data-width="100" data-type="date">{{'list.date_maj'|trans}}</th>
+                            {% elseif row == 'date_cre' %}
+                                <th data-column-id="date_cre" data-width="100" data-visible="false" data-type="date">{{'list.date_cre'|trans}}</th>
+                            {% elseif row == 'user_maj' %}
+                                <th data-column-id="user_maj" data-width="10" data-visible="false">{{'list.user_maj'|trans}}</th>
+                            {% elseif row == 'user_cre' %}
+                                <th data-column-id="user_cre" data-width="10" data-visible="false">{{'list.user_cre'|trans}}</th>
+                            {% elseif row[:5] == "link_" %}
+                                <th data-column-id="{{ row }}" data-formatter="{{ row }}" data-sortable="false" data-width="20" data-visible="true">{{('list.'~row)|trans}}</th>
+                            {% else %}
+                                {% if compt < max_fields_visible  %}
+                                    <th data-column-id="{{ row }}" data-visible="true">{{('list.'~row)|trans}}</th>
+                                {% else %}
+                                    <th data-column-id="{{ row }}" data-visible="false">{{('list.'~row)|trans}}</th>
+                                {% endif %}
+                                {% set compt = compt + 1 %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <th data-column-id="show" data-formatter="show" data-sortable="false" data-width="20">{{'list.show'|trans}}</th>
+                        <th data-column-id="edit" data-formatter="edit" data-sortable="false" data-width="20">{{'list.edit'|trans}}</th>
+                        <th data-column-id="delete" data-formatter="delete" data-sortable="false" data-width="20">{{'list.delete'|trans}}</th>
+
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block templatescripts %}
+
+    {{ encore_entry_script_tags("index") }}
+
+    {# display of the error message on Delete if there are related records #}
+    {% if ( exception_message is defined ) %}
+        <script type="text/javascript">
+            alert("{{ exception_message|raw }}");
+        </script>
+    {% endif %}
+
+    {#  bootgrid list management #}
+    <script type="text/javascript">
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const is_granted = {
+            ROLE_COLLABORATION: {{ is_granted("ROLE_COLLABORATION")|json_encode() }},
+            ROLE_PROJECT: {{ is_granted("ROLE_PROJECT")|json_encode() }}
+        };
+
+        let showUrlPattern = '{{ path('admin_show', {'entity':entity, 'id':'__id__'}|merge(app.request.query)) }}';
+        let editUrlPattern = '{{ path('admin_edit', {'entity':entity, 'id':'__id__'}|merge(app.request.query)) }}';
+        let deleteUrlPattern = '{{ path('admin_delete', {'entity':entity, 'id':'__id__'}|merge(app.request.query)) }}';
+
+        function is_owner(row) {
+            return {% if app.user.id is defined %}{{ app.user.id }}{% else %}0{% endif %} === row.userCreId;
+        }
+
+        $(document).ready(function () {
+            $("#grid-basic").bootgrid({
+                ajax: true,
+                url: "{{ path( 'admin_indexjson', {'entity':entity} ) }}",
+                post: function () {
+                    return {
+                        searchPattern: urlParams.get("searchPattern"),
+                        idFk: urlParams.get("idFk"),
+                        nameFk: urlParams.get("nameFk"),
+                        urlArg: urlParams.get("urlArg")
+                    };
+                },
+                rowCount: [10, 25, 50, -1],
+                labels: {
+                    noResults: "There are no results for the selection",
+                    search: urlParams.get("searchPattern") || ""
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                },
+                complete: function () {
+                },
+                formatters: {
+                    {% for link in links %}
+                        {#INBORE1.0  {% set linkname =  'link' ~ (link|capitalize) %}#}
+                        {% set linkname =  'link_' ~ link %}
+                        {#INBORE1.0  {% set link_tabname =  link|split('_')[0] %}#}
+                        {% set link_tabname =  link|split('__')[0] %}
+                        {% set link_index =  link_tabname  ~ '_index' %}
+                        {% set link_new=  link_tabname ~ '_new' %}
+                        "{{ linkname }}": function (column, row, value) {
+                            if (row.{{ linkname }} !== undefined && row.{{ linkname }} != '' && row.{{ linkname }} !== null) {
+                                var is_num = row.{{ linkname }};
+                                is_num = is_num.match(/^\d+$/);
+                                if (is_num > 0) {
+                                    {#return "<a href=\"{{ path('admin_index', {'entity':link_tabname}) }}?nameFk={{ nameOfEntity }}Fk&idFk=" + row.{{ linkname }} + "\" class=\"btn btn-sm\" ><span class=\"fas fa-list\"></span></a>";#}
+                                    return "<a href=\"{{ path('admin_index', {'entity':link_tabname}) }}?nameFk=id_{{ entity }}&idFk=" + row.{{ linkname }} + "\" class=\"btn btn-sm\" ><span class=\"fas fa-list\"></span></a>";
+                                } else {
+                                    return "<a href=\"{{ path('admin_index', {'entity':link_tabname}) }}?searchPattern=" + row.{{ linkname }} + "\" class=\"btn btn-sm\" ><span class=\"fas fa-list\"></span></a>";
+                                }
+                            } else if (is_granted.ROLE_COLLABORATION) {
+                                {#return "<a href=\"{{ path('admin_new', {'entity':link_tabname}) }}?nameFk={{ nameOfEntity }}Fk&idFk=" + row.id + "\" class=\"btn btn-sm\" ><span class=\"fas fa-plus-circle\"></span></a>";#}
+                                return "<a href=\"{{ path('admin_new', {'entity':link_tabname}) }}?nameFk=id_{{ entity }}&idFk=" + row.id + "\" class=\"btn btn-sm\" ><span class=\"fas fa-plus-circle\"></span></a>";
+                            } else {
+                                return `<a href="#" class="btn btn-sm disabled"><i class="fas fa-plus-circle"></i></a>`;
+                            }
+                        },
+                    {% endfor %}
+
+                    "show": function (column, row, value) {
+                        return '<a href="'+showUrlPattern.replace('__id__', row.id)+'" class="btn btn-sm" ><i class="fas fa-eye"></i></a>';
+                    },
+                    "edit": function (column, row, value) {
+                        if (is_granted.ROLE_PROJECT || (is_granted.ROLE_COLLABORATION && is_owner(row))) {
+                            return '<a href="'+editUrlPattern.replace('__id__', row.id)+'" class="btn btn-sm"><i class="fas fa-edit"></i></a>';
+                        } else {
+                            return '<a href="javascript:void();" class="btn btn-sm  disabled" ><i class="fas fa-edit" ></i></a>';
+                        }
+                    },
+                    "delete": function (column, row, value) {
+                        if (is_granted.ROLE_PROJECT || (is_granted.ROLE_COLLABORATION && is_owner(row))) {
+                            return '<form ' +
+                                    'method="post" ' +
+                                    'action="'+deleteUrlPattern.replace('__id__', row.id)+'" ' +
+                                    'onsubmit="return confirm(\'Do you really want to delete this record?\');">' +
+                                    '<input type="hidden" name="token" value="{{ csrf_token('delete-item') }}" />' +
+                                    '<input name="_method" value="DELETE" type="hidden" />' +
+                                    '<button class="btn btn-sm" type="submit"><i class="fas fa-trash"></i></button>' +
+                                '</form>'
+                            ;
+                        } else {
+                            return '<button class="btn btn-sm" disabled><i class="fas fa-trash"></i></button>';
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        // enable the table to CSV tool
+        $("#export").click(function () {
+            $("#grid-basic").tableToCSV();
+        });
+    </script>
+
+{% endblock %}

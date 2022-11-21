@@ -1,0 +1,37 @@
+<footer>
+	<hr>
+	<div class="d-flex justify-content-between">
+		<span>
+			©
+			<a href="http://bbees.mnhn.fr">BBEES</a>
+			2022 - INBORE 1.0 -
+			<a href="{{ path('legals') }}">
+				{{'legales_mentions'|trans}}
+			</a>
+		</span>
+		<span class="d-flex align-items-center">
+			<a href="https://github.com/philgris/inbore/" target="_blank">
+				<i class="fab fa-github fa-2x px-3"></i>
+			</a>
+			<div class="d-flex flex-column align-items-start">
+				<span>
+					{{ 'footer.github_prompt'|trans({}, "ui")|capitalize}} !
+				</span>
+				<span>
+					<a
+						target="_blank"
+						href="https://github.com/philgris/inbore/issues/new?assignees=&labels=bug&template=bug_report.md&title=">
+						{{ 'footer.bug_report'|trans({}, "ui")|capitalize}}
+					</a>
+					<span class="px-2">
+						|
+					</span>
+					<a
+						target="_blank"
+						href="https://github.com/philgris/inbore/issues/new?assignees=&labels=&template=feature_request.md&title=">
+						{{ 'footer.feature_request'|trans({}, "ui")|capitalize}}
+					</a>
+				</span>
+			</div>
+		</span>
+	</footer>

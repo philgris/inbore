@@ -1,0 +1,33 @@
+dashboard: |
+    INFO : Presentation of some information about data of the project database.
+
+vocabulary_index: |
+    INFO : List of existing vocabulary terms. The search is performed on the * column.
+vocabulary_edit: |
+    INFO : Enter the information about the vocabulary term. The fields in red are required to valid the entry.
+vocabulary_new: |
+    INFO : Enter the information about the vocabulary term. The fields in red are required to valid the entry.
+    
+user_index: |
+    INFO : Use this page to browse, create, export, show, edit and delete user accounts. WARNING: Deleting a user account would erase contents of technical fields (e.g. user creation). Rather, lock a user account using the option “LOCKED” in the edit session. Additional fields can be listed using the top right button. The search button applies to the field "Username"
+user_new: |
+    INFO : Use this form to fill in data of a new user. 
+user_show: |
+    INFO : Use this form to consult data of a user. 
+user_edit: |
+    INFO : Use this form to edit data of a user. 
+
+login: Use this page to login and access to web user interface
+# info generale aux import de fichiers csv
+importfiles.form: |
+    (1) Select the file to be imported using the scroll bar
+
+    (2) Upload the csv file to be imported
+
+    the csv file has to be recorded with the options :
+         - character encoding in UTF-8
+         - the "semicolon" as record delimiter
+         - quotation marks as text field delimiter 
+# procédure d'import csv      
+importfilestable_index: | 
+    INFO : 

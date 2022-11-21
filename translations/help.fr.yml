@@ -1,0 +1,38 @@
+dashboard: |
+    INFO : Cette page présente quelques informations concernant les données présentes dans la base de données du projet.
+
+vocabulary_index: |
+    INFO : Liste des termes de vocabulaire existants. La recherche s'effectue sur le champ marqué d'une *. 
+vocabulary_edit: |
+    INFO : Saisir les informations concernant le terme de vocabulaire. Les champs en rouge sont obligatoires pour valider la saisie.
+vocabulary_new: |
+    INFO : Saisir les informations concernant le terme de vocabulaire. Les champs en rouge sont obligatoires pour valider la saisie.
+    
+user_index: |
+    INFO : ATTENTION: Supprimer un utilisateur, supprimera la possibilité de retrouver les informations des données (userMAj, UserCre). Utiliser l option “LOCKED” en mode edit.
+user_new: |
+    INFO : Saisir les informations concernant le nouvel Utilisateur. 
+user_show: |
+    INFO : Utiliser le bouton Edit pour modifier des informations relatives à l'Utilisateur. 
+user_edit: |
+    INFO : Utiliser ce formulaire pour modifier des informations relatives à l'Utilisateur. 
+
+login: Utiliser cette page pou vous connecter à l'interface
+# info generale aux import de fichiers csv
+importfiles.form: |
+    (1) Selectionner le type de fichier à importer en utilisant le menu déroulant
+
+    (2) Uploader le fichier csv à importer
+
+    le fichier csv devra avoir été enregistré avec les options :
+         - l'encodage UTF-8 
+         - le "point-vigule" comme delimiteur d'enregistrement
+         - le "guillement" comme delimiteur des champs texte 
+
+# procédure d'import csv      
+importfilestable_index: | 
+    INFO : 
+
+
+  
+   

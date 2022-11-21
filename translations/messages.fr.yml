@@ -1,0 +1,159 @@
+# VOCABULARY ###################################################################
+# Vocabulary (table Voc) : Examples of vocabulary labels (translations fr/en)
+# NOTE : Only add vocabulary terms for which translation is needed. 
+# By default,the primary langage vocabulary label will be used
+# 1 - DELETE THE FIRST PART OF THAT FILE IF ENGLISH IS USED AS A PRIMARY LANGAGE
+
+# 1 - END OF DELETE THE FIRST PART OF THAT FILE IF ENGLISH IS USED AS A PRIMARY LANGAGE
+
+# 
+    
+# autocomplete field form
+
+# Class of vocabulary (table = Voc , field = parent)
+
+
+# SHORT TITLE OF COLUMNS IN CONTENT PAGES ######################################
+# Column titles
+list.show: Lire
+list.edit: Edit
+list.delete: Supp
+# Links
+list.link_entity: ex. libellé du lien vers l'Entity
+# General  
+list.id__search_column: id *
+list.date_maj: Date Maj
+list.date_cre: Date Cre
+list.user_maj: U Maj
+list.user_cre: U Cre
+# Dashboard
+# Entity1
+list.entity1_fieldname1: ex. libellé du champ fieldname1 de l'entity1
+
+
+# BUTTONS ######################################################################
+#
+button.Back: Retour
+button.exportToCSV: Exporter au format CSV
+button.exportToCSV-title: Encodage UTF-8 et Séparateur point virgule
+button.Close: Fermer 
+button.Valid: Valider
+button.BackToTheSelection: Retour à la selection
+button.BackToTheList: Afficher la Liste
+button.showAllRecord: Liste de tous les enregistrements
+Envoyer: Importer le fichier CSV
+# Button titles in csv file uploading tools
+button.ImportEntity: ex. Importer fichier 
+#  Button titles "Back to Entity"
+button.Back to entity: ex. Retour à l'entity
+#  Button titles "Back to Entity" in csv file uploading tools
+button.Back to the list of entity: ex. Retour à la liste des Entity
+# Button titles in web interface
+button.NewEntity: ex. Créer une Entity
+
+# Button in Media ##############################################################
+button.NewMedia: Ajouter un Media
+
+# Button in Gps Form and list of record ########################################
+list.link_gps: gps
+list.gps_point: GPS
+button.NewGps:  Créer un point Gps
+button.ImportGps:  Importer des points Gps 
+button.BatchGps:  Ajuster les points Gps
+button.NewTrack:   Ajouter un track
+#  BUTTON TITLES IN PAGES FOR UPLOADING DATA IN BATCHES ########################
+import.liste: Importer des fichiers
+import.gps: Importer des point GPS par lot
+import.gps.check_for_duplications: Vérifier les duplications
+import.gps.without_duplications: Importer sans duplications
+import.gps.with_duplications: Importer avec duplications
+import.gps.has_duplications: L'import comprend des duplications
+import.gps.imported: Import effectué
+# BATCH GPS ACTIONS ############################################################
+batch.gps: Gestion par lot des points GPS
+batch.gps.set_track: Associer le tracé
+batch.gps.unset_track: Séparer le tracé
+batch.gps.delete: Supprimer
+batch.gps.done: Action effectuée
+
+# TITLES OF CONTENT PAGES  #####################################################
+title.Dashboard: Dashboard
+title.core.entity: ex. Entity title 
+
+
+# HEADINGS OF SCROLLING LISTS ##################################################
+Choose a entity: ex. Sélectionner une Entity-label
+
+
+# DASHBOARD ####################################################################
+Dashboard.lastUpdate: Dernières mises à jour 
+Dashboard.tools: Outils de gestion
+Dashboard.siteName: Liste des sites d'étude
+Dashboard.queryTools: Outils de visualisation
+
+# OTHER ########################################################################
+legales_mentions: Mentions légales
+NO: NON
+YES: OUI
+modal-title.Station - Localisation: Carte des plus proches Stations (0.1x0.1deg ~ 10x10km) du point GPS (centre)
+Switch version: Changer de version
+DAY: JOUR
+MONTH: MOIS
+YEAR: ANNEE
+# PopUp alert messages related to date management
+alert.datePrecisionINCONNU: les champs date doivent être vides
+alert.datePrecisionANNEE: les champs date doivent avoir le format 01-01-AAAA
+alert.datePrecisionMOIS: les champs date doivent avoir le format 01-MM-AAAA
+alert.datePrecisionJOUR: les champs date doivent avoir le format JJ-MM-AAAA
+alert.BadFormatDate: mauvais format de date (JJ-MM-AAAA) ou mauvaise valeur (JJ=[1,31] MM=[1,12] AAAA=[1000,2999]
+
+# UPLODAING FILE SERVICE ERROR MESSAGES ########################################
+# Error messages from the data uploading procedures (ImportFileE3s)
+importfileService.ERROR Unknown file imported: ERREUR - fichier CSV INCONNU
+importfileService.ERROR Unknown template file: ERREUR - template INCONNU
+importfileService.ERROR bad number of columns in CSV file: ERREUR - Le fichier CSV ne contient pas le bon nombre de collonnes - cf. Aide GOTIT
+importfileService.ERROR bad column in CSV file: ERREUR - le fichier CSV ne contient pas les bonnes colonnes du modèle de migration - cf. Aide GOTIT
+importfileService.ERROR NULL value: ERREUR - Contenu INVALIDE (valeur NULL)
+importfileService.ERROR bad data OUI-NON: ERREUR - Contenu INVALIDE { OUI / NON , YES / NO, 1 / 0}
+importfileService.ERROR bad data YES-NO: ERREUR - Contenu INVALIDE ( YES / NO )
+importfileService.ERROR bad float format: ERREUR - Format de type FLOAT INVALIDE
+importfileService.ERROR bad date format: ERREUR - Format de date INVALIDE ( d / m / Y )
+importfileService.ERROR unknown record: ERREUR - Enregistrement INCONNU
+importfileService.ERROR bad character: ERREUR - Des caractères spéciaux sont à supprimer dans
+importfileService.ERROR duplicate record: ERREUR - Enregistrement déja présent dans la BDD
+importfileService.ERROR duplicate code: ERREUR - Code déja présent dans la BDD
+importfileService.ERROR bad code: ERREUR - Code INCONNU
+importfileService.Date of data set import: Date import
+importfileService.Problem of FLUSH: Problème de FLUSH ! La procédure d'import est stoppée, vous devez corriger le fichier CSV. Le message d'erreur est
+importfileService.Import OK: Procédure d'importation terminée. Nombre d'enregistrements insérés
+
+# USER #################################################################
+# table User_db
+Username: Nom d'utilisateur
+User Password: Mot de passe (8 char min)
+Repeat Password: Confirmez le Mot de passe
+User Email: Adresse électronique
+User Role: Rôle
+User Name: Nom complet de l'utilisateur
+Institution: Établissement
+Commentaire user: Commentaires utilisateur
+Locale: Version
+button.NewUser: Créer un nouvel utilisateur
+title.user: Utilisateur
+title.users: Utilisateurs
+list.User cre: User Create
+list.User maj: User Update
+title.Personne: Personne
+ROLE_ADMIN: ADMIN
+ROLE_PROJECT: MEMBRE PROJET
+ROLE_COLLABORATION: MEMBRE COLLABORATION
+ROLE_INVITED: INVITÉ
+Profile: Profil utilisateur
+
+
+
+# DATABASE  ##############################################################
+#  Database Field Titles : Liste de tous les champs des tables de la bdd
+
+Field1 table1 : libellé du Champ1 de la table1 
+Fk1 table1 : libellé de la clès étrangère 1 de la table1 

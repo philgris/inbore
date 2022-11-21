@@ -1,0 +1,20 @@
+core:
+  # main menus
+  Dashboard: Tableau de bord
+  ref-collaboration: Référentiel (collaboration)
+  ref-project: Référentiel (project)
+  ref-admin: Référentiel (admin)
+  users: Utilisateur
+  # sub-menus 1
+
+  # sub-menus 2
+
+  # sub-menus 3
+
+  # sub-menus 4
+
+  # sub-menus ref-collaboration
+
+  # sub-menus ref-project
+
+  # sub-menus ref-admin
