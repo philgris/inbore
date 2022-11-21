@@ -1,3 +1,0 @@
-# FOSJsRouting bundle configuration
-fos_js_routing:
-    routes_to_expose: [^.*$]
