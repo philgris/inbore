@@ -7,11 +7,10 @@ namespace App\Services;
 
 
 use App\Kernel;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Single file uploader service
@@ -25,110 +24,163 @@ class FileUploader
     // All files are stored under this folder.
     const ROOT_UPLOAD_DIRECTORY = 'files';
 
+    // FileUploaderType field suffixes
+    const FILE_SUFFIX       = '_file';
+    const FILENAME_SUFFIX   = '_filename';
+    const REMOVE_SUFFIX     = '_remove';
+
+    // FileUploaderType BlockPrefix
+    const BLOCK_PREFIX      = 'file_uploader';
+    const BLOCK_FILE        = 'file';
+
+    // File controller is <the_entity_name><suffix>
+    const FILE_CONTROLLER_PATH_SUFFIX = '_file';
+
+    const NULL_FIELD = '_null_';
+
     private $kernel;
     private $request;
-    private $slugger;
-    private $config;
+    private $router;
+
+    private $entityDirectory;
+    private $objectDirectory;
 
     public function __construct(
         RequestStack $requestStack,
-        ParameterBagInterface $config,
-        SluggerInterface $slugger,
-        Kernel $kernel
+        Kernel $kernel,
+        RouterInterface $router
     )
     {
         $this->kernel = $kernel;
         $this->request = $requestStack->getCurrentRequest();
-        $this->slugger = $slugger;
-        // see upload parameters in config/admin.yml
-        $this->config = $config->get('admin');
+        $this->router = $router;
     }
 
     /**
-     * Handle the attached file to upload, replace or remove.
+     * Handle the attached files to upload, replace or remove.
      * Call this single method from the controller.
      * For new object persistence, flush the object before calling.
      * The object id is used to create the storage path.
      *
      * @param FormInterface $form
      * @param $object
-     * @param $entity
      * @return bool
      */
-    public function handleFile(FormInterface $form, $object, $entity)
+    public function handleFiles(FormInterface $form, $object)
     {
+        if ($this->request->getMethod()=='DELETE') {
+            $this->removeDirectory($this->getObjectDirectory($object));
+            return true;
+        }
+
         $return = false;
-        // remove file when the request method is DELETE
-        if (
-            $this->request->getMethod()=='DELETE' ||
-            (
-                isset($this->config[$entity]['upload']['remove']) &&
-                $form->has($this->config[$entity]['upload']['remove']) &&
-                $form->get($this->config[$entity]['upload']['remove'])->getData()
-            )
-        )
-        {
-            $this->removeFile($object);
-            $return = true;
+        foreach($form->all() as $element) {
+            if (
+                $element->getConfig()->getType()->getInnerType()->getBlockPrefix()==self::BLOCK_PREFIX
+            ) {
+                $return = $this->handle($element, $object, $element->getConfig()->getOption('ignore_field_name')) || $return;
+            }
         }
-
-        // upload file attached in the submitted form
-        if (
-            isset($this->config[$entity]['upload']['field']) &&
-            $form->has($this->config[$entity]['upload']['field']) &&
-            $form->get($this->config[$entity]['upload']['field'])->getData()
-        )
-        {
-            $this->uploadFile($form, $object, $entity);
-            $return = true;
-        }
-
         return $return;
     }
 
     /**
-     * Check if a file upload is to be handled
-     * @param $entity
+     * @deprecated
+     * Handle single file only : for backward compatibility
+     *
+     * @param FormInterface $form
+     * @param $object
      * @return bool
      */
-    public function handleUpload($entity)
+    public function handleFile(FormInterface $form, $object)
     {
-        // upload is handled if parameter upload > field is set in config/admin.yml
-        // field is the name of the entity field (ex: file, pdf...)
-        return isset($this->config[$entity]['upload']['field']);
+        if ($this->request->getMethod()=='DELETE') {
+            $this->removeDirectory($this->getObjectDirectory($object));
+            return true;
+        }
+
+        foreach($form->all() as $element) {
+            if (
+                $element->getConfig()->getType()->getInnerType()->getBlockPrefix()==self::BLOCK_PREFIX ||
+                $element->getConfig()->getType()->getInnerType()->getBlockPrefix()==self::BLOCK_FILE
+            ) {
+                return $this->handle($element, $object, true);
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * switch to delete and/or upload
+     * @param FormInterface $element
+     * @param $object
+     * @param bool $ignoreFieldName : used for backward compatibility with project only handling single file
+     * @return bool
+     */
+    private function handle(FormInterface $element, $object, $ignoreFieldName=false)
+    {
+        if ($element->getConfig()->getType()->getInnerType()->getBlockPrefix()==self::BLOCK_PREFIX) {
+
+            $field = $ignoreFieldName ? null : $element->getName();
+            $return = false;
+
+            $remove = $element->getName().self::REMOVE_SUFFIX;
+            // remove file when the request method is DELETE
+            if (
+                $element->has($remove) &&
+                $element->get($remove)->getData()
+            )
+            {
+                $this->clearDirectory($object, $field, true);
+                $return = true;
+            }
+
+            $file = $element->getName().self::FILE_SUFFIX;
+
+            // upload file attached in the submitted form
+            if (
+                $element->has($file) &&
+                $element->get($file)->getData()
+            )
+            {
+                $this->uploadFile($element, $object, $field);
+                $return = true;
+            }
+
+            return $return;
+
+        } elseif ($element->getConfig()->getType()->getInnerType()->getBlockPrefix()==self::BLOCK_FILE) {
+            if ($element->getData()) {
+                $this->upload($element->getData(), $this->getFieldDirectory($object, null));
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Upload process
      * - first clear the destination directory
      * - then upload the file
-     *
-     * @param FormInterface $form : submitted form
-     * @param $object : related object (ex: protocol)
-     * @param $entity : name of the entity as set in admin.yml (ex: protocol)
+     * @param FormInterface $element
+     * @param $object
+     * @param $field
      */
-    public function uploadFile(FormInterface $form, $object, $entity)
+    private function uploadFile(FormInterface $element, $object, $field)
     {
-        //$entity = $this->getEntity($object);
-        if (
-            $this->handleUpload($entity) &&
-            $form->has($this->config[$entity]['upload']['field']) &&
-            $form->get($this->config[$entity]['upload']['field'])->getData()
-        ) {
-//            $this->removeFile($object);
-            $this->clearDirectory($object);
-            $this->upload(
-                $form->get($this->config[$entity]['upload']['field'])->getData(),
-                $this->getEntityDirectory($entity).DIRECTORY_SEPARATOR.$object->getId()
-                //$this->getFilename($object)
-            );
-            // read file info and update object properties with setters given in admin.yml
-            // ex: upload > setters > width : setWidth
+        $file = $element->get($element->getName().self::FILE_SUFFIX)->getData();
+        if ($file) {
+            $this->clearDirectory($object, $field);
+            $this->upload($file, $this->getFieldDirectory($object, $field));
+            // setters
+            // ex: 'width' => 'setWidth'
             // will call $object->setWidth(width)
-            if (isset($this->config[$entity]['upload']['setters'])) {
-                $info = $this->getFileInfo($object);
+            $setters = $element->getConfig()->getOption('setters');
+            if (is_array($setters)) {
+                $info = $this->getFileInfo($object, $field);
                 if (!empty($info)) {
-                    foreach ($this->config[$entity]['upload']['setters'] as $property => $setter) {
+                    foreach ($setters as $property => $setter) {
                         if (array_key_exists($property, $info) && !empty($setter) && method_exists($object, $setter)) {
                             try {
                                 $method = new \ReflectionMethod($object, $setter);
@@ -141,7 +193,6 @@ class FileUploader
                 }
             }
         }
-
     }
 
     /**
@@ -149,95 +200,147 @@ class FileUploader
      * Each file is stored in a folder : file/<entity>/<objectId>/<filename>
      *
      * @param $object
+     * @param $field
      * @return null
      */
-    public function getFilename($object)
+    public function getFilename($object, $field=null)
     {
-        $entity = $this->getEntity($object);
-        $dir = $this->getRootUploadDirectory().$this->getEntityDirectory($entity).DIRECTORY_SEPARATOR.$object->getId();
+        $dir = $this->getFieldDirectory($object, $field);
         $scan = scandir($dir,1);
-        return is_file($dir.DIRECTORY_SEPARATOR.$scan[0])
-            ? $scan[0]
-            : null
-        ;
+        for ($i=0; $i<count($scan); $i++) {
+            if (is_file($dir.DIRECTORY_SEPARATOR.$scan[$i])) {
+                return $scan[$i];
+            }
+        }
+        return null;
     }
 
     public function removeFile($object)
     {
-//        $this->remove($object);
-        $this->clearDirectory($object, true);
+        $this->clearDirectory($object, null, true);
     }
 
     /**
      * Low level upload process
      *
      * @param UploadedFile $file
-     * @param $targetDirectory
+     * @param $object
      * @param null $filename
      * @return null|string
      */
-    private function upload(UploadedFile $file, $targetDirectory, $filename=null)
+    private function upload(UploadedFile $file, $dir)
     {
-        $filename = $filename ? $filename : pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $file->guessExtension();
-        $dir = $this->getRootUploadDirectory() . $targetDirectory . DIRECTORY_SEPARATOR;
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
+        if ($dir) {
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $file->guessExtension();
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            if (is_dir($dir)) {
+                $file->move($dir, $filename);
+                return $filename;
+            }
         }
+
+        return null;
+
+    }
+
+    /**
+     * @param $object
+     * @param $field
+     * @return bool
+     */
+    public function fileExists($object, $field=null)
+    {
+        return is_file($this->getFile($object, $field));
+    }
+
+    /**
+     * @param $object
+     * @param $field
+     * @return null|string
+     */
+    public function getFile($object, $field=null)
+    {
+        if ($field==self::NULL_FIELD) {
+            $field = null;
+        }
+        return $this->getFilePath($object, $field);
+    }
+
+    private function clearDirectory($object, $field, $rmDirectory=false)
+    {
+        $dir = $field
+            ? $this->getObjectDirectory($object).DIRECTORY_SEPARATOR.$field
+            : $this->getObjectDirectory($object)
+        ;
         if (is_dir($dir)) {
-            $file->move($dir, $filename);
-            return $filename;
-        } else {
-            return null;
-        }
-
-    }
-
-    public function fileExists($object)
-    {
-        return is_file($this->getFile($object));
-    }
-
-    public function getFile($object)
-    {
-        return $this->getRootUploadDirectory().$this->getFilePath($object);
-    }
-
-    public function remove($object, $removeParentDir=false)
-    {
-        if ($this->fileExists($object)) {
-            unlink($this->getFile($object));
-            //@TODO remove parent dir if empty
-//            if ($removeParentDir) {
-//                @rmdir(dirname($this->getRootUploadDirectory().$this->getEntityDirectory($entity).$object->getId()));
-//            }
-        }
-    }
-
-    private function clearDirectory($object, $rmDirectory=false)
-    {
-        $entity = $this->getEntity($object);
-        $dir = $this->getRootUploadDirectory().$this->getEntityDirectory($entity).DIRECTORY_SEPARATOR.$object->getId();
-        if (is_dir($dir)) {
-            array_map(function($name) use ($dir) {$file = $dir.DIRECTORY_SEPARATOR.$name; if(is_file($file)){@unlink($file);}}, scandir($dir));
+            array_map(
+                function($name) use ($dir) {
+                    $file = $dir.DIRECTORY_SEPARATOR.$name;
+                    if (is_file($file)) {
+                        @unlink($file);
+                    }
+                },
+                scandir($dir)
+            );
             if ($rmDirectory) {
                 @rmdir($dir);
             }
         }
     }
 
-    private function getEntity($object)
+    private function removeDirectory($dir)
     {
-        $a = explode('\\', get_class($object));
-        $entity = strtolower(array_pop($a));
-        return $entity;
+        if (is_dir($dir)) {
+            array_map(
+                function($name) use ($dir) {
+                    $input = $dir.DIRECTORY_SEPARATOR.$name;
+                    if (is_file($input)) {
+                        @unlink($input);
+                    } elseif (is_dir($input) && $name!='.' && $name!='..') {
+                        $this->removeDirectory($input);
+                    }
+                },
+                scandir($dir)
+            );
+            @rmdir($dir);
+        }
     }
 
-    private function getEntityDirectory($entity)
+    private function getObjectDirectory($object)
     {
-        return isset($this->config[$entity]['upload']['dir'])
-            ? $this->config[$entity]['upload']['dir']
-            : $entity
+        if (!isset($this->objectDirectory)) {
+            $this->objectDirectory = $this->getRootUploadDirectory().$this->getEntityDirectory($object).DIRECTORY_SEPARATOR.$object->getId();
+        }
+
+        return $this->objectDirectory;
+    }
+
+    private function getFieldDirectory($object, $field)
+    {
+        return $field
+            ? $this->getObjectDirectory($object).DIRECTORY_SEPARATOR.$field
+            : $this->getObjectDirectory($object)
         ;
+    }
+
+    private function getEntityDirectory($object)
+    {
+        if (isset($this->entityDirectory)) {
+            return $this->entityDirectory;
+        }
+
+        if(is_object($object)) {
+            $a = explode('\\', get_class($object));
+            $class = array_pop($a);
+            if (preg_match_all('/[A-Z0-9][a-z0-9]*/', $class, $matches)) {
+                $this->entityDirectory = implode('_', array_map(function($str){return lcfirst($str);}, $matches[0]));
+                return $this->entityDirectory;
+            }
+        }
+
+        return '_all';
     }
 
     private function getRootUploadDirectory()
@@ -245,18 +348,22 @@ class FileUploader
         return $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . self::ROOT_UPLOAD_DIRECTORY . DIRECTORY_SEPARATOR;
     }
 
-    private function getFilePath($object)
+    private function getFilePath($object, $field)
     {
-        $entity = $this->getEntity($object);
-        $dir = $this->getRootUploadDirectory().$this->getEntityDirectory($entity).DIRECTORY_SEPARATOR.$object->getId();
+        $dir = $field
+            ? $this->getObjectDirectory($object).DIRECTORY_SEPARATOR.$field
+            : $this->getObjectDirectory($object)
+        ;
         if (!is_dir($dir)) {
             return null;
         }
         $scan = scandir($dir,1);
-        return is_file($dir.DIRECTORY_SEPARATOR.$scan[0])
-            ? $this->getEntityDirectory($entity).DIRECTORY_SEPARATOR.$object->getId().DIRECTORY_SEPARATOR.$scan[0]
-            : null
-        ;
+        for ($i=0; $i<count($scan); $i++) {
+            if (is_file($dir.DIRECTORY_SEPARATOR.$scan[$i])) {
+                return $dir.DIRECTORY_SEPARATOR.$scan[$i];
+            }
+        }
+        return null;
     }
 
     /**
@@ -266,11 +373,11 @@ class FileUploader
      * @param $object
      * @return array|bool
      */
-    public function getFileInfo($object)
+    public function getFileInfo($object, $field=null)
     {
-        if ($this->fileExists($object)) {
-            $mime = $this->getMime($object);
-            $file = $this->getFile($object);
+        if ($this->fileExists($object, $field)) {
+            $mime = $this->getMime($object, $field);
+            $file = $this->getFile($object, $field);
             if (preg_match('/^video\//', $mime)) {
                 return [
                     'width'     => null,
@@ -296,11 +403,33 @@ class FileUploader
         return [];
     }
 
-    public function getMime($object)
+    public function getMime($object, $field=null)
     {
-        return $this->fileExists($object)
-            ? mime_content_type($this->getFile($object))
+        if ($field==self::NULL_FIELD) {
+            $field = null;
+        }
+        return $this->fileExists($object, $field)
+            ? mime_content_type($this->getFile($object, $field))
             : ''
         ;
+    }
+
+    public function getFileUrl($object, $field) {
+        if(is_object($object)) {
+            $a = explode('\\', get_class($object));
+            $class = array_pop($a);
+            if (preg_match_all('/[A-Z0-9][a-z0-9]*/', $class, $matches)) {
+                $path = implode('_', array_map(function($str){return lcfirst($str);}, $matches[0]));
+                $path .= self::FILE_CONTROLLER_PATH_SUFFIX;
+                if ($this->router->getRouteCollection()->get($path)) {
+                    try {
+                        $url = $this->router->generate($path, ['id'=>$object->getId(), 'field'=>$field?$field:self::NULL_FIELD]);
+                        return $url;
+                    } catch (\Exception $e) { }
+                }
+            }
+        }
+
+        return null;
     }
 }
