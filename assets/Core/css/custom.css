@@ -143,3 +143,17 @@ input[type="time"].form-control {
   text-align: center;
 }
 
+.file-uploader-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: -1.0rem;
+}
+.file-uploader-group .form-group {
+  flex: auto;
+}
+.file-uploader-group .form-group > div:first-child {
+  display: none;
+}
+/*.file-uploader-group .form-group:first-child > div:first-child {*/
+  /*display: none;*/
+/*}*/

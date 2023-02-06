@@ -154,7 +154,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
                 $em->persist($<?= strtolower($entity_class_name) ?>);
                 try {
                     $em->flush();
-                    if ($fileUploader->handleFile($form, $<?= strtolower($entity_class_name) ?>, '<?= strtolower($entity_class_name) ?>')) {
+                    if ($fileUploader->handleFiles($form, $<?= strtolower($entity_class_name) ?>)) {
                         $em->persist($<?= strtolower($entity_class_name) ?>);
                         $em->flush();
                     }
@@ -265,7 +265,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
             if ($editForm->isValid()) {
                 // upload
                 try {
-                    $fileUploader->handleFile($editForm, $<?= strtolower($entity_class_name) ?>, '<?= strtolower($entity_class_name) ?>');
+                    $fileUploader->handleFiles($editForm, $<?= strtolower($entity_class_name) ?>);
                 } catch (\Exception $e) {
                     $exception_message = html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8');
                     $this->addFlash('danger', explode("\n", $exception_message)[0]);
@@ -321,7 +321,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
         if (($form->isSubmitted() && $form->isValid()) || $this->isCsrfTokenValid('delete-item', $submittedToken)) {
             $em = $this->doctrine->getManager();
             try {
-                $fileUploader->handleFile($form, $<?= strtolower($entity_class_name) ?>, '<?= strtolower($entity_class_name) ?>');
+                $fileUploader->handleFiles($form, $<?= strtolower($entity_class_name) ?>);
                 $em->remove($<?= strtolower($entity_class_name) ?>);
                 $em->flush();
                 $this->addFlash('success', '<?= strtolower($entity_class_name) ?>_deleted');
@@ -353,26 +353,21 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
   }
   
     /**
-     * @Route("/{id}/file", name="<?= $route_name ?>_file", methods={"GET"})
+     * @Route("/{id}/{field}/file", name="<?= $route_name ?>_file", methods={"GET"}, requirements={"field":".*"})
      */
     public function showFile(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
     {
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
-//        $class = $this->getSnakeToUpper($entity);
-//        $object = $this->doctrine->getRepository('App\\Entity\\'.$class)->find($id);
-//        if (!$object) {
-//            $this->addFlash('danger', $entity.'_not_found');
-//            return $this->redirectToRoute('admin_index', ['entity' => $entity]);
-//        }
+
         if ($user->getRole() == 'ROLE_COLLABORATION' && $<?= strtolower($entity_class_name) ?>->getUserCre() != $user->getId()) {
             $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
         }
 
         try {
-            $response = new BinaryFileResponse($fileUploader->getFile($<?= strtolower($entity_class_name) ?>));
-            $response->headers->set('Content-Type', $fileUploader->getMime($<?= strtolower($entity_class_name) ?>));
+            $response = new BinaryFileResponse($fileUploader->getFile($<?= strtolower($entity_class_name) ?>, $field));
+            $response->headers->set('Content-Type', $fileUploader->getMime($<?= strtolower($entity_class_name) ?>, $field));
             return $response;
         } catch (\Exception $e) {
             $exception_message = html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8');

@@ -130,7 +130,7 @@ class MediaController extends AbstractController
                 try {
                     $em->flush();
                     // upload
-                    if ($fileUploader->handleFile($form, $media, 'media')) {
+                    if ($fileUploader->handleFiles($form, $media)) {
                         $em->persist($media);
                         $em->flush();
                     }
@@ -188,7 +188,7 @@ class MediaController extends AbstractController
                 try {
                     $em->flush();
                     // upload
-                    if ($fileUploader->handleFile($form, $media, 'media')) {
+                    if ($fileUploader->handleFiles($form, $media)) {
                         $em->persist($media);
                         $em->flush();
                     }
@@ -262,7 +262,7 @@ class MediaController extends AbstractController
 
                 // upload
                 try {
-                    $fileUploader->handleFile($editForm, $media, 'media');
+                    $fileUploader->handleFiles($editForm, $media);
                 } catch (\Exception $e) {
                     $exception_message = html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8');
                     $this->addFlash('danger', explode("\n", $exception_message)[0]);
@@ -309,7 +309,7 @@ class MediaController extends AbstractController
         if (($form->isSubmitted() && $form->isValid()) || $this->isCsrfTokenValid('delete-item', $submittedToken)) {
             $em = $this->doctrine->getManager();
             try {
-                $fileUploader->handleFile($form, $media, 'media');
+                $fileUploader->handleFiles($form, $media);
                 $em->remove($media);
                 $em->flush();
                 $this->addFlash('success', 'media_deleted');
@@ -343,7 +343,7 @@ class MediaController extends AbstractController
 
 
     /**
-     * @Route("/{id}/file", name="media_file", methods={"GET"})
+     * @Route("/{id}/{field}/file", name="media_file", methods={"GET"}, requirements={"field":".*"})
      */
     public function getFile(Request $request, Media $media, FileUploader $fileUploader): Response
     {
@@ -355,8 +355,8 @@ class MediaController extends AbstractController
         }
 
         try {
-            $response = new BinaryFileResponse($fileUploader->getFile($media));
-            $response->headers->set('Content-Type', $fileUploader->getMime($media));
+            $response = new BinaryFileResponse($fileUploader->getFile($media, $field));
+            $response->headers->set('Content-Type', $fileUploader->getMime($media, $field));
             return $response;
         } catch (\Exception $e) {
             $exception_message = html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8');
