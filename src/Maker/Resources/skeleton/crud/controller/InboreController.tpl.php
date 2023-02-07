@@ -189,7 +189,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
         
 
     /**
-     * @Route("/{<?= $entity_identifier ?>}", name="<?= $route_name ?>_show", methods={"GET"})
+     * @Route("/{id}", name="<?= $route_name ?>_show", methods={"GET"})
      */
     public function show(<?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>): Response
     {
@@ -209,7 +209,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
 
     /**
-     * @Route("/{<?= $entity_identifier ?>}/edit", name="<?= $route_name ?>_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="<?= $route_name ?>_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
     {
@@ -309,7 +309,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
 
     /**
-     * @Route("/{<?= $entity_identifier ?>}", name="<?= $route_name ?>_delete", methods={"DELETE"})
+     * @Route("/{id}", name="<?= $route_name ?>_delete", methods={"DELETE"})
      */
     public function delete(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
     {
