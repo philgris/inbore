@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Type;
+namespace App\Form;
 
 use App\Entity\Media;
 use App\Form\EventListener\AddUserDateFields;
