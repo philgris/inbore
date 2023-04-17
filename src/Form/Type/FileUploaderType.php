@@ -36,7 +36,7 @@ class FileUploaderType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if ($options['action_type']->getValue() == 'new' || $options['action_type']->getKey() == 'edit') {
+        if ($options['action_type'] == Action::create->value || $options['action_type'] == Action::edit->value) {
             $opts = [
                 'label'         => false,
                 'mapped'        => false,
@@ -66,7 +66,7 @@ class FileUploaderType extends AbstractType
             $builder->add($builder->getName().FileUploader::FILE_SUFFIX, FileType::class, $opts);
         }
 
-        if ($options['action_type']->getValue() == 'show' || $options['action_type']->getKey() == 'edit') {
+        if ($options['action_type'] == Action::show->value || $options['action_type'] == Action::edit->value) {
             $object = $builder->getData();
             $field = $options['ignore_field_name'] ? null: $builder->getName();
             // if file exists and file_path option is set show a link
@@ -114,7 +114,7 @@ class FileUploaderType extends AbstractType
                     'data'          => $data
                 ]);
 
-                if ($options['action_type']->getKey() == 'edit') {
+                if ($options['action_type'] == Action::edit->value) {
                     $builder->add($builder->getName().FileUploader::REMOVE_SUFFIX, CheckboxType::class, [
                         'label'         => '<i class="fas fa-trash-alt"></i>',
                         'label_html'    => true,
@@ -144,7 +144,7 @@ class FileUploaderType extends AbstractType
     {
         $resolver->setDefaults(array(
             'entity_name_in_config' => null,
-            'action_type'           => Action::show(),
+            'action_type'           => Action::show->value,
             'inherit_data'          => true,
             'file_path'             => null,    // optional: force a specific path
             'mime_types'            => null,
