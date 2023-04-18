@@ -7,6 +7,7 @@ use <?= $entity_full_class_name ?>;
 use <?= $form_full_class_name ?>;
 use App\Repository\Core\<?= $entity_class_name?>Repository ;
 use App\Services\FileUploader;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -355,7 +356,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
     /**
      * @Route("/{id}/{field}/file", name="<?= $route_name ?>_file", methods={"GET"}, requirements={"field":".*"})
      */
-    public function showFile(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
+    public function showFile(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader, $field): Response
     {
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
