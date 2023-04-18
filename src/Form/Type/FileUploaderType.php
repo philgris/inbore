@@ -80,7 +80,7 @@ class FileUploaderType extends AbstractType
                 if (preg_match('/^image\//', $mime) && $url) {
                     $template =
                         '<a href="'.$url.'" target="_blank">'.
-                            '<img src="'.$url.'" alt="' . $this->uploader->getFilename($builder->getData(), $field) . '" style="max-width:100%; max-height:500px;">'.
+                            '<img src="'.$url.'" alt="' . $this->uploader->getFilename($builder->getData(), $field) . '" style="max-width:100%; max-height:50px;">'.
                         '</a>';
                 } elseif (preg_match('/^video\//', $mime) && $url) {
                     $template =

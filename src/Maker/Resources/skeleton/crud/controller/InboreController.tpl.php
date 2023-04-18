@@ -7,6 +7,7 @@ use <?= $entity_full_class_name ?>;
 use <?= $form_full_class_name ?>;
 use App\Repository\Core\<?= $entity_class_name?>Repository ;
 use App\Services\FileUploader;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -102,19 +103,24 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
         $em->persist($<?= strtolower($entity_class_name) ?>);       
         try {
             $flush = $em->flush();
+            // upload
+            if ($fileUploader->handleFile($form, $<?= strtolower($entity_class_name) ?>, '<?= strtolower($entity_class_name) ?>')) {
+                $em->persist($<?= strtolower($entity_class_name) ?>);
+                $em->flush();
+            }
             $select_id   = $<?= strtolower($entity_class_name) ?>->getId();
             $method = 'get' . ucfirst($request->get('choice_label'));
             $select_name = $<?= strtolower($entity_class_name) ?>->$method();
             return new JsonResponse([
                 'select_id' => $select_id,
                 'select_name' => $select_name,
-                'entityname' => '$<?= strtolower($entity_class_name) ?>',
+                'entityname' => '<?= strtolower($entity_class_name) ?>',
             ]);
         } catch (\Doctrine\DBAL\DBALException $e) {
             return new JsonResponse([
                 'exception' => true,
                 'exception_message' => $e->getMessage(),
-                'entityname' => '$<?= strtolower($entity_class_name) ?>',
+                'entityname' => '<?= strtolower($entity_class_name) ?>',
             ]);
         }                       
       }
@@ -355,7 +361,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
     /**
      * @Route("/{id}/{field}/file", name="<?= $route_name ?>_file", methods={"GET"}, requirements={"field":".*"})
      */
-    public function showFile(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
+    public function showFile(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader, $field): Response
     {
         //  access control for user type  : ROLE_COLLABORATION
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
