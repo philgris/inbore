@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use App\Form\Enums\Action;
 use App\Services\Core\GenericFunction;
@@ -41,6 +42,7 @@ public function __construct(ManagerRegistry $doctrine) {
 
 /**
 * @Route("/", name="<?= $route_name ?>_index", methods={"GET"})
+* @Security("is_granted('ROLE_INVITED')")
 */
      
 public function index(<?= $entity_class_name?>Repository $<?=  strtolower($entity_class_name ) ?>Repository): Response
@@ -80,6 +82,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
    * Creates a new <?= strtolower($entity_class_name) ?> entity for modal windows
    *
    * @Route("/newmodal", name="<?= $route_name ?>_newmodal", methods={"GET", "POST"})
+   * @Security("is_granted('ROLE_COLLABORATION')")
    */
   public function newmodalAction( Request $request, FileUploader $fileUploader, $choice_label = null ) {
     $<?= strtolower($entity_class_name) ?> = new <?= $entity_class_name ?>();
@@ -136,6 +139,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
     /**
      * @Route("/new", name="<?= $route_name ?>_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_COLLABORATION')")
      */
     public function new(Request $request, FileUploader $fileUploader, GenericFunction $genericFunctionService): Response
     {
@@ -196,6 +200,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
     /**
      * @Route("/{id}", name="<?= $route_name ?>_show", methods={"GET"})
+     * @Security("is_granted('ROLE_INVITED')")
      */
     public function show(<?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>): Response
     {
@@ -216,6 +221,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
     /**
      * @Route("/{id}/edit", name="<?= $route_name ?>_edit", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_COLLABORATION')")
      */
     public function edit(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
     {
@@ -316,6 +322,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
     /**
      * @Route("/{id}", name="<?= $route_name ?>_delete", methods={"DELETE"})
+     * @Security("is_granted('ROLE_COLLABORATION')")
      */
     public function delete(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
     {
@@ -360,6 +367,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
   
     /**
      * @Route("/{id}/{field}/file", name="<?= $route_name ?>_file", methods={"GET"}, requirements={"field":".*"})
+     * @Security("is_granted('ROLE_INVITED')")
      */
     public function showFile(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader, $field): Response
     {
