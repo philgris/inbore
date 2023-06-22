@@ -96,9 +96,9 @@ Encore
   // .addLoader({ test: /datatables\.net.*/, loader: 'imports-loader?define=>false' })
 
   // Provide L namespace for leaflet 
-  .autoProvideVariables({
-    L: "leaflet",
-  })
+  // .autoProvideVariables({
+  //  L: "leaflet",
+  // })
 
   // uncomment if you use API Platform Admin (composer req api-admin)
   //.enableReactPreset()
@@ -135,12 +135,6 @@ Encore
   
 
 var config = Encore.getWebpackConfig();
-// disable amd, for datatable
-config.module.rules.unshift({
-  parser: {
-    amd: false
-  }
-});
 
 
 module.exports = config;
