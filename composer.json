@@ -12,8 +12,6 @@
         "doctrine/doctrine-bundle": "2.*",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "2.*",
-        "doctrine/dbal": "2.13.*",
-        "doctrine/persistence": "2.5.*",
         "friendsofsymfony/jsrouting-bundle": "^2.7",
         "phpdocumentor/reflection-docblock": "^5.3",
         "sensio/framework-extra-bundle": "^6.1",
@@ -102,7 +100,8 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "5.4.*"
+            "require": "5.4.*",
+            "docker": false
         }
     }
 }
