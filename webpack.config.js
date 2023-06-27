@@ -36,6 +36,7 @@ Encore
   .addEntry('forms', './assets/Core/forms/js/forms.js')
   .addEntry('form-tools', './assets/Core/forms/js/form-tools.js')
   .addEntry('vocabulary-form', './assets/Core/forms/js/vocabulary-form.js')
+  .addEntry('prelevement-form', './assets/Core/forms/js/prelevement-form.js')
   
   // Query builder
   // .addEntry('querybuilder', './assets/QueryBuilder/js/main.js')
@@ -73,12 +74,12 @@ Encore
   .enableLessLoader()
 
   // enables VueJS
-  .enableVueLoader()
-  .addRule({
-    resourceQuery: /blockType=i18n/,
-    type: 'javascript/auto',
-    loader: '@intlify/vue-i18n-loader',
-  })
+  //.enableVueLoader()
+  //.addRule({
+  //  resourceQuery: /blockType=i18n/,
+  //  type: 'javascript/auto',
+  //  loader: '@intlify/vue-i18n-loader',
+  // })
 
   // YAML loader
   .addLoader({ test: /\.ya?ml$/, loader: 'js-yaml-loader' })
@@ -96,9 +97,9 @@ Encore
   // .addLoader({ test: /datatables\.net.*/, loader: 'imports-loader?define=>false' })
 
   // Provide L namespace for leaflet 
-  .autoProvideVariables({
-    L: "leaflet",
-  })
+  // .autoProvideVariables({
+  //  L: "leaflet",
+  // })
 
   // uncomment if you use API Platform Admin (composer req api-admin)
   //.enableReactPreset()
@@ -135,12 +136,6 @@ Encore
   
 
 var config = Encore.getWebpackConfig();
-// disable amd, for datatable
-config.module.rules.unshift({
-  parser: {
-    amd: false
-  }
-});
 
 
 module.exports = config;
