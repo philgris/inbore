@@ -7,12 +7,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 //
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 
 // add Entity call by EntityType
-use App\Entity\Core\Media;
+use App\Entity\Media;
 
 
 class MediaLinkEmbedType extends AbstractType { 
@@ -27,8 +29,11 @@ class MediaLinkEmbedType extends AbstractType {
     {
         $relativeRecord = $builder->getData();
         $builder
+                       
+        // idMedia : typeOptions['type'] =  , typeOptions['options_code'] =     
+            //->add('idMedia')
             ->add('idMedia', EntityType::class, array(
-            'class' => 'App\\Entity\\Core\\Media',
+            'class' => 'App\\Entity\\Media',
             'query_builder' => function (EntityRepository $er) {
               return $er->createQueryBuilder('media')
                 ->orderBy('media.filename', 'ASC');
@@ -38,9 +43,7 @@ class MediaLinkEmbedType extends AbstractType {
             'multiple' => false,
             'expanded' => false,
           ))
-        // comment : typeOptions['type'] =  , typeOptions['options_code'] =     
-        //    ->add('comment')         
-                                      
+
         ;
     }
 
@@ -48,7 +51,6 @@ class MediaLinkEmbedType extends AbstractType {
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                    'data_class' => 'App\Entity\Core\MediaLink',
             ]);
     }
 }

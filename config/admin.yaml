@@ -1,32 +1,8 @@
 parameters:
     admin:
+        # definition de la forme générale des clés étrangères
         fk_name:
             fixe_fk_delimiter: '_'
             prefixe_fk: 'id'
             suffixe_fk: ''
-        # Ex. entity with upload field name 'file' 
-        # and with Setter ; setWidth, setHeight, setSize , setMimeType, setPath, setFilename 
-        entity_name_1:
-            upload:
-                field: 'file'
-                dir: 'media'
-                mimes: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'video/mp4']
-                accept: '.jpg,.jpeg,.png,.gif,.mp4'
-                max_size: '524288k'
-                setters:
-                    width: 'setWidth'
-                    height: 'setHeight'
-                    size: 'setSize'
-                    mime: 'setMimeType'
-                    path: 'setPath'
-                    filename: 'setFilename'
-        entity_name_2:
-            upload:
-                field: 'pdf'
-                remove: 'removePdf'
-                dir: 'protocol'
-                mimes: ['application/pdf', 'application/x-pdf']
-                accept: '.pdf'
-                max_size: '4096k'
-
-                
+        #            

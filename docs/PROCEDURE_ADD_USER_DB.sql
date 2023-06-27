@@ -23,7 +23,7 @@ START WITH 2
  NO MAXVALUE
  CACHE 1;
 ALTER SEQUENCE public.user_db_id_seq OWNED BY public.user_db.id;
-ALTER TABLE user_db ALTER COLUMN id SET DEFAULT nextval('public.user_db_id_seq'::regclass);
+ALTER TABLE public.user_db ALTER COLUMN id SET DEFAULT nextval('public.user_db_id_seq'::regclass);
 ALTER TABLE ONLY public.user_db ADD CONSTRAINT pk_user_db PRIMARY KEY (id);
 ALTER TABLE ONLY public.user_db ADD CONSTRAINT uk_user_db__username UNIQUE (user_name);
 -- db_user : Default admin account TO CHANGE : login = admin / password = adminInBORe
