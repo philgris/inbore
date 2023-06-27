@@ -5,7 +5,7 @@ import { getSelectedCode } from "./forms"
 
 $(() => {
   // -- Initialization of the auto complete fields and load Ajax request for the route "linkedEntity_search" (the request)
-  // initSearchSelect($("#entity-name_linkedEntityNameFk")), "linkedEntity_search")
+  // initSearchSelect($("#entity-name_linkedEntityNameFk"), "linkedEntity_search");
   // -- End Initialization of  auto complete fields
 
   // Js Action on the field form 
