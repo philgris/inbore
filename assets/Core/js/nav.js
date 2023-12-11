@@ -35,3 +35,20 @@ $('#menu-toggle').click(event => {
   else
     Cookies.set("inbore-menu-layout", undefined,  { sameSite: 'lax' })
 })
+
+// update main menu state
+$(document).ready(function () {
+    let url = window.location.toString();
+    $(".nav-left .menu-entry a.nav-link").each(function() {
+        let $link = $(this);
+        if (url.includes($link.attr('href'))) {
+            close_sub_menus();
+            let $parent = $link.parents('li.menu-entry');
+            $parent.addClass('current-page', 'active');
+            $link.parents('li.menu-sub-entry').addClass('current-page');
+            if (!$(".nav-left").hasClass('nav-sm')) {
+                $('ul:first', $parent).show();
+            }
+        }
+    })
+});
