@@ -37,7 +37,7 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
 // InBORe Repository generation	
     // Search Column in list : ex1 <?= lcfirst($entity_class_name) ?>.nameOfField ; ex2 CONCAT(<?= lcfirst($entity_class_name) ?>.nameOfField,\':\', entityRel.nameOfField)'
     const BOOTGRID_SEARCH_COLUMN = 'name_or_expression_of_the_bootgrid_search_column'; 
-    // Name (Database) of the  Autocomplete Field for Select2 
+    // Name (Database) of the  Autocomplete Field for Select2 : ex1  'evtEchouage.id'; ex2 <?= lcfirst($entity_class_name) ?>.nameOfField ; ex2 CONCAT(<?= lcfirst($entity_class_name) ?>.nameOfField,\':\', entityRel.nameOfField)'
     const DBNAME_FIELD_TO_AUTOCOMPLETE = 'name_of_select2_autocomplete_field';
     // Max number of result to show in the auto-complete list (default = 20)
     const MAX_RESULTS_TO_AUTOCOMPLETE = 20;
@@ -199,15 +199,36 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
     {
         $query = explode(' ', strtolower(trim(urldecode($q))));
         $qb = $this->createQueryBuilder('<?= strtolower($entity_class_name) ?>');        
-            $qb->select('<?= strtolower($entity_class_name) ?>.id, <?= strtolower($entity_class_name) ?>.'.self::DBNAME_FIELD_TO_AUTOCOMPLETE.' as code');
+            $qb->select('<?= strtolower($entity_class_name) ?>.id, '.self::DBNAME_FIELD_TO_AUTOCOMPLETE.' as code');
             for ($i = 0; $i < count($query); $i++) {
-                $qb->andWhere('(LOWER(<?= strtolower($entity_class_name) ?>.'.self::DBNAME_FIELD_TO_AUTOCOMPLETE.') like :q' . $i . ')');
-                $qb->setParameter('q' . $i, $query[$i] . '%');
+                $qb->andWhere('(LOWER('.self::DBNAME_FIELD_TO_AUTOCOMPLETE.') like :q' . $i . ')');
+                $qb->setParameter('q' . $i, '%' . $query[$i] . '%');
             }
             $qb->orderBy('code', 'ASC');
             $qb->setMaxResults(self::MAX_RESULTS_TO_AUTOCOMPLETE);
 
         return $qb->getQuery()->getResult() ;
     }
+    
+    
+    public function save(<?= $entity_class_name ?> $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    
+    public function remove(<?= $entity_class_name ?> $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }    
+    
 	
 }
