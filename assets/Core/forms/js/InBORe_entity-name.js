@@ -4,8 +4,8 @@ import { getSelectedCode } from "./forms"
 // NOTE ! this file has to be load in the /templates/entity-name/edit.html.twig and the webpack.config.js files
 
 $(() => {
-  // -- Initialization of the auto complete fields and load Ajax request for the route "linkedEntity_search" (the request)
-  // initSearchSelect($("#entity-name_linkedEntityNameFk"), "linkedEntity_search");
+  // -- Initialization of the auto complete fields and load Ajax request for the route "linked_entity_search" (the request)
+  // initSearchSelect($("#entity-name_linkedEntityNameFk"), "linked_entity_search");
   // -- End Initialization of  auto complete fields
 
   // Js Action on the field form 
