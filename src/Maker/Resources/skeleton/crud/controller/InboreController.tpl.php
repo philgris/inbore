@@ -81,7 +81,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
   /**
    * Creates a new <?= strtolower($entity_class_name) ?> entity for modal windows
    *
-   * @Route("/newmodal", name="<?= $route_name ?>_newmodal", methods={"GET", "POST"})
+   * @Route("/newmodal", name="<?= strtolower($entity_class_name) ?>_newmodal", methods={"GET", "POST"})
    * @Security("is_granted('ROLE_COLLABORATION')")
    */
   public function newmodalAction( Request $request, FileUploader $fileUploader, $choice_label = null ) {
@@ -119,7 +119,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
                 'select_name' => $select_name,
                 'entityname' => '<?= strtolower($entity_class_name) ?>',
             ]);
-        } catch (\Doctrine\DBAL\DBALException $e) {
+        } catch (\Exception $e) {
             return new JsonResponse([
                 'exception' => true,
                 'exception_message' => $e->getMessage(),
@@ -179,10 +179,6 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
                     'valid' => 1,
                     'nameFk' => $request->get('nameFk'),
                     'idFk' => $request->get('idFk'),
-                    'urlArg' => $request->get('urlArg'),
-                    'backTo' => $request->get('backTo'),
-                    'backToNameFk' => $request->get('backToNameFk'),
-                    'backToIdFk' => $request->get('backToIdFk'),
                 ]);
             } else {
                 $this->addFlash('danger', $form->getErrors(true));
@@ -231,39 +227,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
         $user = $this->getUser();
         if ($user->getRole() == 'ROLE_COLLABORATION' && $<?= strtolower($entity_class_name) ?>->getUserCre() != $user->getId()) {
           $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
-        }
-        
-        // check if a relational Entity is given as urlArg parameter like nameRelEntity:idRelEntity
-        // If  SET Fk value if idRelEntity > 0 or DELETE if idRelEntity = 0 
-        if ($request->get('urlArg') && count(explode( ':', $request->get('urlArg'))) == 2) { 
-            try {            
-                // set the RelationalEntityFk for the new Entity
-                $nameRelEntity = explode( ':', $request->get('urlArg'))[0];
-                $idRelEntity = explode( ':', $request->get('urlArg'))[1];
-                // test if idRelEntity is an integer
-                if (is_numeric($idRelEntity) && ctype_digit($idRelEntity) ) { 
-                    $repo = $em->getRepository(self::ENTITY_PATH.$nameRelEntity);
-                    $relationalEntity = $repo->find($idRelEntity);
-                    $nameRelEntityFk = $genericFunctionService->GetFkName($nameRelEntity);
-                    // GET the Relational Entity to DELETE if needed
-                    $method =  'get'.$nameRelEntityFk;
-                    $relationalEntityToDelete = $<?= strtolower($entity_class_name) ?>->$method(); 
-                    // SET the new id value for the Fk of the Relational Entity (=NULL if $idRelEntity=0)
-                    $method =  'set'.$nameRelEntityFk;
-                    $<?= strtolower($entity_class_name) ?>->$method($relationalEntity);
-                    $em->persist($<?= strtolower($entity_class_name) ?>);
-                    if($idRelEntity == 0 && $relationalEntityToDelete !== null) {
-                        // DELETE procedure
-                        $em->remove($relationalEntityToDelete);
-                        $this->addFlash('success', $nameRelEntity.'_deleted');   
-                    } 
-                    // flush changes in the database
-                    $em->flush();                    
-                }
-            } catch (Doctrine\Common\Persistence\Mapping\MappingException $e) {
-                // NOPE! Not a mapped model
-            }
-        }        
+        }                
 
         // set Edit form parameters
         $edit_form_parameters = array('form_parameters' => ['action_type' => Action::edit->value]);
@@ -288,7 +252,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
                 $this->doctrine->getManager()->persist($<?= strtolower($entity_class_name) ?>);
                 try {
                     $this->doctrine->getManager()->flush();
-                } catch (\Doctrine\DBAL\DBALException $e) {
+                } catch (\Exception $e) {
                     $exception_message = html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8');
                     $this->addFlash('danger', explode("\n", $exception_message)[0]);
                     return $this->redirectToRoute('<?= $route_name ?>_index');
@@ -301,10 +265,6 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
                     'valid'     => 1,
                     'nameFk'    => $request->get('nameFk'),
                     'idFk'      => $request->get('idFk'),
-                    'urlArg' => $request->get('urlArg'),
-                    'backTo' => $request->get('backTo'),
-                    'backToNameFk' => $request->get('backToNameFk'),
-                    'backToIdFk' => $request->get('backToIdFk'),
                 ]);
             } else {
                 $this->addFlash('danger', $editForm->getErrors(true));
@@ -338,7 +298,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
                 $em->remove($<?= strtolower($entity_class_name) ?>);
                 $em->flush();
                 $this->addFlash('success', '<?= strtolower($entity_class_name) ?>_deleted');
-            } catch (\Doctrine\DBAL\DBALException $e) {
+            } catch (\Exception $e) {
                 $exception_message = addslashes(html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8'));
                 $this->addFlash('danger', explode("\n", $exception_message)[0]);
             }

@@ -36,7 +36,6 @@ Encore
   .addEntry('forms', './assets/Core/forms/js/forms.js')
   .addEntry('form-tools', './assets/Core/forms/js/form-tools.js')
   .addEntry('vocabulary-form', './assets/Core/forms/js/vocabulary-form.js')
-  .addEntry('prelevement-form', './assets/Core/forms/js/prelevement-form.js')
   
   // Query builder
   // .addEntry('querybuilder', './assets/QueryBuilder/js/main.js')
