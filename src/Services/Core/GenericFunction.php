@@ -78,14 +78,18 @@ class GenericFunction
     }
 
     public function GetFkName($entityRel){
-        if ($this->prefixe !== '') {
-            $nameFk = ($this->delimiter == '_') ? ucfirst($this->prefixe).ucfirst($entityRel) : ucfirst($this->prefixe).$this->delimiter.$entityRel;
+        if(isset($this->config['fk_name'][$entityRel]) ) {
+            $nameFk = $this->config['fk_name'][$entityRel];
         } else {
-            $nameFk = $entityRel;
+            if ($this->prefixe !== '') {
+                $nameFk = ($this->delimiter == '_') ? ucfirst($this->prefixe).ucfirst($entityRel) : ucfirst($this->prefixe).$this->delimiter.$entityRel;
+            } else {
+                $nameFk = $entityRel;
+            }
+            if ($this->suffixe !== '') {
+                $nameFk = ($this->delimiter == '_') ? $nameFk.ucfirst($this->suffixe) : $nameFk.$this->delimiter.$this->suffixe;
+            }   
         }
-        if ($this->suffixe !== '') {
-            $nameFk = ($this->delimiter == '_') ? $nameFk.ucfirst($this->suffixe) : $nameFk.$this->delimiter.$this->suffixe;
-        }        
         return $nameFk;
     }
         

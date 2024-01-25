@@ -5,46 +5,25 @@ namespace <?= $namespace ?>;
 
 use <?= $entity_full_class_name ?>;
 use <?= $form_full_class_name ?>;
+use App\Controller\EntityController;
 use App\Repository\Core\<?= $entity_class_name?>Repository ;
 use App\Services\FileUploader;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Form\Enums\Action;
 use App\Services\Core\GenericFunction;
 
 
-/**
- * @Route("<?= $route_name ?>")
- */
-
-class <?= $class_name ?> extends AbstractController<?= "\n" ?>
+#[Route("<?= $route_name ?>")]
+class <?= $class_name ?> extends EntityController<?= "\n" ?>
 {
-// InBORe Controller generation
 
-/**
- * date of update  : 28/06/2022 
- * @author Philippe Grison  <philippe.grison@mnhn.fr>
- */
-const ENTITY_PATH   = 'App\\Entity\\';
-private $doctrine;
-public function __construct(ManagerRegistry $doctrine) {
-    $this->doctrine = $doctrine;
-   }
-
-
-
-/**
-* @Route("/", name="<?= $route_name ?>_index", methods={"GET"})
-* @Security("is_granted('ROLE_INVITED')")
-*/
-     
+#[Route("/", name: "<?= $route_name ?>_index", methods: ["GET"])]     
 public function index(<?= $entity_class_name?>Repository $<?=  strtolower($entity_class_name ) ?>Repository): Response
 {
     return $this->render('Core/<?= $templates_path ?>/index.html.twig', [
@@ -56,8 +35,8 @@ public function index(<?= $entity_class_name?>Repository $<?=  strtolower($entit
 /**
  * Returns in json format a set of records for auto-complete field (see App\Form\Type\SearchableSelectType) 
  *
- * @Route("/search/{q}", name="<?= $route_name ?>_search", requirements={"q"=".+"} )
  */
+#[Route("/search/{q}", requirements: ["q" => ".+"], name: "<?= $route_name ?>_search")]
 public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  strtolower($entity_class_name ) ?>Repository) {
 
   $results = $<?=  strtolower($entity_class_name ) ?>Repository->findSearchAction($q);
@@ -71,9 +50,8 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
    * a) 1 search criterion ($ request-> get ('searchPhrase')) insensitive to the case and  applied to a field
    * b) the number of lines to display ($ request-> get ('rowCount'))
    * c) 1 sort criterion on a collone ($ request-> get ('sort'))
-   *
-   * @Route("/indexjson", name="<?= $route_name ?>_indexjson", methods={"POST"})
    */
+  #[Route("/indexjson", name: "<?= $route_name ?>_indexjson", methods: ["POST"])]
   public function indexjsonAction(Request $request, <?=  $entity_class_name  ?>Repository $<?=  strtolower($entity_class_name ) ?>Repository) {
     return new JsonResponse($<?=  strtolower($entity_class_name ) ?>Repository->findSearch());
   }  
@@ -81,9 +59,10 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
   /**
    * Creates a new <?= strtolower($entity_class_name) ?> entity for modal windows
    *
-   * @Route("/newmodal", name="<?= strtolower($entity_class_name) ?>_newmodal", methods={"GET", "POST"})
-   * @Security("is_granted('ROLE_COLLABORATION')")
+   * 
    */
+   #[Route("/newmodal", name: "<?= strtolower($entity_class_name) ?>_newmodal", methods: ["GET", "POST"])]
+   #[IsGranted('ROLE_COLLABORATION')]
   public function newmodalAction( Request $request, FileUploader $fileUploader, $choice_label = null ) {
     $<?= strtolower($entity_class_name) ?> = new <?= $entity_class_name ?>();
     $form    = $this->createForm('App\Form\<?= $entity_class_name ?>Type', $<?= strtolower($entity_class_name) ?>, [
@@ -102,14 +81,13 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
           ])->getContent(),
         ]);
       } else {
-        $em = $this->doctrine->getManager();
-        $em->persist($<?= strtolower($entity_class_name) ?>);       
+        $this->entityManager->persist($<?= strtolower($entity_class_name) ?>); 
         try {
-            $flush = $em->flush();
+            $this->entityManager->flush();
             // upload
             if ($fileUploader->handleFile($form, $<?= strtolower($entity_class_name) ?>, '<?= strtolower($entity_class_name) ?>')) {
-                $em->persist($<?= strtolower($entity_class_name) ?>);
-                $em->flush();
+                $this->entityManager->persist($<?= strtolower($entity_class_name) ?>);
+                $this->entityManager->flush();
             }
             $select_id   = $<?= strtolower($entity_class_name) ?>->getId();
             $method = 'get' . ucfirst($request->get('choice_label'));
@@ -138,19 +116,19 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
   
 
     /**
-     * @Route("/new", name="<?= $route_name ?>_new", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_COLLABORATION')")
+     *
      */
+    #[Route("/new", name: "<?= $route_name ?>_new", methods: ["GET", "POST"])]
+    #[IsGranted('ROLE_COLLABORATION')]
     public function new(Request $request, FileUploader $fileUploader, GenericFunction $genericFunctionService): Response
     {
         $<?= strtolower($entity_class_name) ?> = new <?= $entity_class_name ?>();
-        $em = $this->doctrine->getManager();
         
         // check if the relational Entity  is given
         if ($request->get('idFk') && $request->get('nameFk')) { 
             // set the RelationalEntityFk for the new Entity
             $nameRelEntity = ( substr($request->get('nameFk'), 0, 4) == "core") ? substr($request->get('nameFk'), 4, -2) : $request->get('nameFk', 0, -2);
-            $relationalEntity = $em->getRepository(self::ENTITY_PATH.$nameRelEntity)->find($request->get('idFk'));
+            $relationalEntity = $this->entityManager->getRepository('App\\Entity\\' . $nameRelEntity)->find($request->get('idFk'));
             $nameRelEntityFk = $genericFunctionService->GetFkName($nameRelEntity);
             $method =  'set'.$nameRelEntityFk;
             $<?= strtolower($entity_class_name) ?>->$method($relationalEntity);
@@ -161,12 +139,12 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
         
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $em->persist($<?= strtolower($entity_class_name) ?>);
+                $this->entityManager->persist($<?= strtolower($entity_class_name) ?>);
                 try {
-                    $em->flush();
+                    $this->entityManager->flush();
                     if ($fileUploader->handleFiles($form, $<?= strtolower($entity_class_name) ?>)) {
-                        $em->persist($<?= strtolower($entity_class_name) ?>);
-                        $em->flush();
+                        $this->entityManager->persist($<?= strtolower($entity_class_name) ?>);
+                        $this->entityManager->flush();
                     }
                 } catch (\Exception $e) {
                     $exception_message = html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8');
@@ -195,9 +173,10 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
         
 
     /**
-     * @Route("/{id}", name="<?= $route_name ?>_show", methods={"GET"})
-     * @Security("is_granted('ROLE_INVITED')")
+     * 
      */
+    #[Route("/{id}", name: "<?= $route_name ?>_show", methods: ["GET"])]
+    #[IsGranted('ROLE_INVITED')]
     public function show(<?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>): Response
     {
     
@@ -216,9 +195,10 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
 
     /**
-     * @Route("/{id}/edit", name="<?= $route_name ?>_edit", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_COLLABORATION')")
+     * 
      */
+    #[Route("/{id}/edit", name: "<?= $route_name ?>_edit", methods: ["GET", "POST"])]
+    #[IsGranted('ROLE_COLLABORATION')]
     public function edit(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
     {
     
@@ -249,9 +229,9 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
                 }
 
                 // flush
-                $this->doctrine->getManager()->persist($<?= strtolower($entity_class_name) ?>);
+                $this->entityManager->persist($<?= strtolower($entity_class_name) ?>);
                 try {
-                    $this->doctrine->getManager()->flush();
+                   $this->entityManager->flush();
                 } catch (\Exception $e) {
                     $exception_message = html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8');
                     $this->addFlash('danger', explode("\n", $exception_message)[0]);
@@ -281,9 +261,10 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
 
     /**
-     * @Route("/{id}", name="<?= $route_name ?>_delete", methods={"DELETE"})
-     * @Security("is_granted('ROLE_COLLABORATION')")
+     * 
      */
+    #[Route("/{id}", name: "<?= $route_name ?>_delete", methods: ["DELETE", "POST"])]
+    #[IsGranted('ROLE_COLLABORATION')]
     public function delete(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
     {
     
@@ -292,11 +273,10 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
         $submittedToken = $request->request->get('token');
         if (($form->isSubmitted() && $form->isValid()) || $this->isCsrfTokenValid('delete-item', $submittedToken)) {
-            $em = $this->doctrine->getManager();
             try {
                 $fileUploader->handleFiles($form, $<?= strtolower($entity_class_name) ?>);
-                $em->remove($<?= strtolower($entity_class_name) ?>);
-                $em->flush();
+                $this->entityManager->remove($<?= strtolower($entity_class_name) ?>);
+                $this->entityManager->flush();
                 $this->addFlash('success', '<?= strtolower($entity_class_name) ?>_deleted');
             } catch (\Exception $e) {
                 $exception_message = addslashes(html_entity_decode(strval($e), ENT_QUOTES, 'UTF-8'));
@@ -314,9 +294,6 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
    /**
    * Creates a form to delete a <?= strtolower($entity_class_name) ?> entity.
    *
-   * @param <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?> The <?= strtolower($entity_class_name) ?> entity
-   *
-   * @return \Symfony\Component\Form\Form The form
    */
   private function createDeleteForm(<?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>) {
     return $this->createFormBuilder()
@@ -326,9 +303,10 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
   }
   
     /**
-     * @Route("/{id}/{field}/file", name="<?= $route_name ?>_file", methods={"GET"}, requirements={"field":".*"})
-     * @Security("is_granted('ROLE_INVITED')")
+     * 
      */
+    #[Route("/{id}/{field}/file", name: "<?= $route_name ?>_file", methods: ["GET"], requirements: ["field" => ".*"])] 
+    #[IsGranted('ROLE_INVITED')]
     public function showFile(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader, $field): Response
     {
         //  access control for user type  : ROLE_COLLABORATION

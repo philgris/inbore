@@ -8,9 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController {
-  /**
-   * @Route("/login", name="login")
-   */
+
+  #[Route("/login", name: "login", methods: ["POST","GET"])]
   public function login(AuthenticationUtils $authenticationUtils): Response {
     // get the login error if there is one
     $error = $authenticationUtils->getLastAuthenticationError();
@@ -24,9 +23,8 @@ class SecurityController extends AbstractController {
     ]);
   }
 
-  /**
-   * @Route("/logout", name="logout")
-   */
+
+  #[Route("/logout", name: "logout", methods: ["POST","GET"])]
   public function logout() {
     throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
   }

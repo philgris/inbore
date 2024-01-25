@@ -34,7 +34,7 @@ class FileUploaderType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($options['action_type'] == Action::create->value || $options['action_type'] == Action::edit->value) {
             $opts = [
@@ -129,7 +129,7 @@ class FileUploaderType extends AbstractType
         }
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['attr']['class'] = isset($view->vars['attr']['class'])
             ? $view->vars['attr']['class']. ' file-uploader-group'
@@ -140,7 +140,7 @@ class FileUploaderType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'entity_name_in_config' => null,
@@ -158,7 +158,7 @@ class FileUploaderType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix():string
+    public function getBlockPrefix(): string
     {
         return FileUploader::BLOCK_PREFIX;
     }
@@ -166,7 +166,7 @@ class FileUploaderType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->getBlockPrefix();
     }

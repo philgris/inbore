@@ -17,42 +17,27 @@
 
 namespace App\Controller\Core;
 
+use App\Controller\EntityController;
 use App\Services\Core\GenericFunction;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
-
-class DashboardController extends AbstractController {  
-    /**
-     * date of update  : 28/06/2022 
-     * @author Philippe Grison  <philippe.grison@mnhn.fr>
-     */
-    const ENTITY_PATH   = 'App\\Entity\\';
-    private $doctrine;
-    public function __construct(ManagerRegistry $doctrine) {
-        $this->doctrine = $doctrine;
-       }
 
 
-  /**
-   * @Route("/", name="dashboard")
-   * @Security("is_granted('ROLE_INVITED')")
-   * @author Philippe Grison  <philippe.grison@mnhn.fr>
-   */
+class DashboardController extends EntityController {  
+
+  #[Route("/", name: "dashboard")]
   public function indexAction( GenericFunction $service) {
-    // load Doctrine Manager
-    $em = $this->doctrine->getManager();
+
     /** 
      */
     $tab_toshow = [];
     // returns the last records of Table
     /** Exemple of Query 
-    $entities_toshow = $em->getRepository(self::ENTITY_PATH.'Table')->createQueryBuilder('t')
-      ->leftJoin('t.idLinkedTable', 'lt')
+    $entities_toshow = $this->getRepository(Entity::class)->createQueryBuilder('e')
+      ->leftJoin('e.idLinkedTable', 'lt')
       ->where('lt.dateMaj IS NOT NULL')
-      ->addOrderBy('t.dateMaj', 'DESC')
+      ->addOrderBy('e.dateMaj', 'DESC')
       ->setMaxResults(25)
       ->getQuery()
       ->getResult();
@@ -87,9 +72,10 @@ class DashboardController extends AbstractController {
   }
 
    /**
-   * @Route("/phpinfo/", name="php_info", methods={"GET"})
-   * @Security("is_granted('ROLE_ADMIN')")
+   * 
    */
+  #[Route("/phpinfo/", name: "php_info", methods: ["GET"])]
+  #[IsGranted('ROLE_ADMIN')]
   public function phpInfo(Request $request) {
     $locale = $request->getLocale();
     $phpinfo = phpinfo();

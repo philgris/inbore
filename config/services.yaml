@@ -35,13 +35,13 @@ services:
     # please note that last definitions always *replace* previous ones
     maker.maker.make_inbore_crud:
         class: App\Maker\MakeInboreCrud
-        arguments: ["@maker.doctrine_helper"]
+        arguments: ["@maker.doctrine_helper","@maker.renderer.form_type_renderer"]
         tags: ['maker.command']
     maker.maker.make_inbore_repository:
         class: App\Maker\MakeInboreRepository
-        arguments: ["@maker.doctrine_helper"]
+        arguments: ["@maker.doctrine_helper","@maker.renderer.form_type_renderer"]
         tags: ['maker.command']
     maker.maker.make_inbore_embed:
         class: App\Maker\MakeInboreEmbed
-        arguments: ["@maker.doctrine_helper"]
+        arguments: ["@maker.doctrine_helper","@maker.renderer.form_type_renderer"]
         tags: ['maker.command']

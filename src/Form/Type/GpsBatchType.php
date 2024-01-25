@@ -15,7 +15,7 @@ class GpsBatchType extends AbstractType
     const ACTION_UNSET_TRACK        = 'action-unset-track';
     const ACTION_DELETE             = 'action-delete';
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('all', CheckboxType::class, [

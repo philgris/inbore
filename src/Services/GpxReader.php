@@ -8,7 +8,7 @@ namespace App\Services;
 
 use App\Entity\Gps;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Import gpx file or zip archive and convert to gps points

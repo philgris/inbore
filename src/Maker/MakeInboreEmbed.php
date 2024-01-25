@@ -13,15 +13,21 @@ namespace App\Maker;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Doctrine\Common\Inflector\Inflector as LegacyInflector;
+use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Renderer\FormTypeRenderer;
 use Symfony\Bundle\MakerBundle\Str;
+use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Console\Command\Command;
@@ -29,9 +35,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Validator\Validation;
+// declaration du FormTypeRender
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 
 /**
@@ -39,21 +48,15 @@ use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
  */
 final class MakeInboreEmbed extends AbstractMaker
 {
-    private $doctrineHelper;
+    private Inflector $inflector;
+    private string $controllerClassName;
+    private bool $generateTests = false;
+    private Generator $generator;
 
-    private $formTypeRenderer;
 
-    private $inflector;
-
-    private $controllerClassName;
-
-    public function __construct(DoctrineHelper $doctrineHelper)
+    public function __construct(private DoctrineHelper $doctrineHelper, private FormTypeRenderer $formTypeRenderer)
     {
-        $this->doctrineHelper = $doctrineHelper;
-
-        if (class_exists(InflectorFactory::class)) {
-            $this->inflector = InflectorFactory::create()->build();
-        }
+        $this->inflector = InflectorFactory::create()->build();
     }
 
     public static function getCommandName(): string
@@ -69,7 +72,7 @@ final class MakeInboreEmbed extends AbstractMaker
     /**
      * {@inheritdoc}
      */
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
             ->addArgument('entity-class', InputArgument::OPTIONAL, sprintf('The class name of the entity to create EmbedType Class (e.g. <fg=yellow>%s</>)', Str::asClassName(Str::getRandomTerm())))
@@ -82,7 +85,7 @@ final class MakeInboreEmbed extends AbstractMaker
     /**
      * @return void
      */
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         if (null === $input->getArgument('entity-class')) {
             $argument = $command->getDefinition()->getArgument('entity-class');
@@ -101,7 +104,7 @@ final class MakeInboreEmbed extends AbstractMaker
 
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $this->generator = $generator;
         $entityClassDetails = $generator->createClassNameDetails(
@@ -142,7 +145,7 @@ final class MakeInboreEmbed extends AbstractMaker
     /**
      * {@inheritdoc}
      */
-    public function configureDependencies(DependencyBuilder $dependencies)
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
         $dependencies->addClassDependency(
             Route::class,
@@ -166,41 +169,19 @@ final class MakeInboreEmbed extends AbstractMaker
 
         $dependencies->addClassDependency(
             DoctrineBundle::class,
-            'orm-pack'
+            'orm'
         );
 
         $dependencies->addClassDependency(
             CsrfTokenManager::class,
             'security-csrf'
         );
-
-        $dependencies->addClassDependency(
-            ParamConverter::class,
-            'annotations'
-        );
+        
     }
 
-    private function pluralize(string $word): string
-    {
-        if (null !== $this->inflector) {
-            return $this->inflector->pluralize($word);
-        }
-
-        return LegacyInflector::pluralize($word);
-    }
-
-    private function singularize(string $word): string
-    {
-        if (null !== $this->inflector) {
-            return $this->inflector->singularize($word);
-        }
-
-        return LegacyInflector::singularize($word);
-    }
-    
     
     // FormType render 
-    public function render(ClassNameDetails $formClassDetails, array $formFields, ClassNameDetails $boundClassDetails = null, array $constraintClasses = [], array $extraUseClasses = [])
+    public function render(ClassNameDetails $formClassDetails, array $formFields, ClassNameDetails $boundClassDetails = null, array $constraintClasses = [], array $extraUseClasses = []): void
     {
         $fieldTypeUseStatements = [];
         $fields = [];
@@ -210,24 +191,50 @@ final class MakeInboreEmbed extends AbstractMaker
             if (isset($fieldTypeOptions['type'])) {
                 $fieldTypeUseStatements[] = $fieldTypeOptions['type'];
                 $fieldTypeOptions['type'] = Str::getShortClassName($fieldTypeOptions['type']);
+                if (\array_key_exists('extra_use_classes', $fieldTypeOptions) && \count($fieldTypeOptions['extra_use_classes']) > 0) {
+                    $extraUseClasses = array_merge($extraUseClasses, $fieldTypeOptions['extra_use_classes'] ?? []);
+                    $fieldTypeOptions['options_code'] = str_replace(
+                        $fieldTypeOptions['extra_use_classes'],
+                        array_map(fn ($class) => Str::getShortClassName($class), $fieldTypeOptions['extra_use_classes']),
+                        $fieldTypeOptions['options_code']
+                    );
+                }
             }
 
             $fields[$name] = $fieldTypeOptions;
         }
-
+        
         $mergedTypeUseStatements = array_unique(array_merge($fieldTypeUseStatements, $extraUseClasses));
         sort($mergedTypeUseStatements);
+
+        $useStatements = new UseStatementGenerator(array_unique(array_merge(
+            $fieldTypeUseStatements,
+            $extraUseClasses,
+            $constraintClasses
+        )));
+
+        $useStatements->addUseStatement([
+            AbstractType::class,
+            FormBuilderInterface::class,
+            OptionsResolver::class,
+        ]);
+
+        if ($boundClassDetails) {
+            $useStatements->addUseStatement($boundClassDetails->getFullName());
+        }
 
         $this->generator->generateClass(
             $formClassDetails->getFullName(),
             __DIR__.'/Resources/skeleton/form/EmbedType.tpl.php',
             [
-                'bounded_full_class_name' => $boundClassDetails ? $boundClassDetails->getFullName() : null,
+                'use_statements' => $useStatements,
                 'bounded_class_name' => $boundClassDetails ? $boundClassDetails->getShortName() : null,
                 'form_fields' => $fields,
+                'bounded_full_class_name' => $boundClassDetails ? $boundClassDetails->getFullName() : null,
                 'field_type_use_statements' => $mergedTypeUseStatements,
                 'constraint_use_statements' => $constraintClasses,
             ]
         );
     }
+    
 }

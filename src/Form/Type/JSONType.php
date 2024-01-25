@@ -14,7 +14,7 @@ class JSONType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($options['keys'] as $infos) {
             if ($infos instanceof FormBuilderInterface) {
@@ -42,7 +42,7 @@ class JSONType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'keys' => array(),
@@ -52,7 +52,7 @@ class JSONType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix():string
+    public function getBlockPrefix(): string
     {
         return 'json';
     }
@@ -60,7 +60,7 @@ class JSONType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->getBlockPrefix();
     }

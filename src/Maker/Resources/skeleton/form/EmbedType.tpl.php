@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Doctrine\ORM\EntityRepository;
 
 /** // add the LinkEntity call by EntityType
@@ -37,7 +38,7 @@ class <?= $class_name ?> extends AbstractType {
  * @param array $options
  *
  */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $relativeRecord = $builder->getData();
         $builder
@@ -45,7 +46,7 @@ class <?= $class_name ?> extends AbstractType {
       
     // keep the fields to show in the embed Form 
     <?php foreach ($form_fields as $form_field => $typeOptions): ?>
-    // <?= $form_field ?> : typeOptions['type'] = <?= $typeOptions['type']?> , typeOptions['options_code'] = <?=$typeOptions['options_code']?>    
+    // <?= $form_field ?>    
     <?php if ($form_field ==  'dateCre' || $form_field ==  'dateMaj' || $form_field ==  'userCre' || $form_field ==  'userMaj' ): ?>    
     <?php elseif (null === $typeOptions['type'] && !$typeOptions['options_code']): ?>
         ->add('<?= $form_field ?>')
@@ -61,7 +62,7 @@ class <?= $class_name ?> extends AbstractType {
           
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([

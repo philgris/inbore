@@ -25,7 +25,7 @@ class GpsImportType extends ActionFormType {
  * InBORe : template Type.tpl.php
  * {@inheritdoc}
  */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $relativeRecord = $builder->getData();
         $builder    

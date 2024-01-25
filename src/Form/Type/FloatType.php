@@ -13,14 +13,14 @@ use Symfony\Component\Form\AbstractType;
 class FloatType extends AbstractType
 {
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setNormalizer('attr', function (Options $options, $value) {
             return array_merge($value, ['pattern' => '^[0-9]*([\.,][0-9]*)?$']);
         });
     }
 
-    public function getParent():?string
+    public function getParent(): ?string
     {
         return NumberType::class;
     }

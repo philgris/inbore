@@ -19,7 +19,7 @@ class BooleanType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // Unlike in other types, where the data is NULL by default, it
         // needs to be a Boolean here. setData(null) is not acceptable
@@ -34,7 +34,7 @@ class BooleanType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars = array_replace($view->vars, [
             'value' => $options['value'],
@@ -45,7 +45,7 @@ class BooleanType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $emptyData = function (FormInterface $form, $viewData) {
             return $viewData;
@@ -72,7 +72,7 @@ class BooleanType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix():string
+    public function getBlockPrefix(): string
     {
         return 'boolean';
     }

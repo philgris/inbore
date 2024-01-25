@@ -1,7 +1,7 @@
 # To get started with security, check out the documentation:
 security:
   # https://symfony.com/doc/current/security/experimental_authenticators.html
-  enable_authenticator_manager: true
+
   # https://symfony.com/doc/current/security.html#c-hashing-passwords
   password_hashers:
     Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
@@ -22,7 +22,11 @@ security:
         # manager_name: customer
 
   access_control:
-    - { path: "^/{_locale}/login", roles: PUBLIC_ACCESS }
+    # allow unauthenticated users to access the login form
+    - { path: '^/{_locale}/login$', roles: PUBLIC_ACCESS }
+    # but require authentication for all other routes
+    - { path: '^/(?!.*login$)', roles: IS_AUTHENTICATED_FULLY }
+
 
   firewalls:
     # disables authentication for assets and the profiler, adapt it according to your needs

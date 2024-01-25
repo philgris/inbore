@@ -9,14 +9,14 @@ use Symfony\Component\Form\AbstractType;
 
 class EntityCodeType extends AbstractType {
 
-  public function configureOptions(OptionsResolver $resolver) {
+  public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setNormalizer("attr", function (Options $options, $value) {
       $value['class'] = "text-monospace " . ($value['class'] ?? "");
       return $value;
     });
   }
 
-  public function getParent():?string {
+  public function getParent(): ?string {
     return TextType::class;
   }
 }

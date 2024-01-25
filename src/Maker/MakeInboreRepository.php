@@ -13,15 +13,21 @@ namespace App\Maker;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Doctrine\Common\Inflector\Inflector as LegacyInflector;
+use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Renderer\FormTypeRenderer;
 use Symfony\Bundle\MakerBundle\Str;
+use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Console\Command\Command;
@@ -29,31 +35,26 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Validator\Validation;
-use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 
 /**
  * @author Sadicov Vladimir <sadikoff@gmail.com>
  */
 final class MakeInboreRepository extends AbstractMaker
 {
-    private $doctrineHelper;
+    private Inflector $inflector;
+    private string $controllerClassName;
+    private bool $generateTests = false;
+    private Generator $generator;
 
-    private $formTypeRenderer;
 
-    private $inflector;
-
-    private $controllerClassName;
-
-    public function __construct(DoctrineHelper $doctrineHelper)
+    public function __construct(private DoctrineHelper $doctrineHelper, private FormTypeRenderer $formTypeRenderer)
     {
-        $this->doctrineHelper = $doctrineHelper;
-
-        if (class_exists(InflectorFactory::class)) {
-            $this->inflector = InflectorFactory::create()->build();
-        }
+        $this->inflector = InflectorFactory::create()->build();
     }
 
     public static function getCommandName(): string
@@ -69,7 +70,7 @@ final class MakeInboreRepository extends AbstractMaker
     /**
      * {@inheritdoc}
      */
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
             ->addArgument('entity-class', InputArgument::OPTIONAL, sprintf('The class name of the entity to create Repository (e.g. <fg=yellow>%s</>)', Str::asClassName(Str::getRandomTerm())))
@@ -82,7 +83,7 @@ final class MakeInboreRepository extends AbstractMaker
     /**
      * @return void
      */
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         if (null === $input->getArgument('entity-class')) {
             $argument = $command->getDefinition()->getArgument('entity-class');
@@ -105,7 +106,7 @@ final class MakeInboreRepository extends AbstractMaker
         );
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $this->generator = $generator;
         $entityClassDetails = $generator->createClassNameDetails(
@@ -116,24 +117,37 @@ final class MakeInboreRepository extends AbstractMaker
         $entityDoctrineDetails = $this->doctrineHelper->createDoctrineDetails($entityClassDetails->getFullName());
 
         $repositoryVars = [];
+        $repositoryClassName = EntityManagerInterface::class;
+        
+                
+        if (null !== $entityDoctrineDetails->getRepositoryClass()) {
+            $repositoryClassDetails = $generator->createClassNameDetails(
+                '\\'.$entityDoctrineDetails->getRepositoryClass(),
+                'Repository\\Core\\',
+                'Repository'
+            );
+            $repositoryClassName = $repositoryClassDetails->getFullName();
+            $repositoryVars = [
+                'repository_full_class_name' => $repositoryClassName,
+                'repository_class_name' => $repositoryClassDetails->getShortName(),
+                'repository_var' => lcfirst($this->inflector->singularize($repositoryClassDetails->getShortName())),
+            ];
+        } else {
+            $repositoryClassDetails = $generator->createClassNameDetails(
+                 $entityClassDetails->getShortName().'Repository',
+                 'Repository\\Core\\',
+                 'Repository'
+             ); 
+            $repositoryClassName = $repositoryClassDetails->getFullName();
+            $repositoryVars = [
+                'repository_full_class_name' => $repositoryClassName,
+                'repository_class_name' => $repositoryClassDetails->getShortName(),
+                'repository_var' => lcfirst($this->inflector->singularize($repositoryClassDetails->getShortName())),
+            ];
+        }
 
-       
-        $repositoryClassDetails = $generator->createClassNameDetails(
-            $this->controllerClassName,
-            'Repository\\Core\\',
-            'Repository'
-        );
-
-        $repositoryVars = [
-            'repository_full_class_name' => $repositoryClassDetails->getFullName(),
-            'repository_class_name' => $repositoryClassDetails->getShortName(),
-            'repository_var' => lcfirst($this->singularize($repositoryClassDetails->getShortName())),
-        ];
-
-
-
-        $entityVarPlural = lcfirst($this->pluralize($entityClassDetails->getShortName()));
-        $entityVarSingular = lcfirst($this->singularize($entityClassDetails->getShortName()));
+        $entityVarPlural = lcfirst($this->inflector->pluralize($entityClassDetails->getShortName()));
+        $entityVarSingular = lcfirst($this->inflector->singularize($entityClassDetails->getShortName()));
 
         $entityTwigVarPlural = Str::asTwigVariable($entityVarPlural);
         $entityTwigVarSingular = Str::asTwigVariable($entityVarSingular);
@@ -164,7 +178,7 @@ final class MakeInboreRepository extends AbstractMaker
     /**
      * {@inheritdoc}
      */
-    public function configureDependencies(DependencyBuilder $dependencies)
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
         $dependencies->addClassDependency(
             Route::class,
@@ -188,36 +202,13 @@ final class MakeInboreRepository extends AbstractMaker
 
         $dependencies->addClassDependency(
             DoctrineBundle::class,
-            'orm-pack'
+            'orm'
         );
 
         $dependencies->addClassDependency(
             CsrfTokenManager::class,
             'security-csrf'
         );
-
-        $dependencies->addClassDependency(
-            ParamConverter::class,
-            'annotations'
-        );
-    }
-
-    private function pluralize(string $word): string
-    {
-        if (null !== $this->inflector) {
-            return $this->inflector->pluralize($word);
-        }
-
-        return LegacyInflector::pluralize($word);
-    }
-
-    private function singularize(string $word): string
-    {
-        if (null !== $this->inflector) {
-            return $this->inflector->singularize($word);
-        }
-
-        return LegacyInflector::singularize($word);
     }
 
 }
