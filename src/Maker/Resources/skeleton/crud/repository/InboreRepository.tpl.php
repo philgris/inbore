@@ -94,12 +94,17 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
         // join aggregation : links (2)
         
         // reduction
-        $qb
+        $qb 
             ->addGroupBy('<?= lcfirst($entity_class_name) ?>.id')
             ->addGroupBy('userMaj.id')
             ->addGroupBy('userCre.id')
+            ->addGroupBy('userMaj.name')
+            ->addGroupBy('userCre.name')
+            ->addGroupBy('<?= lcfirst($entity_class_name) ?>.dateMaj')
+            ->addGroupBy('<?= lcfirst($entity_class_name) ?>.dateCre')
+            ->addGroupBy('<?= lcfirst($entity_class_name) ?>.userCre')
         ;
-		
+        
 	// GENERIC CODE  - DONT CHANGE THE CODE UNDER THIS LINE  //
 		
 	$aliases = array_values($fields);
@@ -112,8 +117,8 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
         }
 
         // join technical fields
-        $qb->leftJoin('App:Core\\User', 'userCre', 'WITH', '<?= lcfirst($entity_class_name) ?>.userCre = userCre.id')
-            ->leftJoin('App:Core\\User', 'userMaj', 'WITH', '<?= lcfirst($entity_class_name) ?>.userMaj = userMaj.id')
+        $qb->leftJoin('App\Entity\Core\User', 'userCre', 'WITH', '<?= lcfirst($entity_class_name) ?>.userCre = userCre.id')
+            ->leftJoin('App\Entity\Core\User', 'userMaj', 'WITH', '<?= lcfirst($entity_class_name) ?>.userMaj = userMaj.id')
         ;
 
         // query
@@ -123,7 +128,7 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
         }
         if (strlen($searchPhrase)>0) {
             $qb->where('LOWER('. self::BOOTGRID_SEARCH_COLUMN .') LIKE :search')
-                ->setParameter('search', strtolower($searchPhrase).'%')
+                ->setParameter('search', '%'.strtolower($searchPhrase).'%')
             ;
         }
 
@@ -139,6 +144,7 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
         $total = count(
             $qb
                 ->select('COUNT(<?= lcfirst($entity_class_name) ?>.id)')
+                ->addGroupBy('<?= lcfirst($entity_class_name) ?>.id')
                 ->getQuery()
                 ->getScalarResult()
         );
