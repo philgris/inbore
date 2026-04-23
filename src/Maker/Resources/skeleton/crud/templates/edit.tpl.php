@@ -25,10 +25,11 @@
         #}
         {# Add a button Show List of 1-N linked entity : name_of_linked_entity
             {% if edit_form.vars.value.id is not null %}
-                        <a href="{{path('name_of_linked_entity_index', {'nameFk':'coreEntityFk', 'idFk':edit_form.vars.value.id})}}" class="btn btn-sm btn-info">
-                                <i class="fas fa-list"></i>
-                    {{'button.Show name_of_linked_entity list'|trans}}
-                        </a>
+                    {% set path_route_index = path_route_index|default(path(route_index, app.request.query.all)) %}
+                    <a href="{{ path_route_index }}" class="btn btn-primary btn-sm" role="button">
+                        <i class="fas fa-list"></i>
+                        {{ "button.BackToTheList"|trans }}
+                    </a>
             {% endif %}
         #}
 {% endblock %}

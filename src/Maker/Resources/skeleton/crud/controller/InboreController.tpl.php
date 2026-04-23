@@ -152,12 +152,9 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
                     return $this->redirectToRoute('<?= $route_name ?>_index');
                 }
                 $this->addFlash('success', '<?= strtolower($entity_class_name) ?>_created');
-                return $this->redirectToRoute('<?= $route_name ?>_edit', [
+                return $this->redirectToRoute('<?= $route_name ?>_edit', array_merge( $request->query->all(), [
                     'id' => $<?= strtolower($entity_class_name) ?> ->getId(),
-                    'valid' => 1,
-                    'nameFk' => $request->get('nameFk'),
-                    'idFk' => $request->get('idFk'),
-                ]);
+                ]));
             } else {
                 $this->addFlash('danger', $form->getErrors(true));
             }
@@ -240,12 +237,9 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
 
                 //flash message
                 $this->addFlash('success', '<?= strtolower($entity_class_name) ?>_updated');
-                return $this->redirectToRoute('<?= $route_name ?>_edit', [
+                return $this->redirectToRoute('<?= $route_name ?>_edit', array_merge( $request->query->all(), [
                     'id' => $<?= strtolower($entity_class_name) ?>->getId(),
-                    'valid'     => 1,
-                    'nameFk'    => $request->get('nameFk'),
-                    'idFk'      => $request->get('idFk'),
-                ]);
+                ]));
             } else {
                 $this->addFlash('danger', $editForm->getErrors(true));
             }

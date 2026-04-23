@@ -1,5 +1,5 @@
 
-{% extends 'index.html.twig' %}
+{% extends 'index-input-filters.html.twig' %}
 
 {# INDEX : <?= $entity_class_name ?> #}
 

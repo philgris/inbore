@@ -42,6 +42,10 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
     private $service;
     private $fileUploader;
     private $request;
+    private $security;
+    
+    // liste des champs de type : aggregation / aggregation_integer / aggregation_float / aggregation_date / integer / float / date
+    private $listTypeFields = ['date_maj' => 'date', 'date_cre' => 'date'];
 
     public function __construct(ManagerRegistry $registry, GenericFunction $service, FileUploader $fileUploader, RequestStack $requestStack)
     {
@@ -58,7 +62,7 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
             '<?= lcfirst($entity_class_name) ?>.id'                                    => 'id',
 			
             // bootgrid column to search 
-           self::BOOTGRID_SEARCH_COLUMN             => '<?= lcfirst($entity_class_name) ?>_bootgrid_search_column',
+            // self::BOOTGRID_SEARCH_COLUMN             => '<?= lcfirst($entity_class_name) ?>_bootgrid_search_column',
 						
             // specific
 
@@ -140,6 +144,11 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
             ;
         }
 
+        // APPLIQUE LES FILTRES PAR COLONNE       
+        $filters = $this->request->get('filters') ?? [];
+        $this->service->applyFilters($qb, array_flip($fields), $this->listTypeFields, $filters);  
+              
+        
         // count all records for the current search
         $total = count(
             $qb

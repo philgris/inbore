@@ -70,11 +70,20 @@ export function initDateMask(formBlockElement) {
 
 function validateDate(dateInput) {
   const dateValid = (
-    moment(dateInput.value, 'DD-MM-YYYY', true).isValid() || dateInput.disabled
+    (
+        ($(dateInput).prop('min') ? moment(dateInput.value, 'DD-MM-YYYY').format('YYYY-MM-DD') >= $(dateInput).prop('min') : true) &&
+        ($(dateInput).prop('min') ? moment(dateInput.value, 'DD-MM-YYYY').format('YYYY-MM-DD') >= $(dateInput).prop('min') : true) &&
+        ($(dateInput).prop('max') ? moment(dateInput.value, 'DD-MM-YYYY').format('YYYY-MM-DD') <= $(dateInput).prop('max') : true) &&
+        moment(dateInput.value, 'DD-MM-YYYY', true).isValid()
+    ) || dateInput.disabled || dateInput.value == ''
   )
   if (dateValid) {
-    $(dateInput).addClass('is-valid').removeClass('is-invalid')
-    $(dateInput)[0].setCustomValidity("");
+    if(dateInput.value == '') {
+        $(dateInput).removeClass('is-valid').removeClass('is-invalid');
+    } else {
+        $(dateInput).addClass('is-valid').removeClass('is-invalid');
+        $(dateInput)[0].setCustomValidity("");
+    }
   }
   else {
     $(dateInput).addClass('is-invalid').removeClass('is-valid')
