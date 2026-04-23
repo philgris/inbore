@@ -1,2 +1,41 @@
 {% extends 'edit.html.twig' %}
 
+{% block action %}
+    {% if is_granted('ROLE_ADMIN') and nameFk|trim == '' %}
+        {% set path_route_index = path_route_index|default(path( route_index, { nameFk: nameFk, idFk: idFk , searchPattern: searchPattern} )) %}
+        <a href="{{ path_route_index }}" class="btn btn-primary btn-sm" role="button">
+            <i class="fas fa-list"></i>
+            {{ "button.BackToTheList"|trans }}
+        </a>
+    {% endif %}
+
+    {% if edit_form.vars.action_type is defined and
+        edit_form.vars.action_type == "show" and
+        (    is_granted('ROLE_PROJECT') or
+        (    is_granted('ROLE_COLLABORATION') and
+        edit_form.vars.data.userCre == app.user.id)) %}
+        {% if nameFk is defined and idFk is defined %}
+            <a href="{{ app.request.baseUrl }}{{ app.request.pathinfo }}/edit?nameFk={{nameFk}}&idFk={{idFk}}" class="btn btn-sm btn-success">
+                <i class="fas fa-edit"></i>
+                {{ 'Edit'|trans }}
+            </a>
+        {% else %}
+            <a href="{{ app.request.baseUrl }}{{ app.request.pathinfo }}/edit" class="btn btn-sm btn-success">
+                <i class="fas fa-edit"></i>
+                {{ 'Edit'|trans }}
+            </a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        form .form-group {
+            align-items: initial;
+        }
+    </style>
+{% endblock %}
+
+

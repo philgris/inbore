@@ -19,19 +19,86 @@
         <thead>
             <tr>
                 <th data-column-id="user.id" data-type="numeric" data-visible="false" >Id</th>
-                <th data-column-id="user.username" data-sortable="true">{{'Username'|trans}}</th>               
+                <th data-column-id="user.username" data-sortable="true">{{'Username'|trans}} *</th>               
                 <th data-column-id="user.email" data-sortable="true">{{'Email'|trans}}</th>
                 <th data-column-id="user.role" data-sortable="true">{{'Role'|trans}}</th>
                 <th data-column-id="user.name" data-sortable="true">{{'Name'|trans}}</th> 
                 <th data-column-id="user.institution" data-sortable="true">{{'Institution'|trans}}</th> 
                 <th data-column-id="user.commentaireUser" data-sortable="false" data-visible="false">{{'Commentaire user'|trans}}</th> 
-                <th data-column-id="user.dateMaj" data-width="100" data-visible="true">{{'list.Date maj'|trans}}</th>
-                <th data-column-id="user.dateCre" data-width="100" data-visible="true">{{'list.Date cre'|trans}}</th>
+                <th data-column-id="user.dateMaj" data-width="100" data-visible="true">{{'list.date_maj'|trans}}</th>
+                <th data-column-id="user.dateCre" data-width="100" data-visible="true">{{'list.date_cre'|trans}}</th>
+                <th data-column-id="user.userMaj" data-width="10" data-visible="false">{{'list.user_maj'|trans}}</th>
+                <th data-column-id="user.userCre" data-width="10" data-visible="false">{{'list.user_cre'|trans}}</th>
                 <th data-column-id="show" data-formatter="show" data-sortable="false"   data-width="20">{{'list.show'|trans}}</th>
                 <th data-column-id="edit" data-formatter="edit" data-sortable="false"  data-width="20">{{'list.edit'|trans}}</th>
-                <th data-column-id="delete" data-formatter="delete" data-sortable="false" data-width="20">{{'list.delete'|trans}}</th>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <th data-column-id="delete" data-formatter="delete" data-sortable="false" data-width="20" data-visible="false">{{'list.delete'|trans}}</th>
+                {% endif %}
             </tr>
         </thead>
     </table>
     </div>       
+{% endblock %}
+
+{% block scripts %}
+	{{ parent() }}
+
+
+<script>
+$(document).ready(function() {
+    $("#grid-basic").on("loaded.rs.jquery.bootgrid", function() {
+        {% if 'ROLE_ADMIN' in app.user.roles %}
+        const currentUserId = parseInt({{ app.user.id }});
+        // Attendre un court instant pour s'assurer que les données sont bien chargées
+        setTimeout(function() {
+            // Récupérer les index des colonnes
+            let roleIndex = -1;
+            let showIndex = -1;
+            let editIndex = -1;
+            $("#grid-basic thead th").each(function(index) {
+                let columnId = $(this).data("column-id");
+                if (columnId === "user.role") roleIndex = index;
+                if (columnId === "show") showIndex = index;
+                if (columnId === "edit") editIndex = index;
+            });
+            $("#grid-basic tbody tr").each(function() {
+                let row = $(this);
+                // Récupérer l'URL du bouton Edit
+                let editLink = row.children("td").eq(editIndex).find("a").attr("href");
+                // Vérifier que l'URL existe
+                if (editLink) {
+                    // Diviser l'URL par "/"
+                    let urlParts = editLink.split("/");
+                    // Récupérer l'avant-dernière partie de l'URL (ex: "32" dans "/user/32/edit?")
+                    let userId = parseInt(urlParts[urlParts.length - 2]);
+                    // Extraire le rôle de la colonne user.role
+                    let rolesText = row.children("td").eq(roleIndex).text().trim();
+                    // Désactiver uniquement les autres ADMIN
+                    if(userId !== currentUserId) {
+                        if (rolesText.includes("ROLE_ADMIN") || rolesText.includes("ROLE_SUPER_ADMIN") ) {
+                            // Bouton show
+                            row.children("td").eq(showIndex).find("a")
+                                .addClass("disabled")
+                                .attr("href", "#")
+                                .attr("title", "Accès refusé");
+                            // Bouton edit
+                            row.children("td").eq(editIndex).find("a")
+                                .addClass("disabled")
+                                .attr("href", "#")
+                                .attr("title", "Accès refusé");
+                        }
+                    }
+                } else {
+                    console.log("URL du bouton Edit non trouvée.");
+                }
+            });
+        }, 300); // Délai de 300 ms pour s'assurer que les données sont chargées
+        {% endif %}
+    });
+});
+</script>
+
+
+
+
 {% endblock %}

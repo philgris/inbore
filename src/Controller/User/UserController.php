@@ -42,7 +42,7 @@ class UserController extends EntityController {
   #[IsGranted('ROLE_ADMIN')]
   public function indexAction() {
 
-    $users = $this->getRepository(User::class)->findAll();
+    $users = $this->entityManager->getRepository(User::class)->findAll();
 
     return $this->render('user/index.html.twig', array(
       'users' => $users,
@@ -82,7 +82,7 @@ class UserController extends EntityController {
     ];
     $minRecord = intval($request->get('current') - 1) * $rowCount;
     $tab_toshow = [];
-    $entities_toshow = $this->getRepository(User::class)
+    $entities_toshow = $this->entityManager->getRepository(User::class)
       ->createQueryBuilder('user')
       ->where('LOWER(user.username) LIKE :criteriaLower')
       ->setParameter('criteriaLower', strtolower($request->get('searchPhrase')) . '%')
@@ -110,6 +110,8 @@ class UserController extends EntityController {
         "user.commentaireUser" => $entity->getCommentaireUser(),
         "user.dateCre" => $DateCre,
         "user.dateMaj" => $DateMaj,
+        "user.userCre" => $entity->getUserCre(),
+        "user.userMaj" =>  $entity->getUserMaj(),
       );
     }
     return new JsonResponse([
@@ -190,14 +192,29 @@ class UserController extends EntityController {
   #[Route("/{id}/edit", name: "user_edit", methods: ["GET", "POST"])]
   #[IsGranted("ROLE_COLLABORATION")]
   public function editAction(Request $request, User $user, UserPasswordHasherInterface $hasher) {
-    //  access control for user type  : ROLE_COLLABORATION
+    // Vérifier que l'utilisateur est bien authentifié
     $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-    if (
-      $user->getRole() == 'ROLE_COLLABORATION' &&
-      $user->getUserCre() != $user->getId()
-    ) {
-      $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
+    // Récupérer l'utilisateur actuellement connecté
+    $currentUser = $this->getUser();
+    // test si l'utilisateur est ADMIN ou SUPER_ADMIN
+    $isCurrentUserSuperAdmin  =  ($currentUser->getRole() == 'ROLE_SUPER_ADMIN') ? true : false;
+    $isCurrentUserAdmin   =  ($currentUser->getRole() == 'ROLE_ADMIN') ? true : false;
+    // Vérifier si l'utilisateur à éditer est un super administrateur
+    $isTargetUserSuperAdmin = in_array('ROLE_SUPER_ADMIN', $user->getRoles(), true);
+    // Vérifier si l'utilisateur à éditer est un administrateur
+    $isTargetUserAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true);
+    // Empêcher les administrateurs d'éditer d'autres administrateurs ou super administrateurs (sauf eux-mêmes)
+    if ($isCurrentUserAdmin) {
+        if (($isTargetUserAdmin || $isTargetUserSuperAdmin) && $currentUser->getId() !== $user->getId()) {
+            throw $this->createAccessDeniedException('ACCESS DENIED: Admins cannot edit other admins or super admins.');
+        }
     }
+    // Empêcher les non-administrateurs d'éditer d'autres utilisateurs
+    if (!$isCurrentUserAdmin && !$isCurrentUserSuperAdmin && $currentUser->getId() !== $user->getId()) {
+        throw $this->createAccessDeniedException('ACCESS DENIED: You can only edit your own profile.');
+    }    
+    
+    // Créer les formulaires de suppression et d'edition
     $deleteForm = $this->createDeleteForm($user);
     $editForm = $this->createForm('App\Form\Core\UserType', $user, [
       'action_type' => Action::edit->value,
@@ -205,9 +222,12 @@ class UserController extends EntityController {
     $editForm->handleRequest($request);
 
     if ($editForm->isSubmitted() && $editForm->isValid()) {
-      $plainPassword = $user->getPlainPassword();
-      $passwordHash = $hasher->hashPassword($user, $plainPassword);
-      $user->setPassword($passwordHash);
+        if($editForm->getViewData()->getPlainPassword()!=null) {
+            $plainPassword = $user->getPlainPassword();
+            $passwordHash = $hasher->hashPassword($user, $plainPassword);
+            $user->setPassword($passwordHash);
+        }
+
       try {
         $this->entityManager->flush();
       } catch (\Exception $e) {
@@ -237,15 +257,39 @@ class UserController extends EntityController {
    * Deletes a user entity.
    *
    */
-  #[Route("/{id}", name: "user_delete", methods: ["DELETE", "POST"])]
+    #[Route("/{id}", name: "user_delete", methods: ["DELETE", "POST"])]
+    #[IsGranted('ROLE_ADMIN')]
   public function deleteAction(Request $request, User $user) {
+        
+    // Vérifier que l'utilisateur est bien authentifié
+    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    // Récupérer l'utilisateur actuellement connecté
+    $currentUser = $this->getUser();
+    // test si l'utilisateur est ADMIN ou SUPER_ADMIN
+    $isCurrentUserSuperAdmin  =  ($currentUser->getRole() == 'ROLE_SUPER_ADMIN') ? true : false;
+    $isCurrentUserAdmin   =  ($currentUser->getRole() == 'ROLE_ADMIN') ? true : false;
+    // Vérifier si l'utilisateur à supprimer est un super administrateur
+    $isTargetUserSuperAdmin = in_array('ROLE_SUPER_ADMIN', $user->getRoles(), true);
+    // Vérifier si l'utilisateur à supprimer est un administrateur
+    $isTargetUserAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true);
+    // Empêcher les administrateurs de supprimer d'autres administrateurs ou super administrateurs
+    if ($isCurrentUserAdmin) {
+        if ($isTargetUserAdmin || $isTargetUserSuperAdmin) {
+            throw $this->createAccessDeniedException('ACCESS DENIED: Admins cannot DELETE other User admin or super-admin');
+        }
+    }
+    // Empêcher les non-administrateurs de supprimer d'autres utilisateurs
+    if (!$isCurrentUserAdmin && !$isCurrentUserSuperAdmin ) {
+        throw $this->createAccessDeniedException('ACCESS DENIED: You cannot DELETE User profile.');
+    }        
+        
     $form = $this->createDeleteForm($user);
     $form->handleRequest($request);
 
     $submittedToken = $request->request->get('token');
 
     if (($form->isSubmitted() && $form->isValid()) || $this->isCsrfTokenValid('delete-item', $submittedToken)) {
-      if ($user->getRole() != 'ROLE_ADMIN') {
+      if ($isCurrentUserAdmin  || $isCurrentUserSuperAdmin) {
         try {
           $this->entityManager->remove($user);
           $this->entityManager->flush();
