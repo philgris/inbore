@@ -109,8 +109,8 @@ alert.BadFormatDate: Bad date format (DD-MM-YYYY) or bad value (DD=[1,31] MM=[1,
 # Error messages from the data uploading procedures (ImportFileE3s)
 importfileService.ERROR Unknown file imported: ERROR -  UNKNOWN CSV file imported
 importfileService.ERROR Unknown template file: ERROR - UNKNOWN template file
-importfileService.ERROR bad number of columns in CSV file: ERROR - Wrong number of columns in CSV file - cf. GOTIT Help 
-importfileService.ERROR bad column in CSV file: ERROR - the CSV file does not contain correct column names - cf. GOTIT Help 
+importfileService.ERROR bad number of columns in CSV file: ERROR - Wrong number of columns in CSV file
+importfileService.ERROR bad column in CSV file: ERROR - the CSV file does not contain correct column names 
 importfileService.ERROR bad data OUI-NON: ERROR - INVALID record { OUI / NON , YES / NO, 1 / 0}
 importfileService.ERROR bad data YES-NO: ERROR - INVALID record ( YES / NO )
 importfileService.ERROR bad float format: ERROR - Wrong FLOAT format

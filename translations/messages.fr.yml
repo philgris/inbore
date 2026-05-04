@@ -111,8 +111,8 @@ alert.BadFormatDate: mauvais format de date (JJ-MM-AAAA) ou mauvaise valeur (JJ=
 # Error messages from the data uploading procedures (ImportFileE3s)
 importfileService.ERROR Unknown file imported: ERREUR - fichier CSV INCONNU
 importfileService.ERROR Unknown template file: ERREUR - template INCONNU
-importfileService.ERROR bad number of columns in CSV file: ERREUR - Le fichier CSV ne contient pas le bon nombre de collonnes - cf. Aide GOTIT
-importfileService.ERROR bad column in CSV file: ERREUR - le fichier CSV ne contient pas les bonnes colonnes du modèle de migration - cf. Aide GOTIT
+importfileService.ERROR bad number of columns in CSV file: ERREUR - Le fichier CSV ne contient pas le bon nombre de collonnes
+importfileService.ERROR bad column in CSV file: ERREUR - le fichier CSV ne contient pas les bonnes colonnes du modèle de migration
 importfileService.ERROR NULL value: ERREUR - Contenu INVALIDE (valeur NULL)
 importfileService.ERROR bad data OUI-NON: ERREUR - Contenu INVALIDE { OUI / NON , YES / NO, 1 / 0}
 importfileService.ERROR bad data YES-NO: ERREUR - Contenu INVALIDE ( YES / NO )
