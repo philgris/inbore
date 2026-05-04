@@ -455,36 +455,31 @@ private function parsePartialDate(string $dateStr, string $context): \DateTime
                 break;
         }
     }
-
+    
     /**
      * Applique un filtre date sur WHERE
-     */   
+     */
     private function applyDateFilter(QueryBuilder $qb, string $alias, string $field, array $parsed, array &$params)
     {
         if ($parsed['type'] === 'exact_date') {
-            // Date exacte : utilise LIKE pour ignorer l'heure
             $param = "filter_{$alias}_exact";
-            $qb->andWhere("$field LIKE :$param");
-            $params[$param] = $parsed['value'] . '%'; // Ex: "2025-01-14%"
+            $qb->andWhere("SUBSTRING($field, 1, 10) = :$param");
+            $params[$param] = $parsed['value']; // Format YYYY-MM-DD
 
         } elseif ($parsed['type'] === 'date_range') {
-            // Intervalle : utilise BETWEEN avec des bornes en YYYY-MM-DD HH:MM:SS
             $paramStart = "filter_{$alias}_start";
-            $paramEnd   = "filter_{$alias}_end";
-            $qb->andWhere("$field BETWEEN :$paramStart AND :$paramEnd");
-            $params[$paramStart] = $parsed['start'] . ' 00:00:00';
-            $params[$paramEnd]   = $parsed['end'] . ' 23:59:59';
+            $paramEnd = "filter_{$alias}_end";
+            $qb->andWhere("SUBSTRING($field, 1, 10) BETWEEN :$paramStart AND :$paramEnd");
+            $params[$paramStart] = $parsed['start'];
+            $params[$paramEnd] = $parsed['end'];
 
         } elseif ($parsed['type'] === 'comparison') {
-            // Comparaisons (> < >= <=) : utilise SUBSTRING pour comparer uniquement la date
             $param = "filter_{$alias}_comp";
-            $dateStr = $parsed['date']->format('Y-m-d'); // Format YYYY-MM-DD
+            $dateStr = $parsed['date']->format('Y-m-d');
             $qb->andWhere("SUBSTRING($field, 1, 10) {$parsed['operator']} :$param");
             $params[$param] = $dateStr;
-        } else {
-            throw new \InvalidArgumentException("Unknown parsed date type: ".$parsed['type']);
         }
-    }    
+    }   
 
      /**
      * Applique le filtre numérique sur HAVING
@@ -532,28 +527,24 @@ private function parsePartialDate(string $dateStr, string $context): \DateTime
     private function applyAggregationDateFilter(string $alias, string $field, array $parsed, array &$havingConditions, array &$params)
     {
         if ($parsed['type'] === 'exact_date') {
-            // Date exacte : utilise LIKE pour ignorer l'heure
             $param = "filter_{$alias}_exact";
-            $havingConditions[] = "$field LIKE :$param";
-            $params[$param] = $parsed['value'] . '%'; // Ex: "2025-01-14%"
+            $havingConditions[] = "SUBSTRING($field, 1, 10) = :$param";
+            $params[$param] = $parsed['value'];
 
         } elseif ($parsed['type'] === 'date_range') {
-            // Intervalle : utilise BETWEEN avec des bornes en YYYY-MM-DD HH:MM:SS
             $paramStart = "filter_{$alias}_start";
             $paramEnd = "filter_{$alias}_end";
-            $havingConditions[] = "$field BETWEEN :$paramStart AND :$paramEnd";
-            $params[$paramStart] = $parsed['start'] . ' 00:00:00';
-            $params[$paramEnd] = $parsed['end'] . ' 23:59:59';
+            $havingConditions[] = "SUBSTRING($field, 1, 10) BETWEEN :$paramStart AND :$paramEnd";
+            $params[$paramStart] = $parsed['start'];
+            $params[$paramEnd] = $parsed['end'];
 
         } elseif ($parsed['type'] === 'comparison') {
-            // Comparaisons (> < >= <=) : utilise SUBSTRING pour comparer uniquement la date
             $param = "filter_{$alias}_comp";
-            $dateStr = $parsed['date']->format('Y-m-d'); // Format YYYY-MM-DD
+            $dateStr = $parsed['date']->format('Y-m-d');
             $havingConditions[] = "SUBSTRING($field, 1, 10) {$parsed['operator']} :$param";
             $params[$param] = $dateStr;
         }
     }
-
 
     /**
      * Applique les filtres sur le QueryBuilder
@@ -573,8 +564,21 @@ private function parsePartialDate(string $dateStr, string $context): \DateTime
             if (!isset($fields[$alias])) continue;
             $field = $fields[$alias];
             $value = trim($value);
-            if ($value === '') continue;
             $type = $types[$alias] ?? 'string';
+            // test si il y a le signe = comme premier caractère => filtre suivant le type déclaré sinon comme une chaine
+            if (str_starts_with($value, '=')) {
+                $value = substr($value, 1);
+                if ($type == 'string') $type = 'exact_string';
+            } else {
+                if (!str_starts_with($value, '>') && !str_starts_with($value, '<')) {
+                    if($type == 'aggregation_integer' || $type == 'aggregation_float' || 'aggregation_date') {
+                        $type = 'aggregation';
+                    } else {
+                        $type = 'string';
+                    }
+                }
+            }  
+            if ($value === '' || $value == '<' || $value == '>') continue;
             switch ($type) {
                 case 'integer':
                     $parsed = $this->parseIntegerFilter($value);
@@ -604,7 +608,12 @@ private function parsePartialDate(string $dateStr, string $context): \DateTime
                 case 'aggregation_date':
                     $parsed = $this->parseDateFilter($value);
                     $this->applyAggregationDateFilter($alias, $field, $parsed, $havingConditions, $parameters);
-                    break;               
+                    break;   
+                case 'exact_string':
+                    $paramName = "filter_$alias";
+                    $whereConditions[] = "LOWER($field) LIKE LOWER(:$paramName) ESCAPE '\\'";
+                    $parameters[$paramName] = $this->escapeLike($value);
+                    break;
                 default:
                     $paramName = "filter_$alias";
                     $whereConditions[] = "LOWER($field) LIKE LOWER(:$paramName) ESCAPE '\\'";
