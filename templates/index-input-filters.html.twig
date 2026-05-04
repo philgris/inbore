@@ -1,0 +1,394 @@
+{% extends 'base.html.twig' %}
+
+{# initialize the nameOfEntity variable from the gloable variable _controller: '~ / Controller / NameOfEntityController :: indexAction' #}
+{% set Urlcontroller = app.request.attributes.get('_controller') %}
+{% set controllerInArray = Urlcontroller|split('Controller') %}
+{% set controllerName = controllerInArray[1][1:] %}
+{% set nameOfEntity = (controllerName[:1]|lower) ~ controllerName[1:] %}
+{# initialise la variable entityname à partir de la variable globale _route : 'entityname_index' #}
+{% set route = app.request.attributes.get('_route') %}
+{#INBORE1.0  {% set entityname = route|split('_')[0] %} #} 
+{% set entityname = route|split('_')|slice(0,-1)|join('_') %}
+{# initialise les routes : 'importfilesentityname_index' et entityname_new #}
+{% set route_index = entityname ~ '_index' %}
+{% set route_importfiles = 'importfiles' ~ entityname ~ '_index' %}
+{% set route_new = entityname ~ '_new' %}
+{% set route_indexjson = entityname ~ '_indexjson' %}
+
+{% set varUrl_idFk = app.request.query.get('idFk') | default(null) %}
+{% set varUrl_nameFk = app.request.query.get('nameFk') | default('') %}
+{% set varUrl_urlArg = app.request.query.get('urlArg') | default(null) %}
+
+
+{% block stylesheets %}
+        {{ parent() }}
+        {% if bootgrid_search_column == 'yes' %}
+            <style>
+                .bootgrid-header .search {
+                    display: none;
+                }
+            </style>
+        {% endif %}
+{% endblock %}
+
+{% block page_title %}
+  <h1>
+    {{ ('core.' ~ entityname)|trans({}, 'sections') }}
+  </h1>
+{% endblock %}
+
+{% block action %}
+  {{ parent() }}
+  <a href="{{ path(route_index) }}"
+    class="btn btn-primary btn-sm"
+    role="button">
+    <i class="fas fa-list"></i>
+    {{ 'button.showAllRecord'|trans }}
+  </a>
+
+  {% if is_granted('ROLE_COLLABORATION') %}
+    {% set path_action_new = path(route_new) ~ "?nameFk=" ~ varUrl_nameFk ~ "&idFk=" ~ varUrl_idFk %}
+        <a href="{{ path_action_new }}"
+          class="btn btn-success btn-sm"
+          role="button">
+          <i class="fas fa-plus"></i>
+          {{ ['button.New', entityname|capitalize]|join|trans }}
+        </a>
+    <button class="btn btn-light border btn-sm"
+      id="export"
+      data-export="export"
+      data-toggle="tooltip"
+      data-align="right"
+      title="{{ 'button.exportToCSV-title'|trans }}">
+      <i class="fas fa-file-export"></i>
+      {{ 'button.exportToCSV'|trans }}
+    </button>
+  {% else %}
+    <a href="#"
+      class="btn btn-secondary btn-sm disabled"
+      role="button">
+      {{ ['button.New', entityname|capitalize]|join|trans }}
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block templatescripts %}  
+    
+    
+{{ encore_entry_script_tags("index") }}
+  
+{# display of the error message on Delete if there are related records #}
+{% if ( exception_message is defined ) %} 
+<script type="text/javascript"> 
+    alert("{{exception_message|raw}}"); 
+</script>    
+{% endif %}
+
+{#  bootgrid list management #} 
+
+
+<script type="text/javascript">     
+
+const urlParams = new URLSearchParams(window.location.search);
+{% if app.user.id is defined %}
+    const current_user_id = {{app.user.id}}
+{% else %}
+    const current_user_id = 0
+{% endif %}
+
+const is_granted = {
+    ROLE_COLLABORATION : {{is_granted("ROLE_COLLABORATION")|json_encode()}},
+    ROLE_PROJECT: {{is_granted("ROLE_PROJECT")|json_encode()}}
+}
+
+function is_owner(row){
+    return current_user_id == row.user_cre_id
+}
+
+$(document).ready(function(){
+
+    $(function () {
+        
+        let filterValues = {};
+        let lastActiveColumn = null;
+        let caretPos = 0;
+
+        // ------------------
+        // FILTRES DEPUIS URL
+        // ------------------
+        urlParams.forEach((value, key) => {
+            // ignorer les paramètres déjà utilisés ailleurs
+            if(["idFk","nameFk","urlArg","searchPattern"].includes(key)){
+                return;
+            }
+            // tout autre paramètre est considéré comme un filtre de colonne
+            filterValues[key] = value;
+        });
+
+        // debounce simple
+        function debounce(fn, delay){
+            let t;
+            return function(){
+                clearTimeout(t);
+                t = setTimeout(()=>fn.apply(this, arguments), delay);
+            }
+        }
+        
+
+        // fonction updateButtonURL
+        function updateButtonURL() {
+
+            // Récupére tous les boutons avec les classes .btn-show, .btn-edit, .btn-delete
+            const buttons = document.querySelectorAll('a.btn-show, a.btn-edit, form[onsubmit]');
+            const currentParams = new URLSearchParams(window.location.search);
+
+            // Ajoute les filtres de colonne à currentParams
+            Object.entries(filterValues).forEach(([key, value]) => {
+                if (value) {
+                    currentParams.set(key, value);
+                } else {
+                    currentParams.delete(key);
+                }
+            });
+
+            // Met à jour les URLs des boutons
+            buttons.forEach(button => {
+                if (button.tagName === 'A') {
+                    // Pour les liens <a>
+                    const url = new URL(button.href, window.location.origin);
+                    const path = url.pathname;
+                    url.search = currentParams.toString();
+                    button.href = url.toString();
+                } else if (button.tagName === 'FORM') {
+                    // Pour les formulaires de suppression
+                    const actionUrl = new URL(button.action, window.location.origin);
+                    const path = actionUrl.pathname;
+                    actionUrl.search = currentParams.toString();
+                    button.action = actionUrl.toString();
+                }
+            });
+        }
+
+        // ------------------
+        // BOOTGRID
+        // ------------------
+        let grid = $("#grid-basic").bootgrid({
+
+            ajax: true,
+
+            url: "{{ path(route_indexjson) }}",
+
+            post: function () {
+                return {
+                    searchPattern: urlParams.get("searchPattern"),
+                    idFk: urlParams.get("idFk"),
+                    nameFk: urlParams.get("nameFk"),
+                    urlArg: urlParams.get("urlArg"),
+                    filters: filterValues
+                };
+            },
+
+            rowCount: [50,500,5000],
+
+            labels: {
+                noResults: "There are no results for the selection",
+                search: urlParams.get("searchPattern") || ""
+            },
+
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+
+            complete: function() {
+            },
+
+            formatters: {
+                {% for link in links %}
+                    {#INBORE1.0  {% set linkname =  'link' ~ (link|capitalize) %} #}
+                    {% set linkname =  'link_' ~ link %}
+                    {#INBORE1.0  {% set link_tabname =  link|split('_')[0]  %} #}    
+                    {% set link_tabname =  link|split('__')[0]  %}
+                    {% set link_index =  link_tabname  ~ '_index' %}
+                    {% set link_new=  link_tabname ~ '_new' %}                   
+                "{{linkname}}" : function(column, row, value)
+                {   
+                    if (row.{{linkname}} !== undefined && row.{{linkname}} != '' && row.{{linkname}} !== null) {
+                        var is_num = row.{{linkname}};
+                        is_num = is_num.match(/^\d+$/);
+                        if( is_num > 0) {
+                            return "<a href=\"{{ path(link_index)}}?nameFk={{nameOfEntity}}Fk&idFk=" + row.{{linkname}} + "\" class=\"btn btn-sm\" ><span class=\"fas fa-list\"></span></a>";
+                        } else {
+                            return "<a href=\"{{ path(link_index)}}?searchPattern="  + row.{{linkname}} + "\" class=\"btn btn-sm\" ><span class=\"fas fa-list\"></span></a>";
+                        }
+                     } else if (is_granted.ROLE_COLLABORATION) {  
+                          return '';
+                          {#return "<a href=\"{{ path(link_new)}}?nameFk={{nameOfEntity}}Fk&idFk="  + row.id + "\" class=\"btn btn-sm\" ><span class=\"fas fa-plus-circle\"></span></a>";#}
+                     }  else {
+                          return '';
+                          // return `<a href="#" class="btn btn-sm disabled"><i class="fas fa-plus-circle"></i></a>`;
+                     }
+                },
+                {% endfor %}
+
+                "show": function(column, row, value)
+                { 
+                    const params = new URLSearchParams();
+                    // Ajouter les paramètres de l'URL actuelle
+                    urlParams.forEach((value, key) => params.set(key, value));
+                    // Ajouter les filtres de colonne
+                    Object.entries(filterValues).forEach(([key, value]) => {
+                            if (value) {
+                                params.set(key, value);
+                            } else {
+                                params.delete(key); // Supprimer si la valeur est vide
+                            }
+                    });
+                    return `<a href="${row.id}?${params.toString()}" class="btn btn-sm btn-show">
+                                            <i class="fas fa-eye"></i></a>`;
+                },
+                "edit": function(column, row, value)
+                {
+                    const params = new URLSearchParams();
+                    urlParams.forEach((value, key) => params.set(key, value));
+                    Object.entries(filterValues).forEach(([key, value]) => {
+                        if (value) {
+                            params.set(key, value);
+                        } else {
+                            params.delete(key); // Supprimer si la valeur est vide
+                        }
+                    });
+                    if (is_granted.ROLE_PROJECT || (is_granted.ROLE_COLLABORATION && is_owner(row))) {
+                        return `<a href="${row.id}/edit?${params.toString()}" class="btn btn-sm">
+                                    <i class="fas fa-edit"></i></a>`;
+                    } else {
+                        return `<a href="#" class="btn btn-sm disabled"><i class="fas fa-edit"></i></a>`;
+                    }                
+                },
+                "delete": function(column, row, value)
+                {
+                    const params = new URLSearchParams();
+                    urlParams.forEach((value, key) => params.set(key, value));
+                    Object.entries(filterValues).forEach(([key, value]) => {
+                        if (value) {
+                            params.set(key, value);
+                        } else {
+                            params.delete(key); // Supprimer si la valeur est vide
+                        }
+                    });                    
+                    let form_action = `${row.id}?${params.toString()}`;
+                    if( is_granted.ROLE_PROJECT || (is_granted.ROLE_COLLABORATION && is_owner(row))) {
+                        return `<form  method="post" action="${form_action}"
+                                    onsubmit="return confirm('Attention !\\nLa suppression de cet enregistrement est définitive et peut entrainer celle d\\'autres entités liées.\\nConfirmez-vous cet effacement ?');" >
+                                <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}" />
+                                <input name="_method" value="DELETE" type="hidden" /> 
+                                <button class='btn btn-sm' type='submit'>
+                                <i class="fas fa-trash"></i></button></form>`; 
+                    } else {
+                        return `<button class="btn btn-sm" disabled><i class="fas fa-trash"></i></button>`
+                    }
+                },
+                "batch": function(column, row, value)
+                {
+                    if( is_granted.ROLE_PROJECT || (is_granted.ROLE_COLLABORATION && is_owner(row))) {
+                        return '<input type="checkbox" name="ids[]" class="batch-id" value="'+row.id+'"/>';
+                    } else {
+                        return '<input type="checkbox" disabled/>';
+                    }
+                },
+            }
+
+        });
+
+        {% if bootgrid_search_column == 'yes' %}
+        // ------------------
+        // CREATION FILTRES
+        // ------------------
+        $("#grid-basic").on("loaded.rs.jquery.bootgrid", function(){
+            let $thead = $("#grid-basic thead");
+            $thead.find(".filter-row").remove();
+            let filterRow = $("<tr class='filter-row'></tr>");
+            $thead.find("tr:first th:visible").each(function(){
+                let column = $(this).data("column-id");
+                if(
+                    column &&
+                    column !== "show" &&
+                    column !== "edit" &&
+                    column !== "delete" &&
+                    column !== "batch" &&
+                    !column.startsWith("link_")
+                ){
+                    let value = filterValues[column] || "";
+                    filterRow.append(`
+                        <th>
+                            <input
+                                class="column-filter form-control form-control-sm"
+                                data-column="${column}"
+                                value="${value}"
+                            >
+                        </th>
+                    `);
+                } else {
+                    filterRow.append("<th></th>");
+                }
+            });
+            $thead.append(filterRow);
+            // restauration focus
+            if(lastActiveColumn){
+                let input = $(`.column-filter[data-column="${lastActiveColumn}"]`);
+                if(input.length){
+                    input.focus();
+                    input[0].setSelectionRange(caretPos, caretPos);
+                }
+            }
+        });
+
+        // ------------------
+        // GESTION INPUT
+        // ------------------
+       let reloadTimer = null;
+        $(document).on("input",".column-filter",function(){
+            let col = $(this).data("column");
+            if(!col) return;
+            // Supprimer les guillemets doubles de la valeur
+            // let value = $(this).val();  
+            let value = $(this).val().replace(/"/g, '');          
+            // Échapper les guillemets doubles
+            // let value = $(this).val().replace(/"/g, '\\"');           
+            filterValues[col] = value;
+            lastActiveColumn = col;
+            caretPos = this.selectionStart;
+            // annule le reload précédent
+            clearTimeout(reloadTimer);
+            // déclenche le reload uniquement si l'utilisateur n'a rien tapé pendant 500 ms
+            reloadTimer = setTimeout(function(){
+            updateButtonURL(); // Mettre à jour les URLs des boutons
+                $("#grid-basic").bootgrid("reload");              
+            },500);
+        });
+
+        // ------------------
+        // VISIBILITE COLONNES
+        // ------------------
+        $("#grid-basic").on("columnVisibility.rs.jquery.bootgrid",function(){
+            $("#grid-basic").bootgrid("reload");
+        });
+        {% endif %}
+ 
+        updateButtonURL(); // Mettre à jour les URLs des boutons au chargement 
+ 
+    });
+
+}); 
+
+</script>
+
+<script type="text/javascript">
+    // enable the table to CSV tool
+   $("#export").click(function(){
+        $("#grid-basic").tableToCSV();
+   });
+</script>
+
+{% endblock %}
