@@ -125,7 +125,7 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
             ->leftJoin('App\Entity\Core\User', 'userMaj', 'WITH', '<?= lcfirst($entity_class_name) ?>.userMaj = userMaj.id')
         ;
 
-        // query
+        // QUERY
         $searchPhrase = $this->request->get('searchPhrase');
         if ($this->request->get('searchPattern') && !$searchPhrase) {
             $searchPhrase = $this->request->get('searchPattern');
@@ -135,7 +135,6 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
                 ->setParameter('search', '%'.strtolower($searchPhrase).'%')
             ;
         }
-
         // foreign key
         if ($this->request->get('idFk') && filter_var($this->request->get('idFk'), FILTER_VALIDATE_INT) !== false) {
             $nameFk = lcfirst($this->service->getFkName(substr($this->request->get('nameFk'), 4, -2)));
@@ -143,13 +142,9 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
                 ->setParameter($nameFk, $this->request->get('idFk'))
             ;
         }
-
-        // APPLIQUE LES FILTRES PAR COLONNE       
-        $filters = $this->request->get('filters') ?? [];
-        $this->service->applyFilters($qb, array_flip($fields), $this->listTypeFields, $filters);  
               
         
-        // count all records for the current search
+        // TOTAL COUNT
         $total = count(
             $qb
                 ->select('COUNT(<?= lcfirst($entity_class_name) ?>.id)')
@@ -158,22 +153,25 @@ class <?= $repository_class_name ?> extends ServiceEntityRepository <?= "\n" ?>
                 ->getScalarResult()
         );
 
-        // select
+        // SELECT
         $select = [];
         foreach ($fields as $field => $alias) {
             $select[] = $field.' '.$alias;
         }
-        $select = implode(', ', $select);
+        $qb->select($select);
+        
+        // APPLIQUE LES FILTRES PAR COLONNE       
+        $filters = $this->request->get('filters') ?? [];
+        $this->service->applyFilters($qb, array_flip($fields), $this->listTypeFields, $filters);  
 
-        // limit
+        // LIMIT
         $rowCount = $this->request->get('rowCount') ?: 10;
         $minRecord = intval($this->request->get('current') - 1) * $rowCount;
-        $qb->select($select)
-            ->setFirstResult($minRecord)
+        $qb->setFirstResult($minRecord)
             ->setMaxResults($rowCount)
         ;
 
-        // sort
+        // SORT
         $orderBy = $this->request->get('sort');
         if (empty($orderBy)) {
             $orderBy = $orderByDefault;

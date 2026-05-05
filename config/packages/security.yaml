@@ -11,6 +11,7 @@ security:
     ROLE_COLLABORATION: ROLE_INVITED
     ROLE_PROJECT: ROLE_COLLABORATION
     ROLE_ADMIN: ROLE_PROJECT
+    ROLE_SUPER_ADMIN: ROLE_ADMIN
 
   # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
   providers:

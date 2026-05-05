@@ -261,7 +261,14 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
     #[IsGranted('ROLE_COLLABORATION')]
     public function delete(Request $request, <?= $entity_class_name ?> $<?= strtolower($entity_class_name) ?>, FileUploader $fileUploader): Response
     {
-    
+
+        //  access control for user type  : ROLE_COLLABORATION
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+        if ($user->getRole() == 'ROLE_COLLABORATION' && $<?= strtolower($entity_class_name) ?>->getUserCre() != $user->getId()) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'ACCESS DENIED');
+        }
+        
         $form = $this->createDeleteForm($<?= strtolower($entity_class_name) ?>);
         $form->handleRequest($request);
 
@@ -278,10 +285,7 @@ public function searchAction($q, <?=  $entity_class_name  ?>Repository $<?=  str
             }
         }
         
-    return $this->redirectToRoute('<?= $route_name ?>_index', [
-                    'nameFk'    => $request->get('nameFk'),
-                    'idFk'      => $request->get('idFk'),
-                ]);
+        return $this->redirectToRoute('<?= $route_name ?>_index', $request->query->all());
     
     }
     
