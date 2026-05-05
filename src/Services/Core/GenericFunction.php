@@ -571,7 +571,7 @@ private function parsePartialDate(string $dateStr, string $context): \DateTime
                 if ($type == 'string') $type = 'exact_string';
             } else {
                 if (!str_starts_with($value, '>') && !str_starts_with($value, '<')) {
-                    if($type == 'aggregation_integer' || $type == 'aggregation_float' || 'aggregation_date') {
+                    if($type == 'aggregation_integer' || $type == 'aggregation_float' || $type == 'aggregation_date') {
                         $type = 'aggregation';
                     } else {
                         $type = 'string';
